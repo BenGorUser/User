@@ -74,26 +74,43 @@ final class User
     /**
      * Constructor.
      *
-     * @param UserId              $anId      The id
-     * @param UserEmail           $anEmail   The email
-     * @param string              $aPassword The plain password
-     * @param UserPasswordEncoder $encoder   The password encoder
+     * @param UserId                $anId               The id
+     * @param UserEmail             $anEmail            The email
+     * @param string                $aPassword          The plain password
+     * @param UserPasswordEncoder   $anEncoder          The password encoder
+     * @param UserConfirmationToken $aConfirmationToken The confirmation token
+     * @param \DateTime             $aCreatedOn         The created on
+     * @param \DateTime             $anUpdatedOn        The updated on
+     * @param \DateTime|null        $aLastLogin         The last login
      */
-    private function __construct(UserId $anId, UserEmail $anEmail, $aPassword, UserPasswordEncoder $encoder)
-    {
+    private function __construct(
+        UserId $anId,
+        UserEmail $anEmail,
+        $aPassword,
+        UserPasswordEncoder $anEncoder = null,
+        UserConfirmationToken $aConfirmationToken = null,
+        \DateTime $aCreatedOn = null,
+        \DateTime $anUpdatedOn = null,
+        \DateTime $aLastLogin = null
+    ) {
         $this->id = $anId;
         $this->email = $anEmail;
-        $this->password = new UserPassword($aPassword, $encoder);
-        $this->createdOn = new \DateTime();
-        $this->updatedOn = new \DateTime();
-        $this->lastLogin = null;
-        $this->confirmationToken = new UserConfirmationToken();
+        $this->password = new UserPassword($aPassword, $anEncoder);
+        $this->createdOn = $aCreatedOn ?: new \DateTime();
+        $this->updatedOn = $anUpdatedOn ?: new \DateTime();
+        $this->lastLogin = $aLastLogin ?: null;
+
+        if (true === $aConfirmationToken) {
+            $this->confirmationToken = new UserConfirmationToken();
+        } else {
+            $this->confirmationToken = $aConfirmationToken;
+        }
 
         DomainEventPublisher::instance()->publish(new UserRegistered($this));
     }
 
     /**
-     * Named static constructor.
+     * Named register static constructor.
      *
      * @param UserId              $anId      The id
      * @param UserEmail           $anEmail   The email
@@ -104,7 +121,35 @@ final class User
      */
     public static function register(UserId $anId, UserEmail $anEmail, $aPassword, UserPasswordEncoder $encoder)
     {
-        return new self($anId, $anEmail, $aPassword, $encoder);
+        return new self($anId, $anEmail, $aPassword, $encoder, true);
+    }
+
+    /**
+     * Named build static constructor.
+     *
+     * This method is required to transform a plain
+     * database properties into domain user object.
+     *
+     * @param UserId                     $anId               The id
+     * @param UserEmail                  $anEmail            The email
+     * @param string                     $aPassword          The plain password
+     * @param \DateTime                  $aCreatedOn         The created on
+     * @param \DateTime                  $anUpdatedOn        The updated on
+     * @param \DateTime|null             $aLastLogin         The last login
+     * @param UserConfirmationToken|null $aConfirmationToken The confirmation token
+     *
+     * @return User
+     */
+    public static function build(
+        UserId $anId,
+        UserEmail $anEmail,
+        $aPassword,
+        \DateTime $aCreatedOn,
+        \DateTime $anUpdatedOn,
+        \DateTime $aLastLogin = null,
+        UserConfirmationToken $aConfirmationToken = null
+    ) {
+        return new self($anId, $anEmail, $aPassword, null, $aConfirmationToken, $aCreatedOn, $anUpdatedOn, $aLastLogin);
     }
 
     /**
@@ -118,16 +163,6 @@ final class User
     }
 
     /**
-     * Enables the user account.
-     */
-    public function enableAccount()
-    {
-        $this->confirmationToken = null;
-
-        DomainEventPublisher::instance()->publish(new UserEnabled($this));
-    }
-
-    /**
      * Gets the confirmation token.
      *
      * @return UserConfirmationToken
@@ -135,6 +170,16 @@ final class User
     public function confirmationToken()
     {
         return $this->confirmationToken;
+    }
+
+    /**
+     * Gets the created on.
+     *
+     * @return \DateTime
+     */
+    public function createdOn()
+    {
+        return $this->createdOn;
     }
 
     /**
@@ -148,6 +193,16 @@ final class User
     }
 
     /**
+     * Enables the user account.
+     */
+    public function enableAccount()
+    {
+        $this->confirmationToken = null;
+
+        DomainEventPublisher::instance()->publish(new UserEnabled($this));
+    }
+
+    /**
      * Checks if the user is enabled or not.
      *
      * @return bool
@@ -155,6 +210,16 @@ final class User
     public function isEnabled()
     {
         return $this->confirmationToken === null;
+    }
+
+    /**
+     * Gets the last login.
+     *
+     * @return \DateTime
+     */
+    public function lastLogin()
+    {
+        return $this->lastLogin;
     }
 
     /**
@@ -193,5 +258,15 @@ final class User
         $this->confirmationToken = new UserConfirmationToken();
 
         DomainEventPublisher::instance()->publish(new UserRememberPasswordRequested($this));
+    }
+
+    /**
+     * Gets the updated on.
+     *
+     * @return \DateTime
+     */
+    public function updatedOn()
+    {
+        return $this->updatedOn;
     }
 }
