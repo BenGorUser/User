@@ -10,7 +10,7 @@
  * file that was distributed with this source code.
  */
 
-namespace BenGor\User\Infrastructure\UserMailer;
+namespace BenGor\User\Infrastructure\Mailing\Mandrill;
 
 use BenGor\User\Domain\Model\UserMailer;
 
