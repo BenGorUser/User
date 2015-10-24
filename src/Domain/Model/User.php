@@ -168,6 +168,14 @@ final class User
     }
 
     /**
+     * Updated the user state after logout.
+     */
+    public function logout()
+    {
+        DomainEventPublisher::instance()->publish(new UserLoggedOut($this));
+    }
+
+    /**
      * Gets the password.
      *
      * @return UserPassword

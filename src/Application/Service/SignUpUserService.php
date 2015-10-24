@@ -15,7 +15,6 @@ namespace BenGor\User\Application\Service;
 use BenGor\User\Domain\Model\User;
 use BenGor\User\Domain\Model\UserAlreadyExistException;
 use BenGor\User\Domain\Model\UserEmail;
-use BenGor\User\Domain\Model\UserId;
 use BenGor\User\Domain\Model\UserPasswordEncoder;
 use BenGor\User\Domain\Model\UserRepository;
 use Ddd\Application\Service\ApplicationService;
@@ -67,7 +66,7 @@ final class SignUpUserService implements ApplicationService
         }
 
         $user = User::register(
-            new UserId(),
+            $this->repository->nextIdentity(),
             new UserEmail($email),
             $password,
             $this->encoder

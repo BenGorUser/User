@@ -12,6 +12,10 @@
 
 namespace BenGor\User\Application\Service;
 
+use BenGor\User\Domain\Model\UserDoesNotExistException;
+use BenGor\User\Domain\Model\UserInactiveException;
+use BenGor\User\Domain\Model\UserRepository;
+
 /**
  * User logout service class.
  *
@@ -20,4 +24,39 @@ namespace BenGor\User\Application\Service;
  */
 final class LogOutUserService
 {
+    /**
+     * The user repository.
+     *
+     * @var UserRepository
+     */
+    private $repository;
+
+    /**
+     * Constructor.
+     *
+     * @param UserRepository $aRepository The user repository
+     */
+    public function __construct(UserRepository $aRepository)
+    {
+        $this->repository = $aRepository;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function execute($request = null)
+    {
+        $userId = $request->id();
+
+        $user = $this->repository->userOfId($userId);
+        if (null === $user) {
+            throw new UserDoesNotExistException();
+        }
+        if (false === $user->isEnabled()) {
+            throw new UserInactiveException();
+        }
+        $user->logout();
+
+        $this->repository->persist($user);
+    }
 }
