@@ -1,0 +1,9 @@
+/vendor
+
+#### Composer ####
+/composer.phar
+composer.lock
+
+#### PHPSpec ####
+/coverage
+coverage.xml

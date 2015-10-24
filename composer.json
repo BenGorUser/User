@@ -1,0 +1,40 @@
+{
+    "name": "bengor/user",
+    "description": "BenGor User component",
+    "keywords": ["user", "component", "ddd"],
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+      {
+        "name": "Beñat Espiña Diaz",
+        "email": "benatespina@gmail.com",
+        "homepage": "http://benatespina.com"
+      },
+      {
+        "name": "Gorka Laucirica Ibarra",
+        "email": "gorka.lauzirika@gmail.com",
+        "homepage": "http://gorkalaucirica.net"
+      }
+    ],
+    "require": {
+        "php": ">=5.4",
+        "carlosbuenosvinos/ddd": "^1.2",
+        "ramsey/uuid": "^3.0"
+    },
+    "require-dev": {
+        "phpspec/phpspec": "^2.3"
+    },
+    "suggest": {
+        "swiftmailer/swiftmailer": "Required to send emails using Swiftmailer adapter",
+        "mandrill/mandrill": "Required to send emails using Mandrill adapter"
+    },
+    "autoload": {
+        "psr-4": { "BenGor\\User\\": "" }
+    },
+    "autoload-dev": {
+        "psr-4": { "BenGor\\User\\spec\\": "spec/" }
+    },
+    "config": {
+        "bin-dir": "bin"
+    }
+}
