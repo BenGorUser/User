@@ -49,10 +49,10 @@ final class UserPassword
             throw new UserPasswordEncoderRequiredException();
         }
 
-        if (null === $salt) {
+        if (null === $salt) { // Assume is a new password and needs to be encoded
             $this->salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
             $this->encodedPassword = $anEncoder->encode($aPlainPassword, $this->salt);
-        } else {
+        } else { // Assume is an existing password and just store the values
             $this->salt = $salt;
             $this->encodedPassword = $aPlainPassword;
         }
