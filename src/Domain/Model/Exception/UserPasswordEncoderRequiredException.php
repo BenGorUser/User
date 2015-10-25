@@ -18,6 +18,6 @@ namespace BenGor\User\Domain\Model\Exception;
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-class UserPasswordEncoderRequiredException extends \InvalidArgumentException
+final class UserPasswordEncoderRequiredException extends \InvalidArgumentException
 {
 }
