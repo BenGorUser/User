@@ -37,14 +37,17 @@ final class UserPassword
     /**
      * Constructor.
      *
-     * @param string              $aPlainPassword The plain password
-     * @param UserPasswordEncoder $anEncoder      The encoder
-     * @param string|null         $salt           The salt
+     * @param string                   $aPlainPassword The plain password
+     * @param UserPasswordEncoder|null $anEncoder      The encoder
+     * @param string|null              $salt           The salt
      */
-    public function __construct($aPlainPassword, UserPasswordEncoder $anEncoder, $salt = null)
+    public function __construct($aPlainPassword, UserPasswordEncoder $anEncoder = null, $salt = null)
     {
         $this->salt = $salt ?: base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
-        $this->encodedPassword = $anEncoder->encode($aPlainPassword, $this->salt);
+        $this->encodedPassword = $aPlainPassword;
+        if ($anEncoder instanceof UserPasswordEncoder) {
+            $this->encodedPassword = $anEncoder->encode($aPlainPassword, $this->salt);
+        }
     }
 
     /**
