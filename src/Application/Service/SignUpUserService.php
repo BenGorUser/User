@@ -62,7 +62,7 @@ final class SignUpUserService implements ApplicationService
         $email = $request->email();
         $password = $request->password();
 
-        if (null !== $this->repository->userOfEmail($email)) {
+        if (null !== $this->repository->userOfEmail(new UserEmail($email))) {
             throw new UserAlreadyExistException();
         }
 

@@ -21,11 +21,11 @@ namespace BenGor\User\Application\Service;
 final class LogInUserRequest
 {
     /**
-     * The user id.
+     * The user email.
      *
      * @var string
      */
-    private $id;
+    private $email;
 
     /**
      * The user plain password.
@@ -37,23 +37,23 @@ final class LogInUserRequest
     /**
      * Constructor.
      *
-     * @param string $anId           The user id
+     * @param string $anEmail        The user email
      * @param string $aPlainPassword The user plain password
      */
-    public function __construct($anId, $aPlainPassword)
+    public function __construct($anEmail, $aPlainPassword)
     {
-        $this->id = $anId;
+        $this->email = $anEmail;
         $this->plainPassword = $aPlainPassword;
     }
 
     /**
-     * Gets the user id.
+     * Gets the user email.
      *
      * @return string
      */
-    public function id()
+    public function email()
     {
-        return $this->id;
+        return $this->email;
     }
 
     /**
