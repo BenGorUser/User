@@ -39,6 +39,9 @@ class UserSpec extends ObjectBehavior
             $encoder
         ]);
 
-        $this->email()->email()->shouldReturn('test@test.com');
+        $this->id()->id()->shouldNotBe(null);
+        $this->email()->email()->shouldBe('test@test.com');
+        $this->confirmationToken()->token()->shouldNotBe(null);
+        $this->isEnabled()->shouldBe(false);
     }
 }

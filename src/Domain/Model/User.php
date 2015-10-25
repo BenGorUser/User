@@ -105,11 +105,7 @@ class User
         $this->updatedOn = $anUpdatedOn ?: new \DateTime();
         $this->lastLogin = $aLastLogin ?: null;
 
-        if (true === $aConfirmationToken) {
-            $this->confirmationToken = new UserConfirmationToken();
-        } else {
-            $this->confirmationToken = $aConfirmationToken;
-        }
+        $this->confirmationToken = $aConfirmationToken ?: new UserConfirmationToken();
 
         DomainEventPublisher::instance()->publish(new UserRegistered($this));
     }
@@ -126,7 +122,7 @@ class User
      */
     public static function register(UserId $anId, UserEmail $anEmail, $aPassword, UserPasswordEncoder $encoder)
     {
-        return new self($anId, $anEmail, $aPassword, $encoder, true);
+        return new self($anId, $anEmail, $aPassword, $encoder);
     }
 
     /**
