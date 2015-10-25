@@ -32,49 +32,49 @@ class User
      *
      * @var UserId
      */
-    private $id;
+    protected $id;
 
     /**
      * The confirmation token.
      *
      * @var UserConfirmationToken
      */
-    private $confirmationToken;
+    protected $confirmationToken;
 
     /**
      * Created on.
      *
      * @var \DateTime
      */
-    private $createdOn;
+    protected $createdOn;
 
     /**
      * The email.
      *
      * @var UserEmail
      */
-    private $email;
+    protected $email;
 
     /**
      * The last login.
      *
      * @var \DateTime|null
      */
-    private $lastLogin;
+    protected $lastLogin;
 
     /**
      * The password.
      *
      * @var UserPassword
      */
-    private $password;
+    protected $password;
 
     /**
      * Updated on.
      *
      * @var \DateTime
      */
-    private $updatedOn;
+    protected $updatedOn;
 
     /**
      * Constructor.
@@ -88,7 +88,7 @@ class User
      * @param \DateTime             $anUpdatedOn        The updated on
      * @param \DateTime|null        $aLastLogin         The last login
      */
-    private function __construct(
+    protected function __construct(
         UserId $anId,
         UserEmail $anEmail,
         $aPassword,
