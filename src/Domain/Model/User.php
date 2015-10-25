@@ -12,6 +12,11 @@
 
 namespace BenGor\User\Domain\Model;
 
+use BenGor\User\Domain\Model\Event\UserEnabled;
+use BenGor\User\Domain\Model\Event\UserLoggedIn;
+use BenGor\User\Domain\Model\Event\UserLoggedOut;
+use BenGor\User\Domain\Model\Event\UserRegistered;
+use BenGor\User\Domain\Model\Event\UserRememberPasswordRequested;
 use Ddd\Domain\DomainEventPublisher;
 
 /**

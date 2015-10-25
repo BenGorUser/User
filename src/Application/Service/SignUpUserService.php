@@ -12,8 +12,8 @@
 
 namespace BenGor\User\Application\Service;
 
+use BenGor\User\Domain\Model\Exception\UserAlreadyExistException;
 use BenGor\User\Domain\Model\User;
-use BenGor\User\Domain\Model\UserAlreadyExistException;
 use BenGor\User\Domain\Model\UserEmail;
 use BenGor\User\Domain\Model\UserPasswordEncoder;
 use BenGor\User\Domain\Model\UserRepository;

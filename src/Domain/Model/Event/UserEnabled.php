@@ -10,19 +10,19 @@
  * file that was distributed with this source code.
  */
 
-namespace BenGor\User\Domain\Model;
+namespace BenGor\User\Domain\Model\Event;
 
-use BenGor\User\Model\User;
+use BenGor\User\Domain\Model\User;
 use Ddd\Domain\DomainEvent;
 use Ddd\Domain\Event\PublishableDomainEvent;
 
 /**
- * User registered domain event class.
+ * User enabled domain event class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-final class UserRegistered implements DomainEvent, PublishableDomainEvent
+final class UserEnabled implements DomainEvent, PublishableDomainEvent
 {
     /**
      * The user.

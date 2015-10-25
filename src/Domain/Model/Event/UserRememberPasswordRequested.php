@@ -10,8 +10,9 @@
  * file that was distributed with this source code.
  */
 
-namespace BenGor\User\Domain\Model;
+namespace BenGor\User\Domain\Model\Event;
 
+use BenGor\User\Domain\Model\User;
 use Ddd\Domain\DomainEvent;
 use Ddd\Domain\Event\PublishableDomainEvent;
 

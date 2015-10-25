@@ -12,9 +12,9 @@
 
 namespace BenGor\User\Application\Service;
 
-use BenGor\User\Domain\Model\UserDoesNotExistException;
-use BenGor\User\Domain\Model\UserInactiveException;
-use BenGor\User\Domain\Model\UserInvalidPasswordException;
+use BenGor\User\Domain\Model\Exception\UserDoesNotExistException;
+use BenGor\User\Domain\Model\Exception\UserInactiveException;
+use BenGor\User\Domain\Model\Exception\UserInvalidPasswordException;
 use BenGor\User\Domain\Model\UserPassword;
 use BenGor\User\Domain\Model\UserPasswordEncoder;
 use BenGor\User\Domain\Model\UserRepository;

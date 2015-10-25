@@ -12,8 +12,8 @@
 
 namespace BenGor\User\Application\Service;
 
-use BenGor\User\Domain\Model\UserDoesNotExistException;
-use BenGor\User\Domain\Model\UserInactiveException;
+use BenGor\User\Domain\Model\Exception\UserDoesNotExistException;
+use BenGor\User\Domain\Model\Exception\UserInactiveException;
 use BenGor\User\Domain\Model\UserRepository;
 
 /**
