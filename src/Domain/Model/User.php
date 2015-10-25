@@ -267,6 +267,8 @@ class User
      */
     public function rememberPassword()
     {
+        $this->confirmationToken = new UserConfirmationToken();
+
         DomainEventPublisher::instance()->publish(new UserRememberPasswordRequested($this));
     }
 
