@@ -12,6 +12,9 @@
 
 namespace spec\BenGor\User\Domain\Model;
 
+use BenGor\User\Domain\Model\UserEmail;
+use BenGor\User\Domain\Model\UserId;
+use BenGor\User\Domain\Model\UserPasswordEncoder;
 use PhpSpec\ObjectBehavior;
 
 /**
@@ -25,5 +28,17 @@ class UserSpec extends ObjectBehavior
     function it_is_initializable()
     {
         $this->shouldHaveType('BenGor\User\Domain\Model\User');
+    }
+
+    function it_registers_a_user(UserPasswordEncoder $encoder)
+    {
+        $this->beConstructedThrough('register', [
+            new UserId(),
+            new UserEmail('test@test.com'),
+            'strongpassword',
+            $encoder
+        ]);
+
+        $this->email()->email()->shouldReturn('test@test.com');
     }
 }
