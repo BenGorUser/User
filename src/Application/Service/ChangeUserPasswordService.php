@@ -12,21 +12,19 @@
 
 namespace BenGor\User\Application\Service;
 
-use BenGor\User\Domain\Model\Exception\UserAlreadyExistException;
-use BenGor\User\Domain\Model\User;
-use BenGor\User\Domain\Model\UserEmail;
+use BenGor\User\Domain\Model\UserId;
 use BenGor\User\Domain\Model\UserPassword;
 use BenGor\User\Domain\Model\UserPasswordEncoder;
 use BenGor\User\Domain\Model\UserRepository;
 use Ddd\Application\Service\ApplicationService;
 
 /**
- * Sign up user service class.
+ * Change user password service class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-final class SignUpUserService implements ApplicationService
+final class ChangeUserPasswordService implements ApplicationService
 {
     /**
      * The user repository.
@@ -59,18 +57,15 @@ final class SignUpUserService implements ApplicationService
      */
     public function execute($request = null)
     {
-        $email = $request->email();
-        $password = $request->password();
+        $id = $request->id();
+        $newPlainPassword = $request->newPlainPassword();
+        $oldPlainPassword = $request->oldPlainPassword();
 
-        if (null !== $this->repository->userOfEmail($email)) {
-            throw new UserAlreadyExistException();
-        }
+        $user = $this->repository->userOfId(new UserId($id));
+        $oldPassword = UserPassword::fromPlain($oldPlainPassword, $this->encoder, $user->password()->salt());
+        $newPassword = UserPassword::fromPlain($newPlainPassword, $this->encoder);
 
-        $user = User::register(
-            $this->repository->nextIdentity(),
-            new UserEmail($email),
-            UserPassword::fromPlain($password, $this->encoder)
-        );
+        $user->changePassword($oldPassword, $newPassword);
 
         $this->repository->persist($user);
     }

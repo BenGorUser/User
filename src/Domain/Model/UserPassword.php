@@ -39,23 +39,28 @@ final class UserPassword
     /**
      * Constructor.
      *
-     * @param string                   $aPlainPassword The plain password
-     * @param UserPasswordEncoder|null $anEncoder      The encoder
-     * @param string|null              $salt           The salt
+     * @param string      $anEncodedPassword The encoded password
+     * @param string|null $salt              The salt
      */
-    public function __construct($aPlainPassword, UserPasswordEncoder $anEncoder = null, $salt = null)
+    private function __construct($anEncodedPassword, $salt)
     {
-        if (null === $salt && false === $anEncoder instanceof UserPasswordEncoder) {
-            throw new UserPasswordEncoderRequiredException();
-        }
+        $this->salt = $salt;
+        $this->encodedPassword = $anEncodedPassword;
+    }
 
+    public static function fromEncoded($anEncodedPassword, $salt)
+    {
+        return new self($anEncodedPassword, $salt);
+    }
+
+    public static function fromPlain($aPlainPassword, UserPasswordEncoder $anEncoder, $salt = null)
+    {
         if (null === $salt) { // Assume is a new password and needs to be encoded
-            $this->salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
-            $this->encodedPassword = $anEncoder->encode($aPlainPassword, $this->salt);
-        } else { // Assume is an existing password and just store the values
-            $this->salt = $salt;
-            $this->encodedPassword = $aPlainPassword;
+            $salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
         }
+        $encodedPassword = $anEncoder->encode($aPlainPassword, $salt);
+
+        return new self($encodedPassword, $salt);
     }
 
     /**
