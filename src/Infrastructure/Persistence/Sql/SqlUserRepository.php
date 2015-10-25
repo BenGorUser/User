@@ -236,7 +236,7 @@ SQL
         return User::build(
             new UserId($row['id']),
             new UserEmail($row['email']),
-            new UserPassword($row['password']),
+            UserPassword::fromEncoded($row['password'], $row['salt']),
             new \DateTime($row['created_on']),
             new \DateTime($row['updated_on']),
             $lastLogin,

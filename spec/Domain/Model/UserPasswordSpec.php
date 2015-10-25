@@ -25,47 +25,35 @@ use Prophecy\Argument;
  */
 class UserPasswordSpec extends ObjectBehavior
 {
-    function it_generates_encrypted_pass(UserPasswordEncoder $encoder)
+    function it_generates_from_encoded_password()
     {
-        $plainPassword = 'securePassword';
-        $encodedPassword = 'ajdqwjnfewnewnfewkjqnfewkjn';
+        $encodedPassword = 'akjodsjfiqrfiheqiufhuieqwfjewi';
+        $salt = 'fojewifjeiowjfiuoewjqiof';
 
-        $encoder->encode($plainPassword, Argument::type('string'))
-            ->willReturn($encodedPassword);
-
-        $this->beConstructedWith($plainPassword, $encoder);
-
-        $this->shouldHaveType('BenGor\User\Domain\Model\UserPassword');
-        $this->encodedPassword()->shouldBe($encodedPassword);
-    }
-
-    function it_requieres_encoder_when_not_salt_given()
-    {
-        $this->beConstructedWith('securePassword');
-
-        $this->shouldThrow('BenGor\User\Domain\Model\Exception\UserPasswordEncoderRequiredException')
-            ->during('__construct', ['securePassword']);
-    }
-
-    function it_assumes_password_is_already_encoded_when_salt_given()
-    {
-        $encodedPassword = 'ajdqwjnfewnewnfewkjqnfewkjn';
-
-        $this->beConstructedWith($encodedPassword, null, 'thisIsTheSalt');
+        $this->beConstructedFromEncoded($encodedPassword, $salt);
 
         $this->encodedPassword()->shouldBe($encodedPassword);
-        $this->salt()->shouldBe('thisIsTheSalt');
+        $this->salt()->shouldBe($salt);
+    }
+
+    function it_generates_from_plain_password(UserPasswordEncoder $encoder)
+    {
+        $plainPassword = 'secretPassword';
+        $encodedPassword = 'iudfhiuewhfuiewhiufhewiufewhiufwe';
+
+        $encoder->encode($plainPassword, Argument::type('string'))->willReturn($encodedPassword);
+
+        $this->beConstructedFromPlain($plainPassword, $encoder);
+
+        $this->encodedPassword($encodedPassword)->shouldBe($encodedPassword);
+        $this->salt()->shouldNotBe(null);
     }
 
     function it_compares_passwords(UserPasswordEncoder $encoder) {
-        $plainPassword = 'securePassword';
         $encodedPassword = 'ajdqwjnfewnewnfewkjqnfewkjn';
 
-        $encoder->encode($plainPassword, Argument::type('string'))
-            ->willReturn($encodedPassword);
+        $this->beConstructedFromEncoded($encodedPassword, 'thisIsTheSalt');
 
-        $this->beConstructedWith($plainPassword, $encoder);
-
-        $this->equals(new UserPassword($encodedPassword, null, 'thisIsTheSalt'))->shouldBe(true);
+        $this->equals(UserPassword::fromEncoded($encodedPassword, 'thisIsTheSalt'))->shouldBe(true);
     }
 }

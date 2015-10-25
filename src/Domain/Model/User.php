@@ -17,6 +17,7 @@ use BenGor\User\Domain\Model\Event\UserLoggedIn;
 use BenGor\User\Domain\Model\Event\UserLoggedOut;
 use BenGor\User\Domain\Model\Event\UserRegistered;
 use BenGor\User\Domain\Model\Event\UserRememberPasswordRequested;
+use BenGor\User\Domain\Model\Exception\UserInvalidPasswordException;
 use Ddd\Domain\DomainEventPublisher;
 
 /**
@@ -81,8 +82,7 @@ class User
      *
      * @param UserId                $anId               The id
      * @param UserEmail             $anEmail            The email
-     * @param string                $aPassword          The plain password
-     * @param UserPasswordEncoder   $anEncoder          The password encoder
+     * @param UserPassword          $aPassword          The plain password
      * @param UserConfirmationToken $aConfirmationToken The confirmation token
      * @param \DateTime             $aCreatedOn         The created on
      * @param \DateTime             $anUpdatedOn        The updated on
@@ -91,8 +91,7 @@ class User
     protected function __construct(
         UserId $anId,
         UserEmail $anEmail,
-        $aPassword,
-        UserPasswordEncoder $anEncoder = null,
+        UserPassword $aPassword,
         UserConfirmationToken $aConfirmationToken = null,
         \DateTime $aCreatedOn = null,
         \DateTime $anUpdatedOn = null,
@@ -100,12 +99,11 @@ class User
     ) {
         $this->id = $anId;
         $this->email = $anEmail;
-        $this->password = new UserPassword($aPassword, $anEncoder);
+        $this->password = $aPassword;
+        $this->confirmationToken = $aConfirmationToken ?: new UserConfirmationToken();
         $this->createdOn = $aCreatedOn ?: new \DateTime();
         $this->updatedOn = $anUpdatedOn ?: new \DateTime();
         $this->lastLogin = $aLastLogin ?: null;
-
-        $this->confirmationToken = $aConfirmationToken ?: new UserConfirmationToken();
 
         DomainEventPublisher::instance()->publish(new UserRegistered($this));
     }
@@ -113,16 +111,15 @@ class User
     /**
      * Named register static constructor.
      *
-     * @param UserId              $anId      The id
-     * @param UserEmail           $anEmail   The email
-     * @param string              $aPassword The plain password
-     * @param UserPasswordEncoder $encoder   The password encoder
+     * @param UserId       $anId      The id
+     * @param UserEmail    $anEmail   The email
+     * @param UserPassword $aPassword The password
      *
      * @return self
      */
-    public static function register(UserId $anId, UserEmail $anEmail, $aPassword, UserPasswordEncoder $encoder)
+    public static function register(UserId $anId, UserEmail $anEmail, $aPassword)
     {
-        return new self($anId, $anEmail, $aPassword, $encoder);
+        return new self($anId, $anEmail, $aPassword);
     }
 
     /**
@@ -133,7 +130,7 @@ class User
      *
      * @param UserId                     $anId               The id
      * @param UserEmail                  $anEmail            The email
-     * @param string                     $aPassword          The plain password
+     * @param UserPassword               $aPassword          The encoded password
      * @param \DateTime                  $aCreatedOn         The created on
      * @param \DateTime                  $anUpdatedOn        The updated on
      * @param \DateTime|null             $aLastLogin         The last login
@@ -144,13 +141,13 @@ class User
     public static function build(
         UserId $anId,
         UserEmail $anEmail,
-        $aPassword,
+        UserPassword $aPassword,
         \DateTime $aCreatedOn,
         \DateTime $anUpdatedOn,
         \DateTime $aLastLogin = null,
         UserConfirmationToken $aConfirmationToken = null
     ) {
-        return new self($anId, $anEmail, $aPassword, null, $aConfirmationToken, $aCreatedOn, $anUpdatedOn, $aLastLogin);
+        return new self($anId, $anEmail, $aPassword, $aConfirmationToken, $aCreatedOn, $anUpdatedOn, $aLastLogin);
     }
 
     /**
@@ -161,6 +158,20 @@ class User
     public function id()
     {
         return $this->id;
+    }
+
+    /**
+     * Updates the user password.
+     *
+     * @param UserPassword $anOldPassword The old password
+     * @param UserPassword $aNewPassword  The new password
+     */
+    public function changePassword(UserPassword $anOldPassword, UserPassword $aNewPassword)
+    {
+        if (false === $this->password()->equals($anOldPassword)) {
+            throw new UserInvalidPasswordException();
+        }
+        $this->password = $aNewPassword;
     }
 
     /**

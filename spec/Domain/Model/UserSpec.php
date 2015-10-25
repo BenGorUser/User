@@ -14,6 +14,7 @@ namespace spec\BenGor\User\Domain\Model;
 
 use BenGor\User\Domain\Model\UserEmail;
 use BenGor\User\Domain\Model\UserId;
+use BenGor\User\Domain\Model\UserPassword;
 use BenGor\User\Domain\Model\UserPasswordEncoder;
 use PhpSpec\ObjectBehavior;
 
@@ -25,13 +26,14 @@ use PhpSpec\ObjectBehavior;
  */
 class UserSpec extends ObjectBehavior
 {
-    function let(UserPasswordEncoder $encoder)
+    function let()
     {
+        $encoder = new DummyUserPasswordEncoder('encodedPassword');
+
         $this->beConstructedRegister(
             new UserId(),
             new UserEmail('test@test.com'),
-            'strongpassword',
-            $encoder
+            UserPassword::fromPlain('strongpassword', $encoder)
         );
 
     }
@@ -48,7 +50,7 @@ class UserSpec extends ObjectBehavior
         $this->isEnabled()->shouldBe(false);
     }
 
-    function it_enables_an_account(UserPasswordEncoder $encoder)
+    function it_enables_an_account()
     {
         $this->isEnabled()->shouldBe(false);
 
@@ -57,7 +59,7 @@ class UserSpec extends ObjectBehavior
         $this->isEnabled()->shouldBe(true);
     }
 
-    function it_logs_in_user(UserPasswordEncoder $encoder)
+    function it_logs_in_user()
     {
         $this->lastLogin()->shouldBe(null);
 
@@ -66,7 +68,7 @@ class UserSpec extends ObjectBehavior
         $this->lastLogin()->shouldReturnAnInstanceOf('\Datetime');
     }
 
-    function it_remembers_password(UserPasswordEncoder $encoder)
+    function it_remembers_password()
     {
         $token = $this->confirmationToken();
 
