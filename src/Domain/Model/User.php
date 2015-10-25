@@ -32,49 +32,49 @@ class User
      *
      * @var UserId
      */
-    protected $id;
+    private $id;
 
     /**
      * The confirmation token.
      *
      * @var UserConfirmationToken
      */
-    protected $confirmationToken;
+    private $confirmationToken;
 
     /**
      * Created on.
      *
      * @var \DateTime
      */
-    protected $createdOn;
+    private $createdOn;
 
     /**
      * The email.
      *
      * @var UserEmail
      */
-    protected $email;
+    private $email;
 
     /**
      * The last login.
      *
      * @var \DateTime|null
      */
-    protected $lastLogin;
+    private $lastLogin;
 
     /**
      * The password.
      *
      * @var UserPassword
      */
-    protected $password;
+    private $password;
 
     /**
      * Updated on.
      *
      * @var \DateTime
      */
-    protected $updatedOn;
+    private $updatedOn;
 
     /**
      * Constructor.
