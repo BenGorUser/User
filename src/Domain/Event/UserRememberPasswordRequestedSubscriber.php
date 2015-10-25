@@ -12,8 +12,8 @@
 
 namespace BenGor\User\Domain\Event;
 
+use BenGor\User\Domain\Model\Event\UserRememberPasswordRequested;
 use BenGor\User\Domain\Model\UserMailer;
-use BenGor\User\Domain\Model\UserRememberPasswordRequested;
 use Ddd\Domain\DomainEventSubscriber;
 
 /**

@@ -12,8 +12,8 @@
 
 namespace BenGor\User\Domain\Event;
 
+use BenGor\User\Domain\Model\Event\UserRegistered;
 use BenGor\User\Domain\Model\UserMailer;
-use BenGor\User\Domain\Model\UserRegistered;
 use Ddd\Domain\DomainEventSubscriber;
 
 /**
