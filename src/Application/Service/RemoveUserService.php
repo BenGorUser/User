@@ -12,12 +12,62 @@
 
 namespace BenGor\User\Application\Service;
 
+use BenGor\User\Domain\Model\Exception\UserInvalidPasswordException;
+use BenGor\User\Domain\Model\UserId;
+use BenGor\User\Domain\Model\UserPassword;
+use BenGor\User\Domain\Model\UserPasswordEncoder;
+use BenGor\User\Domain\Model\UserRepository;
+use Ddd\Application\Service\ApplicationService;
+
 /**
  * Remove user service class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-final class RemoveUserService
+final class RemoveUserService implements ApplicationService
 {
+    /**
+     * The user repository.
+     *
+     * @var UserRepository
+     */
+    private $repository;
+
+    /**
+     * The user password encoder.
+     *
+     * @var UserPasswordEncoder
+     */
+    private $encoder;
+
+    /**
+     * Constructor.
+     *
+     * @param UserRepository      $aRepository The user repository
+     * @param UserPasswordEncoder $anEncoder   The password encoder
+     */
+    public function __construct(UserRepository $aRepository, UserPasswordEncoder $anEncoder)
+    {
+        $this->repository = $aRepository;
+        $this->encoder = $anEncoder;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function execute($request = null)
+    {
+        $id = $request->id();
+        $plainPassword = $request->password();
+
+        $password = UserPassword::fromPlain($plainPassword, $this->encoder);
+        $user = $this->repository->userOfId(new UserId($id));
+
+        if (false === $user->password()->equals($password)) {
+            throw new UserInvalidPasswordException();
+        }
+
+        $this->repository->remove($user);
+    }
 }
