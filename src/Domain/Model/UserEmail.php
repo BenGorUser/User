@@ -11,6 +11,7 @@
  */
 
 namespace BenGor\User\Domain\Model;
+use BenGor\User\Domain\Model\Exception\UserInvalidEmailException;
 
 /**
  * User email domain class.
