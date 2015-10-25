@@ -10,14 +10,14 @@
  * file that was distributed with this source code.
  */
 
-namespace BenGor\User\Domain\Model;
+namespace BenGor\User\Domain\Model\Exception;
 
 /**
- * User inactive exception class.
+ * User does not exist exception class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-final class UserInactiveException extends \Exception
+final class UserDoesNotExistException extends \Exception
 {
 }

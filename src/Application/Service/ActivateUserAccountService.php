@@ -12,8 +12,8 @@
 
 namespace BenGor\User\Application\Service;
 
+use BenGor\User\Domain\Model\Exception\UserConfirmationTokenNotFoundException;
 use BenGor\User\Domain\Model\UserConfirmationToken;
-use BenGor\User\Domain\Model\UserConfirmationTokenNotFoundException;
 use BenGor\User\Domain\Model\UserRepository;
 use Ddd\Application\Service\ApplicationService;
 

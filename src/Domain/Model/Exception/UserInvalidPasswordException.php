@@ -10,14 +10,14 @@
  * file that was distributed with this source code.
  */
 
-namespace BenGor\User\Domain\Model;
+namespace BenGor\User\Domain\Model\Exception;
 
 /**
- * User does not exist exception class.
+ * User invalid password exception class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-final class UserDoesNotExistException extends \Exception
+final class UserInvalidPasswordException extends \InvalidArgumentException
 {
 }

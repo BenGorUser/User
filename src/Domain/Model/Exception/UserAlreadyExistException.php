@@ -10,14 +10,14 @@
  * file that was distributed with this source code.
  */
 
-namespace BenGor\User\Domain\Model;
+namespace BenGor\User\Domain\Model\Exception;
 
 /**
- * User confirmation token not found exception class.
+ * User already exist exception class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-final class UserConfirmationTokenNotFoundException extends \Exception
+final class UserAlreadyExistException extends \Exception
 {
 }

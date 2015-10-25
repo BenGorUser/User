@@ -10,14 +10,14 @@
  * file that was distributed with this source code.
  */
 
-namespace BenGor\User\Domain\Model;
+namespace BenGor\User\Domain\Model\Exception;
 
 /**
- * User invalid password exception class.
+ * User invalid email exception class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-final class UserInvalidPasswordException extends \InvalidArgumentException
+final class UserInvalidEmailException extends \InvalidArgumentException
 {
 }
