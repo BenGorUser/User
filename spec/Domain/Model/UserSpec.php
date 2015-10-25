@@ -27,12 +27,12 @@ class UserSpec extends ObjectBehavior
 {
     function let(UserPasswordEncoder $encoder)
     {
-        $this->beConstructedThrough('register', [
+        $this->beConstructedRegister(
             new UserId(),
             new UserEmail('test@test.com'),
             'strongpassword',
             $encoder
-        ]);
+        );
 
     }
     function it_is_initializable()
