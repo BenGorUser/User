@@ -25,12 +25,7 @@ use PhpSpec\ObjectBehavior;
  */
 class UserSpec extends ObjectBehavior
 {
-    function it_is_initializable()
-    {
-        $this->shouldHaveType('BenGor\User\Domain\Model\User');
-    }
-
-    function it_registers_a_user(UserPasswordEncoder $encoder)
+    function let(UserPasswordEncoder $encoder)
     {
         $this->beConstructedThrough('register', [
             new UserId(),
@@ -39,6 +34,14 @@ class UserSpec extends ObjectBehavior
             $encoder
         ]);
 
+    }
+    function it_is_initializable()
+    {
+        $this->shouldHaveType('BenGor\User\Domain\Model\User');
+    }
+
+    function it_registers_a_user()
+    {
         $this->id()->id()->shouldNotBe(null);
         $this->email()->email()->shouldBe('test@test.com');
         $this->confirmationToken()->token()->shouldNotBe(null);
@@ -47,13 +50,6 @@ class UserSpec extends ObjectBehavior
 
     function it_enables_an_account(UserPasswordEncoder $encoder)
     {
-        $this->beConstructedThrough('register', [
-            new UserId(),
-            new UserEmail('test@test.com'),
-            'strongpassword',
-            $encoder
-        ]);
-
         $this->isEnabled()->shouldBe(false);
 
         $this->enableAccount();
@@ -63,13 +59,6 @@ class UserSpec extends ObjectBehavior
 
     function it_logs_in_user(UserPasswordEncoder $encoder)
     {
-        $this->beConstructedThrough('register', [
-            new UserId(),
-            new UserEmail('test@test.com'),
-            'strongpassword',
-            $encoder
-        ]);
-
         $this->lastLogin()->shouldBe(null);
 
         $this->login();
@@ -79,13 +68,6 @@ class UserSpec extends ObjectBehavior
 
     function it_remembers_password(UserPasswordEncoder $encoder)
     {
-        $this->beConstructedThrough('register', [
-            new UserId(),
-            new UserEmail('test@test.com'),
-            'strongpassword',
-            $encoder
-        ]);
-
         $token = $this->confirmationToken();
 
         $this->rememberPassword();
