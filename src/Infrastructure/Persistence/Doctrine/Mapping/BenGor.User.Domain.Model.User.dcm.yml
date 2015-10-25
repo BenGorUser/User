@@ -16,6 +16,7 @@ BenGor\User\Domain\Model\User:
             columnPrefix: false
         confirmationToken:
             class: BenGor\User\Domain\Model\UserConfirmationToken
+            columnPrefix: false
         email:
             class: BenGor\User\Domain\Model\UserEmail
             columnPrefix: false

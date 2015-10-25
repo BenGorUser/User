@@ -7,6 +7,7 @@
 # file that was distributed with this source code.
 
 BenGor\User\Domain\Model\UserConfirmationToken:
+    type: embeddable
     fields:
         token:
             column: confirmation_token
