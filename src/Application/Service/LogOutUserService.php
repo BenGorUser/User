@@ -15,6 +15,7 @@ namespace BenGor\User\Application\Service;
 use BenGor\User\Domain\Model\Exception\UserDoesNotExistException;
 use BenGor\User\Domain\Model\Exception\UserInactiveException;
 use BenGor\User\Domain\Model\UserRepository;
+use Ddd\Application\Service\ApplicationService;
 
 /**
  * User logout service class.
@@ -22,7 +23,7 @@ use BenGor\User\Domain\Model\UserRepository;
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-final class LogOutUserService
+final class LogOutUserService implements ApplicationService
 {
     /**
      * The user repository.
