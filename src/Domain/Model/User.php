@@ -25,7 +25,7 @@ use Ddd\Domain\DomainEventPublisher;
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-final class User
+class User
 {
     /**
      * The id.
