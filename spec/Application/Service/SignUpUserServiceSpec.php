@@ -46,7 +46,7 @@ class SignUpUserServiceSpec extends ObjectBehavior
         $request = new SignUpUserRequest('user@user.com', 'plainPassword');
 
         $repository->userOfEmail(Argument::type('BenGor\User\Domain\Model\UserEmail'))
-            ->willReturn(null);
+            ->shouldBeCalled()->willReturn(null);
         $repository->nextIdentity()->shouldBeCalled()->willReturn(new UserId('id'));
         $repository->persist(Argument::type('BenGor\User\Domain\Model\User'))->shouldBeCalled();
 
@@ -58,11 +58,10 @@ class SignUpUserServiceSpec extends ObjectBehavior
         $request = new SignUpUserRequest('user@user.com', 'plainPassword');
 
         $repository->userOfEmail(Argument::type('BenGor\User\Domain\Model\UserEmail'))
-            ->willReturn($user);
+            ->shouldBeCalled()->willReturn($user);
         $repository->nextIdentity()->shouldNotBeCalled();
         $repository->persist(Argument::any())->shouldNotBeCalled();
 
-        $this->shouldThrow('BenGor\User\Domain\Model\Exception\UserAlreadyExistException')
-            ->duringExecute($request);
+        $this->shouldThrow('BenGor\User\Domain\Model\Exception\UserAlreadyExistException')->duringExecute($request);
     }
 }

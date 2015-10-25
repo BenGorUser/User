@@ -15,7 +15,6 @@ namespace spec\BenGor\User\Domain\Model;
 use BenGor\User\Domain\Model\UserEmail;
 use BenGor\User\Domain\Model\UserId;
 use BenGor\User\Domain\Model\UserPassword;
-use BenGor\User\Domain\Model\UserPasswordEncoder;
 use PhpSpec\ObjectBehavior;
 
 /**
@@ -35,8 +34,8 @@ class UserSpec extends ObjectBehavior
             new UserEmail('test@test.com'),
             UserPassword::fromPlain('strongpassword', $encoder)
         );
-
     }
+
     function it_is_initializable()
     {
         $this->shouldHaveType('BenGor\User\Domain\Model\User');

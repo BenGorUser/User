@@ -56,7 +56,7 @@ final class SqlUserRepository implements UserRepository
             return $this->buildUser($row);
         }
 
-        return null;
+        return;
     }
 
     /**
@@ -69,7 +69,7 @@ final class SqlUserRepository implements UserRepository
             return $this->buildUser($row);
         }
 
-        return null;
+        return;
     }
 
     /**
@@ -84,7 +84,7 @@ final class SqlUserRepository implements UserRepository
             return $this->buildUser($row);
         }
 
-        return null;
+        return;
     }
 
     /**
@@ -161,7 +161,7 @@ SQL
             'SELECT COUNT(*) FROM user WHERE id = :id', [':id' => $aUser->id()->id()]
         )->fetchColumn();
 
-        return $count == 1;
+        return $count === 1;
     }
 
     /**
@@ -171,9 +171,9 @@ SQL
      */
     private function insert(User $aUser)
     {
-        $sql = "INSERT INTO user (
+        $sql = 'INSERT INTO user (
             id, confirmation_token, created_on, email, last_login, password, updated_on) VALUES (
-            :id, :token, :createdOn, :email, :lastLogin, :password, :updatedOn)";
+            :id, :token, :createdOn, :email, :lastLogin, :password, :updatedOn)';
         $this->execute($sql, [
             'id'        => $aUser->id()->id(),
             'token'     => $aUser->confirmationToken()->token(),
@@ -192,9 +192,9 @@ SQL
      */
     private function update(User $aUser)
     {
-        $sql = "UPDATE user
+        $sql = 'UPDATE user
             SET password = :password, updated_on = :updatedOn, last_login = :lastLogin, confirmation_token = :token
-            WHERE id = :id";
+            WHERE id = :id';
         $this->execute($sql, [
             'id'        => $aUser->id()->id(),
             'password'  => $aUser->password()->encodedPassword(),

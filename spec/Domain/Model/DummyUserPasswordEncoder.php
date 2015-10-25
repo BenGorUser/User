@@ -14,20 +14,31 @@ namespace spec\BenGor\User\Domain\Model;
 
 use BenGor\User\Domain\Model\UserPasswordEncoder;
 
+/**
+ * Dummy user password encoder class for testing purposes.
+ *
+ * @author Beñat Espiña <benatespina@gmail.com>
+ * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
+ */
 class DummyUserPasswordEncoder implements UserPasswordEncoder
 {
     /**
+     * The expected response.
+     *
      * @var string
      */
     private $expectedResponse;
 
     /**
-     * @param $expectedResponse
+     * Constructor.
+     *
+     * @param string $expectedResponse The expected response
      */
-    public function __construct($expectedResponse) {
-
+    public function __construct($expectedResponse)
+    {
         $this->expectedResponse = $expectedResponse;
     }
+
     /**
      * {@inheritdoc}
      */
@@ -35,5 +46,4 @@ class DummyUserPasswordEncoder implements UserPasswordEncoder
     {
         return $this->expectedResponse;
     }
-
-} 
+}

@@ -43,8 +43,7 @@ class LogOutUserServiceSpec extends ObjectBehavior
         $user->isEnabled()->shouldBeCalled()->willReturn(true);
         $user->logout()->shouldBeCalled();
 
-        $repository->userOfId(Argument::type('BenGor\User\Domain\Model\UserId'))
-            ->willReturn($user);
+        $repository->userOfId(Argument::type('BenGor\User\Domain\Model\UserId'))->shouldBeCalled()->willReturn($user);
         $repository->persist($user)->shouldBeCalled();
 
         $this->execute($request);
@@ -57,12 +56,10 @@ class LogOutUserServiceSpec extends ObjectBehavior
         $user->isEnabled()->shouldBeCalled()->willReturn(false);
         $user->logout()->shouldNotBeCalled();
 
-        $repository->userOfId(Argument::type('BenGor\User\Domain\Model\UserId'))
-            ->willReturn($user);
+        $repository->userOfId(Argument::type('BenGor\User\Domain\Model\UserId'))->shouldBeCalled()->willReturn($user);
         $repository->persist($user)->shouldNotBeCalled();
 
-        $this->shouldThrow('BenGor\User\Domain\Model\Exception\UserInactiveException')
-            ->duringExecute($request);
+        $this->shouldThrow('BenGor\User\Domain\Model\Exception\UserInactiveException')->duringExecute($request);
     }
 
     function it_doesnt_logout_unknown_user(UserRepository $repository, User $user)
@@ -72,11 +69,9 @@ class LogOutUserServiceSpec extends ObjectBehavior
         $user->isEnabled()->shouldNotBeCalled();
         $user->logout()->shouldNotBeCalled();
 
-        $repository->userOfId(Argument::type('BenGor\User\Domain\Model\UserId'))
-            ->willReturn(null);
+        $repository->userOfId(Argument::type('BenGor\User\Domain\Model\UserId'))->shouldBeCalled()->willReturn(null);
         $repository->persist($user)->shouldNotBeCalled();
 
-        $this->shouldThrow('BenGor\User\Domain\Model\Exception\UserDoesNotExistException')
-            ->duringExecute($request);
+        $this->shouldThrow('BenGor\User\Domain\Model\Exception\UserDoesNotExistException')->duringExecute($request);
     }
 }

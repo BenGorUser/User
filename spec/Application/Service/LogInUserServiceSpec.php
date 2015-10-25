@@ -73,7 +73,8 @@ class LogInUserServiceSpec extends ObjectBehavior
             ->duringExecute($request);
     }
 
-    function it_doesnt_log_if_user_does_not_exist(UserRepository $repository, User $user) {
+    function it_doesnt_log_if_user_does_not_exist(UserRepository $repository, User $user)
+    {
         $request = new LogInUserRequest('user@user.com', 'plainPassword');
 
         $user->login()->shouldNotBeCalled();
@@ -86,7 +87,7 @@ class LogInUserServiceSpec extends ObjectBehavior
             ->duringExecute($request);
     }
 
-    function it_doesnt_log_if_user_invalid_password(UserRepository $repository, User $user)
+    function it_does_not_log_if_user_invalid_password(UserRepository $repository, User $user)
     {
         $request = new LogInUserRequest('user@user.com', 'plainPassword');
 

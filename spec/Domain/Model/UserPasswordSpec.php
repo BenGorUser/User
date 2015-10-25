@@ -49,7 +49,8 @@ class UserPasswordSpec extends ObjectBehavior
         $this->salt()->shouldNotBe(null);
     }
 
-    function it_compares_passwords(UserPasswordEncoder $encoder) {
+    function it_compares_passwords()
+    {
         $encodedPassword = 'ajdqwjnfewnewnfewkjqnfewkjn';
 
         $this->beConstructedFromEncoded($encodedPassword, 'thisIsTheSalt');

@@ -49,8 +49,6 @@ final class InMemoryUserRepository implements UserRepository
         if (isset($this->users[$anId->id()])) {
             return $this->users[$anId->id()];
         }
-
-        return;
     }
 
     /**
@@ -63,8 +61,6 @@ final class InMemoryUserRepository implements UserRepository
                 return $user;
             }
         }
-
-        return;
     }
 
     /**

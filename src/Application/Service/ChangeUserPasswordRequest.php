@@ -47,8 +47,6 @@ final class ChangeUserPasswordRequest
      * @param string $anId               The user id
      * @param string $aNewPlainPassword  The new plain password
      * @param string $anOldPlainPassword The old plain password
-     *
-     * @internal param string $aPlainPassword The user plain password
      */
     public function __construct($anId, $aNewPlainPassword, $anOldPlainPassword)
     {

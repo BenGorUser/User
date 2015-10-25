@@ -13,7 +13,6 @@
 namespace spec\BenGor\User\Application\Service;
 
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 
 /**
  * Spec file of change user password request class.

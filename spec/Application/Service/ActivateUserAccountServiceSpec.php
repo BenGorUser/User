@@ -34,7 +34,6 @@ class ActivateUserAccountServiceSpec extends ObjectBehavior
     function it_is_initializable()
     {
         $this->shouldHaveType('BenGor\User\Application\Service\ActivateUserAccountService');
-
     }
 
     function it_activates_user(UserRepository $repository, User $user)

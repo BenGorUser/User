@@ -12,8 +12,6 @@
 
 namespace BenGor\User\Domain\Model;
 
-use BenGor\User\Domain\Model\Exception\UserPasswordEncoderRequiredException;
-
 /**
  * User password domain class.
  *
@@ -48,14 +46,31 @@ final class UserPassword
         $this->encodedPassword = $anEncodedPassword;
     }
 
+    /**
+     * Named static constructor with the given encoded password.
+     *
+     * @param string $anEncodedPassword The encoded password
+     * @param string $salt              The salt
+     *
+     * @return self
+     */
     public static function fromEncoded($anEncodedPassword, $salt)
     {
         return new self($anEncodedPassword, $salt);
     }
 
+    /**
+     * Named static constructor with the given plain password and encoder.
+     *
+     * @param string              $aPlainPassword The plain password
+     * @param UserPasswordEncoder $anEncoder      The encoder
+     * @param string|null         $salt           The salt
+     *
+     * @return self
+     */
     public static function fromPlain($aPlainPassword, UserPasswordEncoder $anEncoder, $salt = null)
     {
-        if (null === $salt) { // Assume is a new password and needs to be encoded
+        if (null === $salt) {
             $salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
         }
         $encodedPassword = $anEncoder->encode($aPlainPassword, $salt);

@@ -13,7 +13,6 @@
 namespace spec\BenGor\User\Domain\Model;
 
 use BenGor\User\Domain\Model\UserId;
-use BenGor\User\Domain\Model\UserPasswordEncoder;
 use PhpSpec\ObjectBehavior;
 
 /**
