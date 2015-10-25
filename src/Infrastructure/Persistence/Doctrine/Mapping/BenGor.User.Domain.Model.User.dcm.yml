@@ -1,0 +1,35 @@
+# This file is part of the User library.
+#
+# (c) Beñat Espiña <benatespina@gmail.com>
+# (c) Gorka Laucirica <gorka.lauzirika@gmail.com>
+#
+# For the full copyright and license information, please view the LICENSE
+# file that was distributed with this source code.
+
+BenGor\User\Domain\Model\User:
+    type: entity
+    repositoryClass: BenGor\User\Infrastructure\Persistence\Doctrine\DoctrineUserRepository
+    table: user
+    embedded:
+        id:
+            class: BenGor\User\Domain\Model\UserId
+            columnPrefix: false
+        confirmationToken:
+            class: BenGor\User\Domain\Model\UserConfirmationToken
+            columnPrefix: false
+        email:
+            class: BenGor\User\Domain\Model\UserEmail
+            columnPrefix: false
+        password:
+            class: BenGor\User\Domain\Model\UserPassword
+            columnPrefix: false
+    fields:
+        createdOn:
+            column: created_on
+            type: datetime
+        lastLogin:
+            column: last_login
+            type: datetime
+        updatedOn:
+            column: updated_on
+            type: datetime
