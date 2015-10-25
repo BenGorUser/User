@@ -19,6 +19,8 @@ use BenGor\User\Domain\Model\UserPassword;
 use BenGor\User\Domain\Model\UserPasswordEncoder;
 use BenGor\User\Domain\Model\UserRepository;
 use PhpSpec\ObjectBehavior;
+use Prophecy\Argument;
+use spec\BenGor\User\Domain\Model\DummyUserPasswordEncoder;
 
 /**
  * Spec file of RemoveUserService class.
@@ -28,8 +30,9 @@ use PhpSpec\ObjectBehavior;
  */
 class RemoveUserServiceSpec extends ObjectBehavior
 {
-    function let(UserRepository $repository, UserPasswordEncoder $encoder)
+    function let(UserRepository $repository)
     {
+        $encoder = new DummyUserPasswordEncoder('encodedPassword');
         $this->beConstructedWith($repository, $encoder);
     }
 
@@ -43,21 +46,29 @@ class RemoveUserServiceSpec extends ObjectBehavior
         $this->shouldHaveType('Ddd\Application\Service\ApplicationService');
     }
 
-//    function it_does_not_execute_because_the_passwords_are_not_equals()
-//    {
-//        $this->id()->shouldReturn('a-plain-string-id');
-//    }
-
-    function it_executes(UserRepository $repository, User $user, UserPasswordEncoder $encoder)
+    function it_does_not_remove_user_password_do_not_match(UserRepository $repository, User $user)
     {
-        $request = new RemoveUserRequest('a-plain-string-id', 'a-plain-user-password');
-//        $request->id()->shouldBeCalled()->willReturn('a-plain-string-id');
-//        $request->password()->shouldBeCalled()->willReturn('a-plain-user-password');
-//
-        $repository->userOfId(new UserId('a-plain-string-id'))->shouldBeCalled()->willReturn($user);
-        $userPassword = new UserPassword('a-plain-user-password', null, 'dummy-salt');
-        $user->password()->shouldBeCalled()->willReturn($userPassword);
-        $userPassword->equals($userPassword)->shouldBeCalled()->willReturn(true);
+        $encoder = new DummyUserPasswordEncoder('passwordThatDoesntMatch');
+        $request = new RemoveUserRequest('userID', 'plainPassword');
+        $password = UserPassword::fromPlain('wrongPassword', $encoder);
+
+        $user->password()->willReturn($password);
+        $repository->userOfId(Argument::type('BenGor\User\Domain\Model\UserId'))
+            ->willReturn($user);
+
+        $this->shouldThrow('BenGor\User\Domain\Model\Exception\UserInvalidPasswordException')
+            ->duringExecute($request);
+    }
+
+    function it_removes_user(UserRepository $repository, User $user)
+    {
+        $encoder = new DummyUserPasswordEncoder('encodedPassword');
+        $request = new RemoveUserRequest('userID', 'plainPassword');
+        $password = UserPassword::fromPlain('plainPassword', $encoder);
+
+        $user->password()->willReturn($password);
+        $repository->userOfId(Argument::type('BenGor\User\Domain\Model\UserId'))
+            ->willReturn($user);
         $repository->remove($user)->shouldBeCalled();
 
         $this->execute($request);
