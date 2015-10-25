@@ -44,4 +44,52 @@ class UserSpec extends ObjectBehavior
         $this->confirmationToken()->token()->shouldNotBe(null);
         $this->isEnabled()->shouldBe(false);
     }
+
+    function it_enables_an_account(UserPasswordEncoder $encoder)
+    {
+        $this->beConstructedThrough('register', [
+            new UserId(),
+            new UserEmail('test@test.com'),
+            'strongpassword',
+            $encoder
+        ]);
+
+        $this->isEnabled()->shouldBe(false);
+
+        $this->enableAccount();
+
+        $this->isEnabled()->shouldBe(true);
+    }
+
+    function it_logs_in_user(UserPasswordEncoder $encoder)
+    {
+        $this->beConstructedThrough('register', [
+            new UserId(),
+            new UserEmail('test@test.com'),
+            'strongpassword',
+            $encoder
+        ]);
+
+        $this->lastLogin()->shouldBe(null);
+
+        $this->login();
+
+        $this->lastLogin()->shouldReturnAnInstanceOf('\Datetime');
+    }
+
+    function it_remembers_password(UserPasswordEncoder $encoder)
+    {
+        $this->beConstructedThrough('register', [
+            new UserId(),
+            new UserEmail('test@test.com'),
+            'strongpassword',
+            $encoder
+        ]);
+
+        $token = $this->confirmationToken();
+
+        $this->rememberPassword();
+
+        $this->confirmationToken()->shouldNotBe($token);
+    }
 }
