@@ -12,6 +12,8 @@
 
 namespace BenGor\User\Domain\Model;
 
+use BenGor\User\Domain\Model\Exception\UserPasswordEncoderRequiredException;
+
 /**
  * User password domain class.
  *
@@ -43,10 +45,16 @@ final class UserPassword
      */
     public function __construct($aPlainPassword, UserPasswordEncoder $anEncoder = null, $salt = null)
     {
-        $this->salt = $salt ?: base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
-        $this->encodedPassword = $aPlainPassword;
-        if ($anEncoder instanceof UserPasswordEncoder) {
+        if (null === $salt && false === $anEncoder instanceof UserPasswordEncoder) {
+            throw new UserPasswordEncoderRequiredException();
+        }
+
+        if (null === $salt) {
+            $this->salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
             $this->encodedPassword = $anEncoder->encode($aPlainPassword, $this->salt);
+        } else {
+            $this->salt = $salt;
+            $this->encodedPassword = $aPlainPassword;
         }
     }
 
