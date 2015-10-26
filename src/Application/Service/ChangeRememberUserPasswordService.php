@@ -12,6 +12,11 @@
 
 namespace BenGor\User\Application\Service;
 
+use BenGor\User\Domain\Model\Exception\UserDoesNotExistException;
+use BenGor\User\Domain\Model\UserPassword;
+use BenGor\User\Domain\Model\UserPasswordEncoder;
+use BenGor\User\Domain\Model\UserRepository;
+use BenGor\User\Domain\Model\UserToken;
 use Ddd\Application\Service\ApplicationService;
 
 /**
@@ -23,20 +28,29 @@ use Ddd\Application\Service\ApplicationService;
 final class ChangeRememberUserPasswordService implements ApplicationService
 {
     /**
-     * The change user password service.
+     * The user repository.
      *
-     * @var ChangeUserPasswordService
+     * @var UserRepository
      */
-    private $changeUserPasswordService;
+    private $repository;
+
+    /**
+     * The user password encoder.
+     *
+     * @var UserPasswordEncoder
+     */
+    private $encoder;
 
     /**
      * Constructor.
      *
-     * @param ChangeUserPasswordService $aChangeUserPasswordService The change user password service
+     * @param UserRepository      $aRepository The user repository
+     * @param UserPasswordEncoder $anEncoder   The password encoder
      */
-    public function __construct(ChangeUserPasswordService $aChangeUserPasswordService)
+    public function __construct(UserRepository $aRepository, UserPasswordEncoder $anEncoder)
     {
-        $this->changeUserPasswordService = $aChangeUserPasswordService;
+        $this->repository = $aRepository;
+        $this->encoder = $anEncoder;
     }
 
     /**
@@ -44,6 +58,17 @@ final class ChangeRememberUserPasswordService implements ApplicationService
      */
     public function execute($request = null)
     {
-        $this->changeUserPasswordService->execute($request);
+        $rememberPasswordToken = $request->rememberPasswordToken();
+        $newPlainPassword = $request->newPlainPassword();
+
+        $user = $this->repository->userOfRememberPasswordToken(new UserToken($rememberPasswordToken));
+        if (null === $user) {
+            throw new UserDoesNotExistException();
+        }
+
+        $newPassword = UserPassword::fromPlain($newPlainPassword, $this->encoder);
+        $user->changePassword($user->password(), $newPassword);
+
+        $this->repository->persist($user);
     }
 }

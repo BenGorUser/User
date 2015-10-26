@@ -21,29 +21,29 @@ namespace BenGor\User\Application\Service;
 final class RequestRememberUserPasswordRequest
 {
     /**
-     * The user id.
+     * The user email.
      *
      * @var string
      */
-    private $id;
+    private $email;
 
     /**
      * Constructor.
      *
-     * @param string $anId The user id
+     * @param string $anEmail The user email
      */
-    public function __construct($anId)
+    public function __construct($anEmail)
     {
-        $this->id = $anId;
+        $this->email = $anEmail;
     }
 
     /**
-     * Gets the user id.
+     * Gets the user email.
      *
      * @return string
      */
-    public function id()
+    public function email()
     {
-        return $this->id;
+        return $this->email;
     }
 }

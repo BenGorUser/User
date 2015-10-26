@@ -21,13 +21,6 @@ namespace BenGor\User\Application\Service;
 final class ChangeRememberUserPasswordRequest
 {
     /**
-     * The user id.
-     *
-     * @var string
-     */
-    private $id;
-
-    /**
      * The new plain password.
      *
      * @var string
@@ -35,34 +28,22 @@ final class ChangeRememberUserPasswordRequest
     private $newPlainPassword;
 
     /**
-     * The old plain password.
+     * The password remember token.
      *
      * @var string
      */
-    private $oldPlainPassword;
+    private $rememberPasswordToken;
 
     /**
      * Constructor.
      *
-     * @param string $anId               The user id
-     * @param string $aNewPlainPassword  The new plain password
-     * @param string $anOldPlainPassword The old plain password
+     * @param string $aNewPlainPassword      The new plain password
+     * @param string $aRememberPasswordToken The password remember token
      */
-    public function __construct($anId, $aNewPlainPassword, $anOldPlainPassword)
+    public function __construct($aNewPlainPassword, $aRememberPasswordToken)
     {
-        $this->id = $anId;
         $this->newPlainPassword = $aNewPlainPassword;
-        $this->oldPlainPassword = $anOldPlainPassword;
-    }
-
-    /**
-     * Gets the user id.
-     *
-     * @return string
-     */
-    public function id()
-    {
-        return $this->id;
+        $this->rememberPasswordToken = $aRememberPasswordToken;
     }
 
     /**
@@ -76,12 +57,12 @@ final class ChangeRememberUserPasswordRequest
     }
 
     /**
-     * Gets the old plain password.
+     * Gets the password remember token.
      *
      * @return string
      */
-    public function oldPlainPassword()
+    public function rememberPasswordToken()
     {
-        return $this->oldPlainPassword;
+        return $this->rememberPasswordToken;
     }
 }
