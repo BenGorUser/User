@@ -13,11 +13,11 @@
 namespace BenGor\User\Infrastructure\Persistence\Doctrine;
 
 use BenGor\User\Domain\Model\User;
-use BenGor\User\Domain\Model\UserConfirmationToken;
 use BenGor\User\Domain\Model\UserEmail;
 use BenGor\User\Domain\Model\UserId;
 use BenGor\User\Domain\Model\UserPassword;
 use BenGor\User\Domain\Model\UserRepository;
+use BenGor\User\Domain\Model\UserToken;
 
 /**
  * Sql user repository class.
@@ -55,8 +55,6 @@ final class SqlUserRepository implements UserRepository
         if ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
             return $this->buildUser($row);
         }
-
-        return;
     }
 
     /**
@@ -68,14 +66,12 @@ final class SqlUserRepository implements UserRepository
         if ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
             return $this->buildUser($row);
         }
-
-        return;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function userOfConfirmationToken(UserConfirmationToken $aConfirmationToken)
+    public function userOfConfirmationToken(UserToken $aConfirmationToken)
     {
         $statement = $this->execute('SELECT * FROM user WHERE confirmation_token = :confirmationToken', [
             'confirmationToken' => $aConfirmationToken->token(),
@@ -83,8 +79,19 @@ final class SqlUserRepository implements UserRepository
         if ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
             return $this->buildUser($row);
         }
+    }
 
-        return;
+    /**
+     * {@inheritdoc}
+     */
+    public function userOfRememberPasswordToken(UserToken $aRememberPasswordToken)
+    {
+        $statement = $this->execute('SELECT * FROM user WHERE remember_password_token = :rememberPasswordToken', [
+            'rememberPasswordToken' => $aRememberPasswordToken->token(),
+        ]);
+        if ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
+            return $this->buildUser($row);
+        }
     }
 
     /**
@@ -137,11 +144,12 @@ final class SqlUserRepository implements UserRepository
 DROP TABLE IF EXISTS user;
 CREATE TABLE user (
     id CHAR(36) PRIMARY KEY,
-    confirmation_token VARCHAR(36) NOT NULL,
+    confirmation_token VARCHAR(36),
     created_on DATETIME NOT NULL,
     email VARCHAR(36) NOT NULL,
     last_login DATETIME,
     password VARCHAR(30) NOT NULL,
+    remember_password_token VARCHAR(36),
     updated_on DATETIME NOT NULL
 )
 SQL
@@ -172,16 +180,17 @@ SQL
     private function insert(User $aUser)
     {
         $sql = 'INSERT INTO user (
-            id, confirmation_token, created_on, email, last_login, password, updated_on) VALUES (
-            :id, :token, :createdOn, :email, :lastLogin, :password, :updatedOn)';
+            id, confirmation_token, created_on, email, last_login, password, remember_password_token, updated_on
+            ) VALUES (:id, :token, :createdOn, :email, :lastLogin, :password, :rememberPasswordToken, :updatedOn)';
         $this->execute($sql, [
-            'id'        => $aUser->id()->id(),
-            'token'     => $aUser->confirmationToken()->token(),
-            'createdOn' => $aUser->createdOn()->format(self::DATE_FORMAT),
-            'email'     => $aUser->email()->email(),
-            'lastLogin' => $aUser->lastLogin()->format(self::DATE_FORMAT),
-            'password'  => $aUser->password()->encodedPassword(),
-            'updatedOn' => $aUser->updatedOn()->format(self::DATE_FORMAT),
+            'id'                    => $aUser->id()->id(),
+            'token'                 => $aUser->confirmationToken()->token(),
+            'createdOn'             => $aUser->createdOn()->format(self::DATE_FORMAT),
+            'email'                 => $aUser->email()->email(),
+            'lastLogin'             => $aUser->lastLogin()->format(self::DATE_FORMAT),
+            'password'              => $aUser->password()->encodedPassword(),
+            'rememberPasswordToken' => $aUser->rememberPasswordToken()->token(),
+            'updatedOn'             => $aUser->updatedOn()->format(self::DATE_FORMAT),
         ]);
     }
 
@@ -192,15 +201,20 @@ SQL
      */
     private function update(User $aUser)
     {
-        $sql = 'UPDATE user
-            SET password = :password, updated_on = :updatedOn, last_login = :lastLogin, confirmation_token = :token
+        $sql = 'UPDATE user SET
+            confirmation_token = :confirmationToken,
+            last_login = :lastLogin,
+            password = :password,
+            remember_password_token = :rememberPasswordToken
+            updated_on = :updatedOn,
             WHERE id = :id';
         $this->execute($sql, [
-            'id'        => $aUser->id()->id(),
-            'password'  => $aUser->password()->encodedPassword(),
-            'updatedOn' => $aUser->updatedOn(),
-            'lastLogin' => $aUser->lastLogin(),
-            'token'     => $aUser->confirmationToken(),
+            'id'                    => $aUser->id()->id(),
+            'confirmationToken'     => $aUser->confirmationToken()->token(),
+            'lastLogin'             => $aUser->lastLogin(),
+            'password'              => $aUser->password()->encodedPassword(),
+            'rememberPasswordToken' => $aUser->rememberPasswordToken()->token(),
+            'updatedOn'             => $aUser->updatedOn(),
         ]);
     }
 
@@ -230,8 +244,15 @@ SQL
      */
     private function buildUser($row)
     {
-        $lastLogin = null === $row['last_login'] ? null : new \DateTime($row['last_login']);
-        $token = null === $row['confirmation_token'] ? null : new UserConfirmationToken($row['confirmation_token']);
+        $lastLogin = null === $row['last_login']
+            ? null
+            : new \DateTime($row['last_login']);
+        $confirmationToken = null === $row['confirmation_token']
+            ? null
+            : new UserToken($row['confirmation_token']);
+        $rememberPasswordToken = null === $row['remember_password_token']
+            ? null
+            : new UserToken($row['remember_password_token']);
 
         return User::build(
             new UserId($row['id']),
@@ -240,7 +261,8 @@ SQL
             new \DateTime($row['created_on']),
             new \DateTime($row['updated_on']),
             $lastLogin,
-            $token
+            $confirmationToken,
+            $rememberPasswordToken
         );
     }
 }

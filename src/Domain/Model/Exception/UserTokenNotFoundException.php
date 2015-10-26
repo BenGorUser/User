@@ -13,11 +13,11 @@
 namespace BenGor\User\Domain\Model\Exception;
 
 /**
- * User confirmation token not found exception class.
+ * User token not found exception class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-final class UserConfirmationTokenNotFoundException extends \Exception
+final class UserTokenNotFoundException extends \Exception
 {
 }

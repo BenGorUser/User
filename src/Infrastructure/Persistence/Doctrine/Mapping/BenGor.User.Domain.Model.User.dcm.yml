@@ -15,14 +15,17 @@ BenGor\User\Domain\Model\User:
             class: BenGor\User\Domain\Model\UserId
             columnPrefix: false
         confirmationToken:
-            class: BenGor\User\Domain\Model\UserConfirmationToken
-            columnPrefix: false
+            class: BenGor\User\Domain\Model\UserToken
+            columnPrefix: confirmation_
         email:
             class: BenGor\User\Domain\Model\UserEmail
             columnPrefix: false
         password:
             class: BenGor\User\Domain\Model\UserPassword
             columnPrefix: false
+        rememberPasswordToken:
+            class: BenGor\User\Domain\Model\UserToken
+            columnPrefix: remember_password_
     fields:
         createdOn:
             column: created_on

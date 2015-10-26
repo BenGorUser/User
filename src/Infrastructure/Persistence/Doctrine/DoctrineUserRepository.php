@@ -13,10 +13,10 @@
 namespace BenGor\User\Infrastructure\Persistence\Doctrine;
 
 use BenGor\User\Domain\Model\User;
-use BenGor\User\Domain\Model\UserConfirmationToken;
 use BenGor\User\Domain\Model\UserEmail;
 use BenGor\User\Domain\Model\UserId;
 use BenGor\User\Domain\Model\UserRepository;
+use BenGor\User\Domain\Model\UserToken;
 use Doctrine\ORM\EntityManager;
 
 /**
@@ -27,6 +27,8 @@ use Doctrine\ORM\EntityManager;
  */
 final class DoctrineUserRepository implements UserRepository
 {
+    const ENTITY = 'BenGor\User\Domain\Model\User';
+
     /**
      * The entity manager.
      *
@@ -49,7 +51,7 @@ final class DoctrineUserRepository implements UserRepository
      */
     public function userOfId(UserId $anId)
     {
-        return $this->entityManager->findOneBy(['id' => $anId]);
+        return $this->entityManager->find(self::ENTITY, $anId);
     }
 
     /**
@@ -57,15 +59,44 @@ final class DoctrineUserRepository implements UserRepository
      */
     public function userOfEmail(UserEmail $anEmail)
     {
-        return $this->entityManager->findOneBy(['email' => $anEmail]);
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+
+        return $queryBuilder
+            ->select($queryBuilder->expr()->eq('u.email', ':email'))
+            ->from(self::ENTITY, 'u')
+            ->setParameter(':email', $anEmail)
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function userOfConfirmationToken(UserConfirmationToken $aConfirmationToken)
+    public function userOfConfirmationToken(UserToken $aConfirmationToken)
     {
-        return $this->entityManager->findOneBy(['confirmationToken' => $aConfirmationToken]);
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+
+        return $queryBuilder
+            ->select($queryBuilder->expr()->eq('u.confirmationToken', ':confirmationToken'))
+            ->from(self::ENTITY, 'u')
+            ->setParameter(':confirmationToken', $aConfirmationToken)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function userOfRememberPasswordToken(UserToken $aRememberPasswordToken)
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+
+        return $queryBuilder
+            ->select($queryBuilder->expr()->eq('u.rememberPasswordToken', ':rememberPasswordToken'))
+            ->from(self::ENTITY, 'u')
+            ->setParameter(':rememberPasswordToken', $aRememberPasswordToken)
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 
     /**
@@ -101,7 +132,7 @@ final class DoctrineUserRepository implements UserRepository
 
         return $queryBuilder
             ->select($queryBuilder->expr()->count('u.id'))
-            ->from('BenGor\User\Domain\Model\User', 'u')
+            ->from(self::ENTITY, 'u')
             ->getQuery()
             ->getSingleScalarResult();
     }

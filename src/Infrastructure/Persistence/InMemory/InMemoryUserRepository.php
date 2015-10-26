@@ -13,10 +13,10 @@
 namespace BenGor\User\Infrastructure\Persistence\Doctrine;
 
 use BenGor\User\Domain\Model\User;
-use BenGor\User\Domain\Model\UserConfirmationToken;
 use BenGor\User\Domain\Model\UserEmail;
 use BenGor\User\Domain\Model\UserId;
 use BenGor\User\Domain\Model\UserRepository;
+use BenGor\User\Domain\Model\UserToken;
 
 /**
  * In memory user repository class.
@@ -57,7 +57,7 @@ final class InMemoryUserRepository implements UserRepository
     public function userOfEmail(UserEmail $anEmail)
     {
         foreach ($this->users as $user) {
-            if (true === $user->email->equals($anEmail)) {
+            if (true === $user->email()->equals($anEmail)) {
                 return $user;
             }
         }
@@ -66,9 +66,25 @@ final class InMemoryUserRepository implements UserRepository
     /**
      * {@inheritdoc}
      */
-    public function userOfConfirmationToken(UserConfirmationToken $aConfirmationToken)
+    public function userOfConfirmationToken(UserToken $aConfirmationToken)
     {
-        throw new \Exception('Not implemented yet');
+        foreach ($this->users as $user) {
+            if (true === $user->confirmationToken()->equals($aConfirmationToken)) {
+                return $user;
+            }
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function userOfRememberPasswordToken(UserToken $aRememberPasswordToken)
+    {
+        foreach ($this->users as $user) {
+            if (true === $user->rememberPasswordToken()->equals($aRememberPasswordToken)) {
+                return $user;
+            }
+        }
     }
 
     /**

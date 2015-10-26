@@ -12,18 +12,17 @@
 
 namespace BenGor\User\Application\Service;
 
-use BenGor\User\Domain\Model\Exception\UserTokenNotFoundException;
+use BenGor\User\Domain\Model\UserId;
 use BenGor\User\Domain\Model\UserRepository;
-use BenGor\User\Domain\Model\UserToken;
 use Ddd\Application\Service\ApplicationService;
 
 /**
- * Activate user account service class.
+ * Request remember user password service class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-final class ActivateUserAccountService implements ApplicationService
+final class RequestRememberUserPasswordService implements ApplicationService
 {
     /**
      * The user repository.
@@ -47,14 +46,10 @@ final class ActivateUserAccountService implements ApplicationService
      */
     public function execute($request = null)
     {
-        $confirmationToken = $request->confirmationToken();
+        $id = $request->id();
 
-        $user = $this->repository->userOfConfirmationToken(new UserToken($confirmationToken));
-        if (null === $user) {
-            throw new UserTokenNotFoundException();
-        }
-        $user->enableAccount();
-
+        $user = $this->repository->userOfId(new UserId($id));
+        $user->rememberPassword();
         $this->repository->persist($user);
     }
 }
