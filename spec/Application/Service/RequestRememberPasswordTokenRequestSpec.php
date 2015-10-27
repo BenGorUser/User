@@ -15,17 +15,17 @@ namespace spec\BenGor\User\Application\Service;
 use PhpSpec\ObjectBehavior;
 
 /**
- * Spec file of request remember user password request class.
+ * Spec file of request remember password token request class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-class RequestRememberUserPasswordRequestSpec extends ObjectBehavior
+class RequestRememberPasswordTokenRequestSpec extends ObjectBehavior
 {
     function it_creates_request()
     {
         $this->beConstructedWith('test@test.com');
-        $this->shouldHaveType('BenGor\User\Application\Service\RequestRememberUserPasswordRequest');
+        $this->shouldHaveType('BenGor\User\Application\Service\RequestRememberPasswordTokenRequest');
 
         $this->email()->shouldBe('test@test.com');
     }

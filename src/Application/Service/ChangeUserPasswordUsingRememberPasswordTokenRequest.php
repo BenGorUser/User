@@ -13,12 +13,12 @@
 namespace BenGor\User\Application\Service;
 
 /**
- * Change user password request class.
+ * Change user password using remember password token request class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-final class ChangeRememberUserPasswordRequest
+final class ChangeUserPasswordUsingRememberPasswordTokenRequest
 {
     /**
      * The new plain password.

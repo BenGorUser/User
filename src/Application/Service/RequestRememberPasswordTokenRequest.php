@@ -13,12 +13,12 @@
 namespace BenGor\User\Application\Service;
 
 /**
- * Request remember user password request class.
+ * Request remember password token request class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-final class RequestRememberUserPasswordRequest
+final class RequestRememberPasswordTokenRequest
 {
     /**
      * The user email.

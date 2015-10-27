@@ -12,22 +12,21 @@
 
 namespace spec\BenGor\User\Application\Service;
 
-use BenGor\User\Application\Service\RequestRememberUserPasswordRequest;
+use BenGor\User\Application\Service\RequestRememberPasswordTokenRequest;
 use BenGor\User\Domain\Model\Exception\UserDoesNotExistException;
 use BenGor\User\Domain\Model\User;
 use BenGor\User\Domain\Model\UserEmail;
 use BenGor\User\Domain\Model\UserRepository;
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 use spec\BenGor\User\Domain\Model\DummyUserPasswordEncoder;
 
 /**
- * Spec file of request remember user password service class.
+ * Spec file of request remember password token service class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-class RequestRememberUserPasswordServiceSpec extends ObjectBehavior
+class RequestRememberPasswordTokenServiceSpec extends ObjectBehavior
 {
     function let(UserRepository $repository)
     {
@@ -37,12 +36,12 @@ class RequestRememberUserPasswordServiceSpec extends ObjectBehavior
 
     function it_is_initializable()
     {
-        $this->shouldHaveType('BenGor\User\Application\Service\RequestRememberUserPasswordService');
+        $this->shouldHaveType('BenGor\User\Application\Service\RequestRememberPasswordTokenService');
     }
 
     function it_requests_change_password(UserRepository $repository, User $user)
     {
-        $request = new RequestRememberUserPasswordRequest('test@test.com');
+        $request = new RequestRememberPasswordTokenRequest('test@test.com');
 
         $repository->userOfEmail(new UserEmail($request->email()))->shouldBeCalled()->willReturn($user);
 
@@ -54,7 +53,7 @@ class RequestRememberUserPasswordServiceSpec extends ObjectBehavior
 
     function it_does_not_request_change_password_because_user_does_not_exist(UserRepository $repository)
     {
-        $request = new RequestRememberUserPasswordRequest('test@test.com');
+        $request = new RequestRememberPasswordTokenRequest('test@test.com');
 
         $repository->userOfEmail(new UserEmail($request->email()))->shouldBeCalled()->willReturn(null);
 

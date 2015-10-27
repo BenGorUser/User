@@ -13,19 +13,17 @@
 namespace BenGor\User\Application\Service;
 
 use BenGor\User\Domain\Model\Exception\UserDoesNotExistException;
-use BenGor\User\Domain\Model\UserPassword;
-use BenGor\User\Domain\Model\UserPasswordEncoder;
+use BenGor\User\Domain\Model\UserEmail;
 use BenGor\User\Domain\Model\UserRepository;
-use BenGor\User\Domain\Model\UserToken;
 use Ddd\Application\Service\ApplicationService;
 
 /**
- * Change remember user password service class.
+ * Request remember password token service class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-final class ChangeRememberUserPasswordService implements ApplicationService
+final class RequestRememberPasswordTokenService implements ApplicationService
 {
     /**
      * The user repository.
@@ -35,22 +33,13 @@ final class ChangeRememberUserPasswordService implements ApplicationService
     private $repository;
 
     /**
-     * The user password encoder.
-     *
-     * @var UserPasswordEncoder
-     */
-    private $encoder;
-
-    /**
      * Constructor.
      *
-     * @param UserRepository      $aRepository The user repository
-     * @param UserPasswordEncoder $anEncoder   The password encoder
+     * @param UserRepository $aRepository The user repository
      */
-    public function __construct(UserRepository $aRepository, UserPasswordEncoder $anEncoder)
+    public function __construct(UserRepository $aRepository)
     {
         $this->repository = $aRepository;
-        $this->encoder = $anEncoder;
     }
 
     /**
@@ -58,17 +47,14 @@ final class ChangeRememberUserPasswordService implements ApplicationService
      */
     public function execute($request = null)
     {
-        $rememberPasswordToken = $request->rememberPasswordToken();
-        $newPlainPassword = $request->newPlainPassword();
+        $email = $request->email();
 
-        $user = $this->repository->userOfRememberPasswordToken(new UserToken($rememberPasswordToken));
+        $user = $this->repository->userOfEmail(new UserEmail($email));
         if (null === $user) {
             throw new UserDoesNotExistException();
         }
 
-        $newPassword = UserPassword::fromPlain($newPlainPassword, $this->encoder);
-        $user->changePassword($user->password(), $newPassword);
-
+        $user->rememberPassword();
         $this->repository->persist($user);
     }
 }
