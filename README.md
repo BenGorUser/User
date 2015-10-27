@@ -8,11 +8,25 @@
 [![Latest Stable Version](https://poser.pugx.org/bengor/user/v/stable.svg)](https://packagist.org/packages/bengor/user)
 [![Latest Unstable Version](https://poser.pugx.org/bengor/user/v/unstable.svg)](https://packagist.org/packages/bengor/user)
 
+##Installation
+
+The easiest way to instal this component is using [composer][7]
+
+```bash
+composer require bengor/user
+```
+
+##Documentation
+
+All the documentation is stored in the `docs\` folder.
+
+[Show me the docs!](docs/index.md)
+
 ##Tests
 This library is completely tested by **[PHPSpec][1], SpecBDD framework for PHP**.
 
-Because you want to contribute or simply because you want to throw the tests, you have to type the following command
-in your terminal.
+Run the following command to launch tests:
+
 ```bash
 $ vendor/bin/phpspec run -fpretty
 ```
@@ -53,3 +67,4 @@ This library is created by:
 [4]: http://symfony.com/doc/current/contributing/code/patches.html#make-a-pull-request
 [5]: http://cs.sensiolabs.org/
 [6]: https://github.com/mmoreram/php-formatter
+[7]: http://getcomposer.org
