@@ -1,5 +1,14 @@
 #User PHP library
-> Lightweight user library developed using Domain-Driven Design
+
+BenGor/User is lightweight, flexible and easy to use user management library. Using
+Domain-Driven Development this library offers a well tested and documented codebase with many common use cases already 
+implemented, such as:
+ 
+ * User registration with confirmation email
+ * Remember password
+ * Log in / Log out
+ * User invitation
+ * User removal
 
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/8e36cc04-117a-4448-9cf7-1bedadfbbc59/mini.png)](https://insight.sensiolabs.com/projects/8e36cc04-117a-4448-9cf7-1bedadfbbc59)
 [![Build Status](https://travis-ci.org/BenGor/User.svg?branch=master)](https://travis-ci.org/BenGor/User)
