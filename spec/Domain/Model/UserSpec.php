@@ -52,27 +52,35 @@ class UserSpec extends ObjectBehavior
     function it_enables_an_account()
     {
         $this->isEnabled()->shouldBe(false);
-
+        $this->confirmationToken()->shouldReturnAnInstanceOf('BenGor\User\Domain\Model\UserToken');
         $this->enableAccount();
-
         $this->isEnabled()->shouldBe(true);
+        $this->confirmationToken()->shouldReturn(null);
     }
 
     function it_logs_in_user()
     {
-        $this->lastLogin()->shouldBe(null);
-
+        $this->lastLogin()->shouldReturn(null);
         $this->login();
-
         $this->lastLogin()->shouldReturnAnInstanceOf('\Datetime');
     }
 
     function it_remembers_password()
     {
-        $token = $this->confirmationToken();
+        $this->rememberPasswordToken()->shouldReturn(null);
+        $this->rememberPassword();
+        $this->rememberPasswordToken()->shouldReturnAnInstanceOf('BenGor\User\Domain\Model\UserToken');
+    }
+
+    function it_changes_password()
+    {
+        $encoder = new DummyUserPasswordEncoder('encodedPassword');
+        $newPassword = UserPassword::fromPlain('strongnewpassword', $encoder);
 
         $this->rememberPassword();
-
-        $this->confirmationToken()->shouldNotBe($token);
+        $this->rememberPasswordToken()->shouldReturnAnInstanceOf('BenGor\User\Domain\Model\UserToken');
+        $this->changePassword($this->password(), $newPassword);
+        $this->rememberPasswordToken()->shouldReturn(null);
+        $this->password()->shouldReturn($newPassword);
     }
 }

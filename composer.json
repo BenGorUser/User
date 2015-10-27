@@ -27,6 +27,17 @@
         "mmoreram/php-formatter": "^1.0",
         "phpspec/phpspec": "^2.3"
     },
+    "scripts": {
+        "cs": [
+            "php-cs-fixer fix --config-file=.php_cs",
+            "php-cs-fixer fix --config-file=.phpspec_cs",
+            "php-formatter f:h:f src",
+            "php-formatter f:h:f spec",
+            "php-formatter f:u:s src",
+            "php-formatter f:u:s spec"
+        ],
+        "test": "phpspec run"
+    },
     "suggest": {
         "doctrine/orm": "Required to persist users using Doctrine repository",
         "mandrill/mandrill": "Required to send emails using Mandrill adapter",

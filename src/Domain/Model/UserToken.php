@@ -15,12 +15,12 @@ namespace BenGor\User\Domain\Model;
 use Ramsey\Uuid\Uuid;
 
 /**
- * User confirmation domain class.
+ * User token domain class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-final class UserConfirmationToken
+final class UserToken
 {
     /**
      * The id in a primitive type.
@@ -32,7 +32,7 @@ final class UserConfirmationToken
     /**
      * Constructor.
      *
-     * @param string | null $token User confirmation token. New will be generated if empty
+     * @param string|null $token User token. New will be generated if empty
      */
     public function __construct($token = null)
     {
@@ -52,11 +52,11 @@ final class UserConfirmationToken
     /**
      * Method that checks if the id given is equal to the current.
      *
-     * @param UserConfirmationToken $aToken The token
+     * @param UserToken $aToken The token
      *
      * @return bool
      */
-    public function equals(UserConfirmationToken $aToken)
+    public function equals(UserToken $aToken)
     {
         return $this->token() === $aToken->token();
     }

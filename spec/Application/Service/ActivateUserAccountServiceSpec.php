@@ -41,7 +41,7 @@ class ActivateUserAccountServiceSpec extends ObjectBehavior
         $request = new ActivateUserAccountRequest('dsfjadjfkdasjkfdajskf');
 
         $user->enableAccount()->shouldBeCalled();
-        $repository->userOfConfirmationToken(Argument::type('BenGor\User\Domain\Model\UserConfirmationToken'))
+        $repository->userOfConfirmationToken(Argument::type('BenGor\User\Domain\Model\UserToken'))
             ->shouldBeCalled()->willReturn($user);
         $repository->persist($user)->shouldBeCalled();
 
@@ -53,11 +53,11 @@ class ActivateUserAccountServiceSpec extends ObjectBehavior
         $request = new ActivateUserAccountRequest('dsfjadjfkdasjkfdajskf');
 
         $user->enableAccount()->shouldNotBeCalled();
-        $repository->userOfConfirmationToken(Argument::type('BenGor\User\Domain\Model\UserConfirmationToken'))
+        $repository->userOfConfirmationToken(Argument::type('BenGor\User\Domain\Model\UserToken'))
             ->shouldBeCalled()->willReturn(null);
         $repository->persist($user)->shouldNotBeCalled();
 
-        $this->shouldThrow('BenGor\User\Domain\Model\Exception\UserConfirmationTokenNotFoundException')
+        $this->shouldThrow('BenGor\User\Domain\Model\Exception\UserTokenNotFoundException')
             ->duringExecute($request);
     }
 }

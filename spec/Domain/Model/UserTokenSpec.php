@@ -12,20 +12,20 @@
 
 namespace spec\BenGor\User\Domain\Model;
 
-use BenGor\User\Domain\Model\UserConfirmationToken;
+use BenGor\User\Domain\Model\UserToken;
 use PhpSpec\ObjectBehavior;
 
 /**
- * Spec file of User confirmation token value object class.
+ * Spec file of user token value object class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-class UserConfirmationTokenSpec extends ObjectBehavior
+class UserTokenSpec extends ObjectBehavior
 {
     function it_is_initializable()
     {
-        $this->shouldHaveType('BenGor\User\Domain\Model\UserConfirmationToken');
+        $this->shouldHaveType('BenGor\User\Domain\Model\UserToken');
     }
 
     function it_constructs_with_null_token()
@@ -44,14 +44,14 @@ class UserConfirmationTokenSpec extends ObjectBehavior
     {
         $this->beConstructedWith('tokenId');
 
-        $this->equals(new UserConfirmationToken('tokenId'))->shouldBe(true);
+        $this->equals(new UserToken('tokenId'))->shouldBe(true);
     }
 
     function it_compares_different_ids()
     {
         $this->beConstructedWith('tokenId');
 
-        $this->equals(new UserConfirmationToken('notEqual'))->shouldBe(false);
+        $this->equals(new UserToken('notEqual'))->shouldBe(false);
     }
 
     function it_renders_string()

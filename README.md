@@ -19,15 +19,10 @@ $ vendor/bin/phpspec run -fpretty
 ##Contributing
 This library follows PHP coding standards, so pull requests need to execute the Fabien Potencier's [PHP-CS-Fixer][5]
 and Marc Morera's [PHP-Formatter][6]. Furthermore, if the PR creates some not-PHP file remember that you have to put
-the license header manually.
+the license header manually. In order to simplify we provide a Composer script that wraps all the commands related with
+this process.
 ```bash
-$ vendor/bin/php-cs-fixer fix
-$ vendor/bin/php-cs-fixer fix --config-file .phpspec_cs
-
-$ vendor/bin/php-formatter formatter:use:sort src/
-$ vendor/bin/php-formatter formatter:use:sort spec/
-$ vendor/bin/php-formatter formatter:header:fix src/
-$ vendor/bin/php-formatter formatter:header:fix spec/
+$ composer run-script cs
 ```
 
 There is also a policy for contributing to this project. Pull requests must be explained step by step to make the

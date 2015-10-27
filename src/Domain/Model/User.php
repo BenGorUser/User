@@ -38,7 +38,7 @@ class User
     /**
      * The confirmation token.
      *
-     * @var UserConfirmationToken
+     * @var UserToken
      */
     private $confirmationToken;
 
@@ -71,6 +71,13 @@ class User
     private $password;
 
     /**
+     * The remember password token.
+     *
+     * @var UserToken
+     */
+    private $rememberPasswordToken;
+
+    /**
      * Updated on.
      *
      * @var \DateTime
@@ -80,30 +87,33 @@ class User
     /**
      * Constructor.
      *
-     * @param UserId                $anId               The id
-     * @param UserEmail             $anEmail            The email
-     * @param UserPassword          $aPassword          The plain password
-     * @param UserConfirmationToken $aConfirmationToken The confirmation token
-     * @param \DateTime             $aCreatedOn         The created on
-     * @param \DateTime             $anUpdatedOn        The updated on
-     * @param \DateTime|null        $aLastLogin         The last login
+     * @param UserId         $anId                   The id
+     * @param UserEmail      $anEmail                The email
+     * @param UserPassword   $aPassword              The plain password
+     * @param UserToken      $aConfirmationToken     The confirmation token
+     * @param \DateTime      $aCreatedOn             The created on
+     * @param \DateTime      $anUpdatedOn            The updated on
+     * @param \DateTime|null $aLastLogin             The last login
+     * @param UserToken|null $aRememberPasswordToken The remember me token
      */
     protected function __construct(
         UserId $anId,
         UserEmail $anEmail,
         UserPassword $aPassword,
-        UserConfirmationToken $aConfirmationToken = null,
+        UserToken $aConfirmationToken = null,
         \DateTime $aCreatedOn = null,
         \DateTime $anUpdatedOn = null,
-        \DateTime $aLastLogin = null
+        \DateTime $aLastLogin = null,
+        UserToken $aRememberPasswordToken = null
     ) {
         $this->id = $anId;
         $this->email = $anEmail;
         $this->password = $aPassword;
-        $this->confirmationToken = $aConfirmationToken ?: new UserConfirmationToken();
+        $this->confirmationToken = $aConfirmationToken ?: new UserToken();
         $this->createdOn = $aCreatedOn ?: new \DateTime();
         $this->updatedOn = $anUpdatedOn ?: new \DateTime();
         $this->lastLogin = $aLastLogin ?: null;
+        $this->rememberPasswordToken = $aRememberPasswordToken;
 
         DomainEventPublisher::instance()->publish(new UserRegistered($this));
     }
@@ -128,15 +138,16 @@ class User
      * This method is required to transform a plain
      * database properties into domain user object.
      *
-     * @param UserId                     $anId               The id
-     * @param UserEmail                  $anEmail            The email
-     * @param UserPassword               $aPassword          The encoded password
-     * @param \DateTime                  $aCreatedOn         The created on
-     * @param \DateTime                  $anUpdatedOn        The updated on
-     * @param \DateTime|null             $aLastLogin         The last login
-     * @param UserConfirmationToken|null $aConfirmationToken The confirmation token
+     * @param UserId         $anId                   The id
+     * @param UserEmail      $anEmail                The email
+     * @param UserPassword   $aPassword              The encoded password
+     * @param \DateTime      $aCreatedOn             The created on
+     * @param \DateTime      $anUpdatedOn            The updated on
+     * @param \DateTime|null $aLastLogin             The last login
+     * @param userToken|null $aConfirmationToken     The confirmation token
+     * @param UserToken|null $aRememberPasswordToken The remember me token
      *
-     * @return User
+     * @return self
      */
     public static function build(
         UserId $anId,
@@ -145,9 +156,19 @@ class User
         \DateTime $aCreatedOn,
         \DateTime $anUpdatedOn,
         \DateTime $aLastLogin = null,
-        UserConfirmationToken $aConfirmationToken = null
+        UserToken $aConfirmationToken = null,
+        UserToken $aRememberPasswordToken = null
     ) {
-        return new self($anId, $anEmail, $aPassword, $aConfirmationToken, $aCreatedOn, $anUpdatedOn, $aLastLogin);
+        return new self(
+            $anId,
+            $anEmail,
+            $aPassword,
+            $aConfirmationToken,
+            $aCreatedOn,
+            $anUpdatedOn,
+            $aLastLogin,
+            $aRememberPasswordToken
+        );
     }
 
     /**
@@ -172,12 +193,13 @@ class User
             throw new UserInvalidPasswordException();
         }
         $this->password = $aNewPassword;
+        $this->rememberPasswordToken = null;
     }
 
     /**
      * Gets the confirmation token.
      *
-     * @return UserConfirmationToken
+     * @return UserToken
      */
     public function confirmationToken()
     {
@@ -263,11 +285,21 @@ class User
     }
 
     /**
+     * Gets the remember password token.
+     *
+     * @return UserToken
+     */
+    public function rememberPasswordToken()
+    {
+        return $this->rememberPasswordToken;
+    }
+
+    /**
      * Remembers the password.
      */
     public function rememberPassword()
     {
-        $this->confirmationToken = new UserConfirmationToken();
+        $this->rememberPasswordToken = new UserToken();
 
         DomainEventPublisher::instance()->publish(new UserRememberPasswordRequested($this));
     }
