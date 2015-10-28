@@ -33,77 +33,77 @@ class User
      *
      * @var UserId
      */
-    private $id;
+    protected $id;
 
     /**
      * The confirmation token.
      *
      * @var UserToken
      */
-    private $confirmationToken;
+    protected $confirmationToken;
 
     /**
      * Created on.
      *
      * @var \DateTime
      */
-    private $createdOn;
+    protected $createdOn;
 
     /**
      * The email.
      *
      * @var UserEmail
      */
-    private $email;
+    protected $email;
 
     /**
      * The last login.
      *
      * @var \DateTime|null
      */
-    private $lastLogin;
+    protected $lastLogin;
 
     /**
      * The password.
      *
      * @var UserPassword
      */
-    private $password;
+    protected $password;
 
     /**
      * The remember password token.
      *
      * @var UserToken
      */
-    private $rememberPasswordToken;
+    protected $rememberPasswordToken;
 
     /**
      * Updated on.
      *
      * @var \DateTime
      */
-    private $updatedOn;
+    protected $updatedOn;
 
     /**
      * Constructor.
      *
      * @param UserId         $anId                   The id
      * @param UserEmail      $anEmail                The email
-     * @param UserPassword   $aPassword              The plain password
-     * @param UserToken      $aConfirmationToken     The confirmation token
-     * @param \DateTime      $aCreatedOn             The created on
-     * @param \DateTime      $anUpdatedOn            The updated on
+     * @param UserPassword   $aPassword              The encoded password
+     * @param \DateTime|null $aCreatedOn             The created on
+     * @param \DateTime|null $anUpdatedOn            The updated on
      * @param \DateTime|null $aLastLogin             The last login
+     * @param userToken|null $aConfirmationToken     The confirmation token
      * @param UserToken|null $aRememberPasswordToken The remember me token
      */
-    protected function __construct(
+    public function __construct(
         UserId $anId,
         UserEmail $anEmail,
         UserPassword $aPassword,
-        UserToken $aConfirmationToken = null,
         \DateTime $aCreatedOn = null,
         \DateTime $anUpdatedOn = null,
         \DateTime $aLastLogin = null,
+        UserToken $aConfirmationToken = null,
         UserToken $aRememberPasswordToken = null
     ) {
         $this->id = $anId;
@@ -116,59 +116,6 @@ class User
         $this->rememberPasswordToken = $aRememberPasswordToken;
 
         DomainEventPublisher::instance()->publish(new UserRegistered($this));
-    }
-
-    /**
-     * Named register static constructor.
-     *
-     * @param UserId       $anId      The id
-     * @param UserEmail    $anEmail   The email
-     * @param UserPassword $aPassword The password
-     *
-     * @return self
-     */
-    public static function register(UserId $anId, UserEmail $anEmail, $aPassword)
-    {
-        return new self($anId, $anEmail, $aPassword);
-    }
-
-    /**
-     * Named build static constructor.
-     *
-     * This method is required to transform a plain
-     * database properties into domain user object.
-     *
-     * @param UserId         $anId                   The id
-     * @param UserEmail      $anEmail                The email
-     * @param UserPassword   $aPassword              The encoded password
-     * @param \DateTime      $aCreatedOn             The created on
-     * @param \DateTime      $anUpdatedOn            The updated on
-     * @param \DateTime|null $aLastLogin             The last login
-     * @param userToken|null $aConfirmationToken     The confirmation token
-     * @param UserToken|null $aRememberPasswordToken The remember me token
-     *
-     * @return self
-     */
-    public static function build(
-        UserId $anId,
-        UserEmail $anEmail,
-        UserPassword $aPassword,
-        \DateTime $aCreatedOn,
-        \DateTime $anUpdatedOn,
-        \DateTime $aLastLogin = null,
-        UserToken $aConfirmationToken = null,
-        UserToken $aRememberPasswordToken = null
-    ) {
-        return new self(
-            $anId,
-            $anEmail,
-            $aPassword,
-            $aConfirmationToken,
-            $aCreatedOn,
-            $anUpdatedOn,
-            $aLastLogin,
-            $aRememberPasswordToken
-        );
     }
 
     /**

@@ -13,8 +13,8 @@
 namespace BenGor\User\Application\Service;
 
 use BenGor\User\Domain\Model\Exception\UserAlreadyExistException;
-use BenGor\User\Domain\Model\User;
 use BenGor\User\Domain\Model\UserEmail;
+use BenGor\User\Domain\Model\UserFactory;
 use BenGor\User\Domain\Model\UserPassword;
 use BenGor\User\Domain\Model\UserPasswordEncoder;
 use BenGor\User\Domain\Model\UserRepository;
@@ -43,15 +43,24 @@ final class SignUpUserService implements ApplicationService
     private $encoder;
 
     /**
+     * The user factory.
+     *
+     * @var UserFactory
+     */
+    private $factory;
+
+    /**
      * Constructor.
      *
      * @param UserRepository      $aRepository The user repository
      * @param UserPasswordEncoder $anEncoder   The password encoder
+     * @param UserFactory         $aFactory    The user factory
      */
-    public function __construct(UserRepository $aRepository, UserPasswordEncoder $anEncoder)
+    public function __construct(UserRepository $aRepository, UserPasswordEncoder $anEncoder, UserFactory $aFactory)
     {
         $this->repository = $aRepository;
         $this->encoder = $anEncoder;
+        $this->factory = $aFactory;
     }
 
     /**
@@ -62,13 +71,14 @@ final class SignUpUserService implements ApplicationService
         $email = $request->email();
         $password = $request->password();
 
-        if (null !== $this->repository->userOfEmail(new UserEmail($email))) {
+        $email = new UserEmail($email);
+        if (null !== $this->repository->userOfEmail($email)) {
             throw new UserAlreadyExistException();
         }
 
-        $user = User::register(
+        $user = $this->factory->register(
             $this->repository->nextIdentity(),
-            new UserEmail($email),
+            $email,
             UserPassword::fromPlain($password, $this->encoder)
         );
 

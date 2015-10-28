@@ -254,7 +254,7 @@ SQL
             ? null
             : new UserToken($row['remember_password_token']);
 
-        return User::build(
+        return new User(
             new UserId($row['id']),
             new UserEmail($row['email']),
             UserPassword::fromEncoded($row['password'], $row['salt']),

@@ -27,7 +27,12 @@ use Doctrine\ORM\EntityManager;
  */
 final class DoctrineUserRepository implements UserRepository
 {
-    const ENTITY = 'BenGor\User\Domain\Model\User';
+    /**
+     * The entity fully qualified namespace.
+     *
+     * @var string
+     */
+    private $class;
 
     /**
      * The entity manager.
@@ -39,11 +44,13 @@ final class DoctrineUserRepository implements UserRepository
     /**
      * Constructor.
      *
-     * @param \Doctrine\ORM\EntityManager $anEntityManager The entity manager
+     * @param EntityManager $aManager The entity manager
+     * @param string        $aClass   The entity fully qualified namespace
      */
-    public function __construct(EntityManager $anEntityManager)
+    public function __construct(EntityManager $aManager, $aClass = 'BenGor\User\Domain\Model\User')
     {
-        $this->entityManager = $anEntityManager;
+        $this->class = $aClass;
+        $this->entityManager = $aManager;
     }
 
     /**
@@ -51,7 +58,7 @@ final class DoctrineUserRepository implements UserRepository
      */
     public function userOfId(UserId $anId)
     {
-        return $this->entityManager->find(self::ENTITY, $anId);
+        return $this->entityManager->find($this->class, $anId);
     }
 
     /**
@@ -63,7 +70,7 @@ final class DoctrineUserRepository implements UserRepository
 
         return $queryBuilder
             ->select($queryBuilder->expr()->eq('u.email', ':email'))
-            ->from(self::ENTITY, 'u')
+            ->from($this->class, 'u')
             ->setParameter(':email', $anEmail)
             ->getQuery()
             ->getSingleScalarResult();
@@ -78,7 +85,7 @@ final class DoctrineUserRepository implements UserRepository
 
         return $queryBuilder
             ->select($queryBuilder->expr()->eq('u.confirmationToken', ':confirmationToken'))
-            ->from(self::ENTITY, 'u')
+            ->from($this->class, 'u')
             ->setParameter(':confirmationToken', $aConfirmationToken)
             ->getQuery()
             ->getSingleScalarResult();
@@ -93,7 +100,7 @@ final class DoctrineUserRepository implements UserRepository
 
         return $queryBuilder
             ->select($queryBuilder->expr()->eq('u.rememberPasswordToken', ':rememberPasswordToken'))
-            ->from(self::ENTITY, 'u')
+            ->from($this->class, 'u')
             ->setParameter(':rememberPasswordToken', $aRememberPasswordToken)
             ->getQuery()
             ->getSingleScalarResult();
@@ -132,7 +139,7 @@ final class DoctrineUserRepository implements UserRepository
 
         return $queryBuilder
             ->select($queryBuilder->expr()->count('u.id'))
-            ->from(self::ENTITY, 'u')
+            ->from($this->class, 'u')
             ->getQuery()
             ->getSingleScalarResult();
     }

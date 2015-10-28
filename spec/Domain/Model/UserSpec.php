@@ -29,7 +29,7 @@ class UserSpec extends ObjectBehavior
     {
         $encoder = new DummyUserPasswordEncoder('encodedPassword');
 
-        $this->beConstructedRegister(
+        $this->beConstructedWith(
             new UserId(),
             new UserEmail('test@test.com'),
             UserPassword::fromPlain('strongpassword', $encoder)
