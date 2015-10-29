@@ -10,7 +10,7 @@
  * file that was distributed with this source code.
  */
 
-namespace BenGor\User\Infrastructure\Persistence\Doctrine;
+namespace BenGor\User\Infrastructure\Persistence\Sql;
 
 use BenGor\User\Domain\Model\User;
 use BenGor\User\Domain\Model\UserEmail;
@@ -254,7 +254,7 @@ SQL
             ? null
             : new UserToken($row['remember_password_token']);
 
-        return User::build(
+        return new User(
             new UserId($row['id']),
             new UserEmail($row['email']),
             UserPassword::fromEncoded($row['password'], $row['salt']),

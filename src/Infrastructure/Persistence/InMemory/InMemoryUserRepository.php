@@ -10,7 +10,7 @@
  * file that was distributed with this source code.
  */
 
-namespace BenGor\User\Infrastructure\Persistence\Doctrine;
+namespace BenGor\User\Infrastructure\Persistence\InMemory;
 
 use BenGor\User\Domain\Model\User;
 use BenGor\User\Domain\Model\UserEmail;
