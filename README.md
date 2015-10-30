@@ -1,5 +1,5 @@
-#User PHP library
-> Lightweight user library developed using Domain-Driven Design
+#BengorUser
+> Lightweight user PHP library developed using Domain-Driven Design
 
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/8e36cc04-117a-4448-9cf7-1bedadfbbc59/mini.png)](https://insight.sensiolabs.com/projects/8e36cc04-117a-4448-9cf7-1bedadfbbc59)
 [![Build Status](https://travis-ci.org/BenGor/User.svg?branch=master)](https://travis-ci.org/BenGor/User)
@@ -8,14 +8,34 @@
 [![Latest Stable Version](https://poser.pugx.org/bengor/user/v/stable.svg)](https://packagist.org/packages/bengor/user)
 [![Latest Unstable Version](https://poser.pugx.org/bengor/user/v/unstable.svg)](https://packagist.org/packages/bengor/user)
 
+BenGorUser is **lightweight, flexible and easy to use** user management library. Using **Domain-Driven Design**
+this library offers a well tested and documented codebase with many common use cases already implemented, such as:
+ 
+ * User registration with confirmation email
+ * Remember password
+ * Log in / log out
+ * User invitation (Coming soon)
+ * User removal
+
+##Installation
+The easiest way to install this component is using [Composer][7]
+```bash
+$ composer require bengor/user
+```
+
+##Documentation
+All the documentation is stored in the `docs` folder.
+
+[Show me the docs!](docs/index.md)
+
 ##Tests
 This library is completely tested by **[PHPSpec][1], SpecBDD framework for PHP**.
 
-Because you want to contribute or simply because you want to throw the tests, you have to type the following command
-in your terminal.
+Run the following command to launch tests:
 ```bash
 $ vendor/bin/phpspec run -fpretty
 ```
+
 ##Contributing
 This library follows PHP coding standards, so pull requests need to execute the Fabien Potencier's [PHP-CS-Fixer][5]
 and Marc Morera's [PHP-Formatter][6]. Furthermore, if the PR creates some not-PHP file remember that you have to put
@@ -48,3 +68,4 @@ This library is created by:
 [4]: http://symfony.com/doc/current/contributing/code/patches.html#make-a-pull-request
 [5]: http://cs.sensiolabs.org/
 [6]: https://github.com/mmoreram/php-formatter
+[7]: http://getcomposer.org
