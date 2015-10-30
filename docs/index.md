@@ -1,4 +1,4 @@
-#BenGor/User documentation
+#BenGorUser documentation
 
 * [Basic usage](basic_usage.md)
 * [Use cases](use_cases.md)

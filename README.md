@@ -1,14 +1,5 @@
-#User PHP library
-
-BenGor/User is lightweight, flexible and easy to use user management library. Using
-Domain-Driven Development this library offers a well tested and documented codebase with many common use cases already 
-implemented, such as:
- 
- * User registration with confirmation email
- * Remember password
- * Log in / Log out
- * User invitation
- * User removal
+#BengorUser
+> Lightweight user PHP library developed using Domain-Driven Design
 
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/8e36cc04-117a-4448-9cf7-1bedadfbbc59/mini.png)](https://insight.sensiolabs.com/projects/8e36cc04-117a-4448-9cf7-1bedadfbbc59)
 [![Build Status](https://travis-ci.org/BenGor/User.svg?branch=master)](https://travis-ci.org/BenGor/User)
@@ -17,17 +8,23 @@ implemented, such as:
 [![Latest Stable Version](https://poser.pugx.org/bengor/user/v/stable.svg)](https://packagist.org/packages/bengor/user)
 [![Latest Unstable Version](https://poser.pugx.org/bengor/user/v/unstable.svg)](https://packagist.org/packages/bengor/user)
 
+BenGorUser is **lightweight, flexible and easy to use** user management library. Using **Domain-Driven Design**
+this library offers a well tested and documented codebase with many common use cases already implemented, such as:
+ 
+ * User registration with confirmation email
+ * Remember password
+ * Log in / log out
+ * User invitation (Coming soon)
+ * User removal
+
 ##Installation
-
-The easiest way to instal this component is using [composer][7]
-
+The easiest way to install this component is using [Composer][7]
 ```bash
-composer require bengor/user
+$ composer require bengor/user
 ```
 
 ##Documentation
-
-All the documentation is stored in the `docs\` folder.
+All the documentation is stored in the `docs` folder.
 
 [Show me the docs!](docs/index.md)
 
@@ -35,22 +32,17 @@ All the documentation is stored in the `docs\` folder.
 This library is completely tested by **[PHPSpec][1], SpecBDD framework for PHP**.
 
 Run the following command to launch tests:
-
 ```bash
 $ vendor/bin/phpspec run -fpretty
 ```
+
 ##Contributing
 This library follows PHP coding standards, so pull requests need to execute the Fabien Potencier's [PHP-CS-Fixer][5]
 and Marc Morera's [PHP-Formatter][6]. Furthermore, if the PR creates some not-PHP file remember that you have to put
-the license header manually.
+the license header manually. In order to simplify we provide a Composer script that wraps all the commands related with
+this process.
 ```bash
-$ vendor/bin/php-cs-fixer fix
-$ vendor/bin/php-cs-fixer fix --config-file .phpspec_cs
-
-$ vendor/bin/php-formatter formatter:use:sort src/
-$ vendor/bin/php-formatter formatter:use:sort spec/
-$ vendor/bin/php-formatter formatter:header:fix src/
-$ vendor/bin/php-formatter formatter:header:fix spec/
+$ composer run-script cs
 ```
 
 There is also a policy for contributing to this project. Pull requests must be explained step by step to make the
