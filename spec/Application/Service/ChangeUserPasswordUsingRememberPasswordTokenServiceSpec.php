@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the User library.
+ * This file is part of the BenGorUser library.
  *
  * (c) Beñat Espiña <benatespina@gmail.com>
  * (c) Gorka Laucirica <gorka.lauzirika@gmail.com>
@@ -38,6 +38,11 @@ class ChangeUserPasswordUsingRememberPasswordTokenServiceSpec extends ObjectBeha
     function it_is_initializable()
     {
         $this->shouldHaveType('BenGor\User\Application\Service\ChangeUserPasswordUsingRememberPasswordTokenService');
+    }
+
+    function it_implements_application_service()
+    {
+        $this->shouldImplement('Ddd\Application\Service\ApplicationService');
     }
 
     function it_restores_password(UserRepository $repository, User $user)

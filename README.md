@@ -1,4 +1,4 @@
-#BengorUser
+#BenGorUser
 > Lightweight user PHP library developed using Domain-Driven Design
 
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/8e36cc04-117a-4448-9cf7-1bedadfbbc59/mini.png)](https://insight.sensiolabs.com/projects/8e36cc04-117a-4448-9cf7-1bedadfbbc59)
@@ -14,7 +14,7 @@ this library offers a well tested and documented codebase with many common use c
  * User registration with confirmation email
  * Remember password
  * Log in / log out
- * User invitation (Coming soon)
+ * User invitation
  * User removal
 
 ##Installation

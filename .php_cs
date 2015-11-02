@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the User library.
+ * This file is part of the BenGorUser library.
  *
  * (c) Beñat Espiña <benatespina@gmail.com>
  * (c) Gorka Laucirica <gorka.lauzirika@gmail.com>
@@ -34,5 +34,4 @@ return Symfony\CS\Config\Config::create()
         'short_echo_tag',
         'strict',
         'strict_param'
-    ])
-    ->setUsingCache(true);
+    ]);

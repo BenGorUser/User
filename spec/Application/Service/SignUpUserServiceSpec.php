@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the User library.
+ * This file is part of the BenGorUser library.
  *
  * (c) Beñat Espiña <benatespina@gmail.com>
  * (c) Gorka Laucirica <gorka.lauzirika@gmail.com>
@@ -42,6 +42,11 @@ class SignUpUserServiceSpec extends ObjectBehavior
     function it_is_initializable()
     {
         $this->shouldHaveType('BenGor\User\Application\Service\SignUpUserService');
+    }
+
+    function it_implements_application_service()
+    {
+        $this->shouldImplement('Ddd\Application\Service\ApplicationService');
     }
 
     function it_signs_the_user_up(UserRepository $repository, UserFactory $factory, User $user)

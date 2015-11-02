@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the User library.
+ * This file is part of the BenGorUser library.
  *
  * (c) Beñat Espiña <benatespina@gmail.com>
  * (c) Gorka Laucirica <gorka.lauzirika@gmail.com>

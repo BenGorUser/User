@@ -6,6 +6,7 @@ perform actions based on the event triggered with many possibilities.
 The following actions are triggered:
 
 * `BenGor\User\Domain\Model\Event\UserEnabled`: After user has been enabled successfully
+* `BenGor\User\Domain\Model\Event\UserInvited`: After user guest has been registered or after the invitation token is regenerated
 * `BenGor\User\Domain\Model\Event\UserLoggedIn`: After successful login
 * `BenGor\User\Domain\Model\Event\UserLoggedOut`: After logout
 * `BenGor\User\Domain\Model\Event\UserRegistered`: After user registered successfully

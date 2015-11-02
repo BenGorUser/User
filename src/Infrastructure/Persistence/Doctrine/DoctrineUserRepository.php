@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the User library.
+ * This file is part of the BenGorUser library.
  *
  * (c) Beñat Espiña <benatespina@gmail.com>
  * (c) Gorka Laucirica <gorka.lauzirika@gmail.com>
@@ -73,7 +73,7 @@ final class DoctrineUserRepository implements UserRepository
             ->from($this->class, 'u')
             ->setParameter(':email', $anEmail)
             ->getQuery()
-            ->getSingleScalarResult();
+            ->getOneOrNullResult();
     }
 
     /**
@@ -88,7 +88,7 @@ final class DoctrineUserRepository implements UserRepository
             ->from($this->class, 'u')
             ->setParameter(':confirmationToken', $aConfirmationToken)
             ->getQuery()
-            ->getSingleScalarResult();
+            ->getOneOrNullResult();
     }
 
     /**
@@ -103,7 +103,7 @@ final class DoctrineUserRepository implements UserRepository
             ->from($this->class, 'u')
             ->setParameter(':rememberPasswordToken', $aRememberPasswordToken)
             ->getQuery()
-            ->getSingleScalarResult();
+            ->getOneOrNullResult();
     }
 
     /**

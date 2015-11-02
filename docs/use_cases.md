@@ -2,6 +2,8 @@
 
 ##Sign up
 
+##Invite user
+
 ##Activate user
 
 ##Log in user
