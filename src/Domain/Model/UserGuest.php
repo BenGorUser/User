@@ -27,28 +27,28 @@ class UserGuest
      *
      * @var UserGuestId
      */
-    private $id;
+    protected $id;
 
     /**
      * Created on.
      *
      * @var \DateTime
      */
-    private $createdOn;
+    protected $createdOn;
 
     /**
      * The email.
      *
      * @var UserEmail
      */
-    private $email;
+    protected $email;
 
     /**
      * The invitation token.
      *
      * @var UserToken
      */
-    private $invitationToken;
+    protected $invitationToken;
 
     /**
      * Constructor.
