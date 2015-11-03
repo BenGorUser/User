@@ -72,11 +72,14 @@ final class LogInUserService implements ApplicationService
         }
 
         $password = UserPassword::fromPlain($plainPassword, $this->encoder, $user->password()->salt());
+
         if (false === $user->password()->equals($password)) {
             throw new UserInvalidPasswordException();
         }
         $user->login();
 
         $this->repository->persist($user);
+
+        return new LogInUserResponse($user);
     }
 }

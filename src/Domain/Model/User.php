@@ -54,7 +54,7 @@ class User
      *
      * @var UserEmail
      */
-    protected $email;
+    public $email;
 
     /**
      * The last login.
@@ -190,7 +190,9 @@ class User
      */
     public function isEnabled()
     {
-        return $this->confirmationToken === null;
+        $token = $this->confirmationToken->token();
+
+        return '' === trim($token) || null === $token;
     }
 
     /**
