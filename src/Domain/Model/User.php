@@ -78,6 +78,13 @@ class User
     protected $rememberPasswordToken;
 
     /**
+     * Array which contains roles.
+     *
+     * @var UserRole[]
+     */
+    protected $roles;
+
+    /**
      * Updated on.
      *
      * @var \DateTime
@@ -93,7 +100,7 @@ class User
      * @param \DateTime|null $aCreatedOn             The created on
      * @param \DateTime|null $anUpdatedOn            The updated on
      * @param \DateTime|null $aLastLogin             The last login
-     * @param userToken|null $aConfirmationToken     The confirmation token
+     * @param UserToken|null $aConfirmationToken     The confirmation token
      * @param UserToken|null $aRememberPasswordToken The remember me token
      */
     public function __construct(
