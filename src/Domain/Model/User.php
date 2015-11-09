@@ -78,6 +78,13 @@ class User
     protected $rememberPasswordToken;
 
     /**
+     * Array which contains roles.
+     *
+     * @var UserRole[]
+     */
+    protected $roles;
+
+    /**
      * Updated on.
      *
      * @var \DateTime
@@ -90,16 +97,18 @@ class User
      * @param UserId         $anId                   The id
      * @param UserEmail      $anEmail                The email
      * @param UserPassword   $aPassword              The encoded password
+     * @param array          $userRoles              Array which contains the roles
      * @param \DateTime|null $aCreatedOn             The created on
      * @param \DateTime|null $anUpdatedOn            The updated on
      * @param \DateTime|null $aLastLogin             The last login
-     * @param userToken|null $aConfirmationToken     The confirmation token
+     * @param UserToken|null $aConfirmationToken     The confirmation token
      * @param UserToken|null $aRememberPasswordToken The remember me token
      */
     public function __construct(
         UserId $anId,
         UserEmail $anEmail,
         UserPassword $aPassword,
+        array $userRoles,
         \DateTime $aCreatedOn = null,
         \DateTime $anUpdatedOn = null,
         \DateTime $aLastLogin = null,
@@ -114,6 +123,7 @@ class User
         $this->updatedOn = $anUpdatedOn ?: new \DateTime();
         $this->lastLogin = $aLastLogin ?: null;
         $this->rememberPasswordToken = $aRememberPasswordToken;
+        $this->addRoles($userRoles);
 
         DomainEventPublisher::instance()->publish(new UserRegistered($this));
     }
@@ -126,6 +136,25 @@ class User
     public function id()
     {
         return $this->id;
+    }
+
+    /**
+     * Adds the given roles.
+     *
+     * @param array $roles     Array which contains the roles
+     * @param bool  $overwrite Overwrite flag, by default is false
+     */
+    public function addRoles(array $roles, $overwrite = false)
+    {
+        foreach ($roles as $role) {
+            if (!$role instanceof UserRole) {
+                throw new \InvalidArgumentException('This is not user role instance');
+            }
+        }
+        if (true === $overwrite) {
+            $this->roles = [];
+        }
+        $this->roles = array_unique(array_merge($this->roles, $roles), SORT_REGULAR);
     }
 
     /**
@@ -251,6 +280,16 @@ class User
         $this->rememberPasswordToken = new UserToken();
 
         DomainEventPublisher::instance()->publish(new UserRememberPasswordRequested($this));
+    }
+
+    /**
+     * Gets the roles.
+     *
+     * @return UserRole[]
+     */
+    public function roles()
+    {
+        return $this->roles;
     }
 
     /**
