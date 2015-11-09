@@ -17,47 +17,21 @@ use BenGor\User\Domain\Model\UserGuest;
 use BenGor\User\Domain\Model\UserGuestId;
 use BenGor\User\Domain\Model\UserGuestRepository;
 use BenGor\User\Domain\Model\UserToken;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 
 /**
  * Doctrine user guest repository class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  */
-final class DoctrineUserGuestRepository implements UserGuestRepository
+final class DoctrineUserGuestRepository extends EntityRepository implements UserGuestRepository
 {
-    /**
-     * The entity fully qualified namespace.
-     *
-     * @var string
-     */
-    private $class;
-
-    /**
-     * The entity manager.
-     *
-     * @var \Doctrine\ORM\EntityManager
-     */
-    private $entityManager;
-
-    /**
-     * Constructor.
-     *
-     * @param EntityManager $aManager The entity manager
-     * @param string        $aClass   The entity fully qualified namespace
-     */
-    public function __construct(EntityManager $aManager, $aClass = 'BenGor\User\Domain\Model\UserGuest')
-    {
-        $this->class = $aClass;
-        $this->entityManager = $aManager;
-    }
-
     /**
      * {@inheritdoc}
      */
     public function userGuestOfId(UserGuestId $anId)
     {
-        return $this->entityManager->find($this->class, $anId);
+        return $this->findOneBy(['id.id' => $anId->id()]);
     }
 
     /**
@@ -65,14 +39,7 @@ final class DoctrineUserGuestRepository implements UserGuestRepository
      */
     public function userGuestOfEmail(UserEmail $anEmail)
     {
-        $queryBuilder = $this->entityManager->createQueryBuilder();
-
-        return $queryBuilder
-            ->select($queryBuilder->expr()->eq('ug.email', ':email'))
-            ->from($this->class, 'ug')
-            ->setParameter('email', $anEmail)
-            ->getQuery()
-            ->getOneOrNullResult();
+        return $this->findOneBy(['email.email' => $anEmail->email()]);
     }
 
     /**
@@ -80,14 +47,7 @@ final class DoctrineUserGuestRepository implements UserGuestRepository
      */
     public function userGuestOfInvitationToken(UserToken $anInvitationToken)
     {
-        $queryBuilder = $this->entityManager->createQueryBuilder();
-
-        return $queryBuilder
-            ->select($queryBuilder->expr()->eq('ug.invitationToken', ':invitationToken'))
-            ->from($this->class, 'ug')
-            ->setParameter('invitationToken', $anInvitationToken)
-            ->getQuery()
-            ->getOneOrNullResult();
+        return $this->findOneBy(['invitationToken.token' => $anInvitationToken->token()]);
     }
 
     /**
@@ -95,7 +55,7 @@ final class DoctrineUserGuestRepository implements UserGuestRepository
      */
     public function persist(UserGuest $aUserGuest)
     {
-        $this->entityManager->persist($aUserGuest);
+        $this->getEntityManager()->persist($aUserGuest);
     }
 
     /**
@@ -103,7 +63,7 @@ final class DoctrineUserGuestRepository implements UserGuestRepository
      */
     public function remove(UserGuest $aUserGuest)
     {
-        $this->entityManager->remove($aUserGuest);
+        $this->getEntityManager()->remove($aUserGuest);
     }
 
     /**
@@ -111,11 +71,10 @@ final class DoctrineUserGuestRepository implements UserGuestRepository
      */
     public function size()
     {
-        $queryBuilder = $this->entityManager->createQueryBuilder();
+        $queryBuilder = $this->createQueryBuilder('ug');
 
         return $queryBuilder
-            ->select($queryBuilder->expr()->count('ug.id'))
-            ->from($this->class, 'ug')
+            ->select($queryBuilder->expr()->count('ug.id.id'))
             ->getQuery()
             ->getSingleScalarResult();
     }

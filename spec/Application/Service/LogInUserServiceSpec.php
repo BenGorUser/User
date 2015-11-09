@@ -60,7 +60,7 @@ class LogInUserServiceSpec extends ObjectBehavior
             ->shouldBeCalled()->willReturn($user);
         $repository->persist($user)->shouldBeCalled();
 
-        $this->execute($request);
+        $this->execute($request)->shouldReturnAnInstanceOf('BenGor\User\Application\Service\LogInUserResponse');
     }
 
     function it_doesnt_log_if_user_not_enabled(UserRepository $repository, User $user)

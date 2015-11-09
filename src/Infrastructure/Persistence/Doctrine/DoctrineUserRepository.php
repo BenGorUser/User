@@ -17,7 +17,7 @@ use BenGor\User\Domain\Model\UserEmail;
 use BenGor\User\Domain\Model\UserId;
 use BenGor\User\Domain\Model\UserRepository;
 use BenGor\User\Domain\Model\UserToken;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 
 /**
  * Doctrine user repository class.
@@ -25,40 +25,14 @@ use Doctrine\ORM\EntityManager;
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-final class DoctrineUserRepository implements UserRepository
+final class DoctrineUserRepository extends EntityRepository implements UserRepository
 {
-    /**
-     * The entity fully qualified namespace.
-     *
-     * @var string
-     */
-    private $class;
-
-    /**
-     * The entity manager.
-     *
-     * @var \Doctrine\ORM\EntityManager
-     */
-    private $entityManager;
-
-    /**
-     * Constructor.
-     *
-     * @param EntityManager $aManager The entity manager
-     * @param string        $aClass   The entity fully qualified namespace
-     */
-    public function __construct(EntityManager $aManager, $aClass = 'BenGor\User\Domain\Model\User')
-    {
-        $this->class = $aClass;
-        $this->entityManager = $aManager;
-    }
-
     /**
      * {@inheritdoc}
      */
     public function userOfId(UserId $anId)
     {
-        return $this->entityManager->find($this->class, $anId);
+        return $this->find($anId->id());
     }
 
     /**
@@ -66,14 +40,7 @@ final class DoctrineUserRepository implements UserRepository
      */
     public function userOfEmail(UserEmail $anEmail)
     {
-        $queryBuilder = $this->entityManager->createQueryBuilder();
-
-        return $queryBuilder
-            ->select($queryBuilder->expr()->eq('u.email', ':email'))
-            ->from($this->class, 'u')
-            ->setParameter(':email', $anEmail)
-            ->getQuery()
-            ->getOneOrNullResult();
+        return $this->findOneBy(['email.email' => $anEmail->email()]);
     }
 
     /**
@@ -81,14 +48,7 @@ final class DoctrineUserRepository implements UserRepository
      */
     public function userOfConfirmationToken(UserToken $aConfirmationToken)
     {
-        $queryBuilder = $this->entityManager->createQueryBuilder();
-
-        return $queryBuilder
-            ->select($queryBuilder->expr()->eq('u.confirmationToken', ':confirmationToken'))
-            ->from($this->class, 'u')
-            ->setParameter(':confirmationToken', $aConfirmationToken)
-            ->getQuery()
-            ->getOneOrNullResult();
+        return $this->findOneBy(['confirmationToken.token' => $aConfirmationToken->token()]);
     }
 
     /**
@@ -96,14 +56,7 @@ final class DoctrineUserRepository implements UserRepository
      */
     public function userOfRememberPasswordToken(UserToken $aRememberPasswordToken)
     {
-        $queryBuilder = $this->entityManager->createQueryBuilder();
-
-        return $queryBuilder
-            ->select($queryBuilder->expr()->eq('u.rememberPasswordToken', ':rememberPasswordToken'))
-            ->from($this->class, 'u')
-            ->setParameter(':rememberPasswordToken', $aRememberPasswordToken)
-            ->getQuery()
-            ->getOneOrNullResult();
+        return $this->findOneBy(['rememberPasswordToken.token' => $aRememberPasswordToken->token()]);
     }
 
     /**
@@ -119,7 +72,7 @@ final class DoctrineUserRepository implements UserRepository
      */
     public function persist(User $aUser)
     {
-        $this->entityManager->persist($aUser);
+        $this->getEntityManager()->persist($aUser);
     }
 
     /**
@@ -127,7 +80,7 @@ final class DoctrineUserRepository implements UserRepository
      */
     public function remove(User $aUser)
     {
-        $this->entityManager->remove($aUser);
+        $this->getEntityManager()->remove($aUser);
     }
 
     /**
@@ -135,11 +88,10 @@ final class DoctrineUserRepository implements UserRepository
      */
     public function size()
     {
-        $queryBuilder = $this->entityManager->createQueryBuilder();
+        $queryBuilder = $this->createQueryBuilder('u');
 
         return $queryBuilder
-            ->select($queryBuilder->expr()->count('u.id'))
-            ->from($this->class, 'u')
+            ->select($queryBuilder->expr()->count('u.id.id'))
             ->getQuery()
             ->getSingleScalarResult();
     }
