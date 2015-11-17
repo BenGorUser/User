@@ -16,6 +16,7 @@ use BenGor\User\Domain\Model\User;
 use BenGor\User\Domain\Model\UserEmail;
 use BenGor\User\Domain\Model\UserId;
 use BenGor\User\Domain\Model\UserPassword;
+use BenGor\User\Domain\Model\UserRole;
 use PhpSpec\ObjectBehavior;
 
 /**
@@ -30,7 +31,8 @@ class SignUpUserResponseSpec extends ObjectBehavior
         $user = new User(
             new UserId(),
             new UserEmail('user@user.com'),
-            UserPassword::fromEncoded('123456', 'dummy-salt')
+            UserPassword::fromEncoded('123456', 'dummy-salt'),
+            [new UserRole('ROLE_USER')]
         );
 
         $this->beConstructedWith($user);
