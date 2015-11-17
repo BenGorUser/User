@@ -15,3 +15,5 @@
 ##Change password
 
 ##Remove user
+
+##Change privileges (roles)
