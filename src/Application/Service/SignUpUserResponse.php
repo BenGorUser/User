@@ -15,11 +15,11 @@ namespace BenGor\User\Application\Service;
 use BenGor\User\Domain\Model\User;
 
 /**
- * User login response class.
+ * User sign up response class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  */
-final class LogInUserResponse
+final class SignUpUserResponse
 {
     /**
      * The user.

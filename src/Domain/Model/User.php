@@ -219,9 +219,7 @@ class User
      */
     public function isEnabled()
     {
-        $token = $this->confirmationToken->token();
-
-        return '' === trim($token) || null === $token;
+        return null === $this->confirmationToken || '' === trim($this->confirmationToken->token());
     }
 
     /**
