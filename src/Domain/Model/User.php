@@ -80,7 +80,7 @@ class User
     /**
      * Array which contains roles.
      *
-     * @var UserRole[]
+     * @var Role[]
      */
     protected $roles;
 
@@ -123,7 +123,7 @@ class User
         $this->updatedOn = $anUpdatedOn ?: new \DateTime();
         $this->lastLogin = $aLastLogin ?: null;
         $this->rememberPasswordToken = $aRememberPasswordToken;
-        $this->addRoles($userRoles);
+        $this->setRoles($userRoles);
 
         DomainEventPublisher::instance()->publish(new UserRegistered($this));
     }
@@ -136,25 +136,6 @@ class User
     public function id()
     {
         return $this->id;
-    }
-
-    /**
-     * Adds the given roles.
-     *
-     * @param array $roles     Array which contains the roles
-     * @param bool  $overwrite Overwrite flag, by default is false
-     */
-    public function addRoles(array $roles, $overwrite = false)
-    {
-        foreach ($roles as $role) {
-            if (!$role instanceof UserRole) {
-                throw new \InvalidArgumentException('This is not user role instance');
-            }
-        }
-        if (true === $overwrite) {
-            $this->roles = [];
-        }
-        $this->roles = array_unique(array_merge($this->roles, $roles), SORT_REGULAR);
     }
 
     /**
@@ -219,7 +200,7 @@ class User
      */
     public function isEnabled()
     {
-        return null === $this->confirmationToken || '' === trim($this->confirmationToken->token());
+        return null === $this->confirmationToken;
     }
 
     /**
@@ -287,7 +268,31 @@ class User
      */
     public function roles()
     {
-        return $this->roles;
+        return array_map(function ($role) {
+            return $role->role();
+        }, $this->roles);
+    }
+
+    /**
+     * Adds the given roles.
+     *
+     * @param array $roles     Array which contains the roles
+     * @param bool  $overwrite Overwrite flag, by default is true
+     */
+    public function setRoles(array $roles, $overwrite = true)
+    {
+        $entities = array_map(function ($role) {
+            if (!$role instanceof UserRole) {
+                throw new \InvalidArgumentException('This is not a role instance');
+            }
+
+            return new Role(new RoleId(), $role);
+        }, $roles);
+
+        if (true === $overwrite) {
+            $this->roles = [];
+        }
+        $this->roles = array_unique(array_merge($this->roles, $entities), SORT_REGULAR);
     }
 
     /**

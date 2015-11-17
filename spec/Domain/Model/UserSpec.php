@@ -15,6 +15,7 @@ namespace spec\BenGor\User\Domain\Model;
 use BenGor\User\Domain\Model\UserEmail;
 use BenGor\User\Domain\Model\UserId;
 use BenGor\User\Domain\Model\UserPassword;
+use BenGor\User\Domain\Model\UserRole;
 use PhpSpec\ObjectBehavior;
 
 /**
@@ -32,7 +33,8 @@ class UserSpec extends ObjectBehavior
         $this->beConstructedWith(
             new UserId(),
             new UserEmail('test@test.com'),
-            UserPassword::fromPlain('strongpassword', $encoder)
+            UserPassword::fromPlain('strongpassword', $encoder),
+            [new UserRole('ROLE_USER'), new UserRole('ROLE_ADMIN')]
         );
     }
 
@@ -82,5 +84,18 @@ class UserSpec extends ObjectBehavior
         $this->changePassword($this->password(), $newPassword);
         $this->rememberPasswordToken()->shouldReturn(null);
         $this->password()->shouldReturn($newPassword);
+    }
+
+    function it_sets_roles()
+    {
+        $roles = [new UserRole('ROLE_USER')];
+
+        $this->setRoles($roles);
+        $this->roles()->shouldReturn($roles);
+    }
+
+    function it_does_not_set_roles_because_the_role_is_not_a_user_role_instance()
+    {
+        $this->shouldThrow(new \InvalidArgumentException('This is not a role instance'))->duringSetRoles(['ROLE_USER']);
     }
 }

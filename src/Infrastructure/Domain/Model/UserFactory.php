@@ -45,8 +45,8 @@ final class UserFactory implements BaseUserFactory
     /**
      * {@inheritdoc}
      */
-    public function register(UserId $anId, UserEmail $anEmail, UserPassword $aPassword)
+    public function register(UserId $anId, UserEmail $anEmail, UserPassword $aPassword, array $roles)
     {
-        return new $this->class($anId, $anEmail, $aPassword);
+        return new $this->class($anId, $anEmail, $aPassword, $roles);
     }
 }

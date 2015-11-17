@@ -15,7 +15,7 @@ namespace spec\BenGor\User\Domain\Model;
 use PhpSpec\ObjectBehavior;
 
 /**
- * Spec file of User Id value object class.
+ * Spec file of user email value object class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>

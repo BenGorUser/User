@@ -85,6 +85,6 @@ class UserRole
      */
     protected function roles()
     {
-        return ['ROLE_USER', 'ROLE_SUPER_ADMIN'];
+        return ['ROLE_USER', 'ROLE_ADMIN'];
     }
 }
