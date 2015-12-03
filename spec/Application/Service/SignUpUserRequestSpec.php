@@ -29,6 +29,6 @@ class SignUpUserRequestSpec extends ObjectBehavior
 
         $this->email()->shouldReturn('user@user.net');
         $this->password()->shouldReturn('plainPassword');
-        $this->roles()->shoulReturn(['ROLE_USER', 'ROLE_ADMIN']);
+        $this->roles()->shouldReturn(['ROLE_USER', 'ROLE_ADMIN']);
     }
 }

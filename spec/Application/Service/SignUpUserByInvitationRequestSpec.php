@@ -28,6 +28,6 @@ class SignUpUserByInvitationRequestSpec extends ObjectBehavior
 
         $this->invitationToken()->shouldBe('dummy-invitation-token');
         $this->password()->shouldBe('plainPassword');
-        $this->roles()->shoulReturn(['ROLE_USER', 'ROLE_ADMIN']);
+        $this->roles()->shouldReturn(['ROLE_USER', 'ROLE_ADMIN']);
     }
 }

@@ -54,7 +54,7 @@ class User
      *
      * @var UserEmail
      */
-    public $email;
+    protected $email;
 
     /**
      * The last login.
