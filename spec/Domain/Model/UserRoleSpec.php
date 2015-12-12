@@ -29,11 +29,4 @@ class UserRoleSpec extends ObjectBehavior
         $this->role()->shouldBe('ROLE_USER');
         $this->__toString()->shouldBe('ROLE_USER');
     }
-
-    function it_constructs_with_invalid_role()
-    {
-        $this->beConstructedWith('invalid role');
-
-        $this->shouldThrow('BenGor\User\Domain\Model\Exception\UserInvalidRoleException')->duringInstantiation();
-    }
 }

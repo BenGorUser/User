@@ -126,7 +126,11 @@ class User
         $this->updatedOn = $anUpdatedOn ?: new \DateTime();
         $this->lastLogin = $aLastLogin ?: null;
         $this->rememberPasswordToken = $aRememberPasswordToken;
-        $this->setRoles($userRoles);
+
+        $this->roles = [];
+        foreach ($userRoles as $userRole) {
+            $this->grant($userRole);
+        }
 
         DomainEventPublisher::instance()->publish(new UserRegistered($this));
     }
