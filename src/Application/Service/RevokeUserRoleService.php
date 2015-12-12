@@ -19,11 +19,11 @@ use BenGor\User\Domain\Model\UserRole;
 use Ddd\Application\Service\ApplicationService;
 
 /**
- * Change user privileges service class.
+ * Revoke user role service class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  */
-final class ChangeUserPrivilegesService implements ApplicationService
+final class RevokeUserRoleService implements ApplicationService
 {
     /**
      * The user repository.
@@ -48,18 +48,13 @@ final class ChangeUserPrivilegesService implements ApplicationService
     public function execute($request = null)
     {
         $id = $request->id();
-        $roles = $request->roles();
+        $role = $request->role();
 
         $user = $this->repository->userOfId(new UserId($id));
         if (null === $user) {
             throw new UserDoesNotExistException();
         }
-
-        $userRoles = array_map(function ($role) {
-            return new UserRole($role);
-        }, $roles);
-
-        $user->setRoles($userRoles);
+        $user->revoke(new UserRole($role));
 
         $this->repository->persist($user);
     }

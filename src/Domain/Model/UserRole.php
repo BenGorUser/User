@@ -12,17 +12,12 @@
 
 namespace BenGor\User\Domain\Model;
 
-use BenGor\User\Domain\Model\Exception\UserInvalidRoleException;
-
 /**
  * User role domain class.
  *
- * This class has an extension point in the roles
- * method depending the application domain roles.
- *
  * @author Beñat Espiña <benatespina@gmail.com>
  */
-class UserRole
+final class UserRole
 {
     /**
      * The role in plain string.
@@ -35,14 +30,9 @@ class UserRole
      * Constructor.
      *
      * @param string $aRole A role in primitive string
-     *
-     * @throws UserInvalidRoleException when the role is not valid
      */
     public function __construct($aRole)
     {
-        if (!in_array($aRole, $this->roles())) {
-            throw new UserInvalidRoleException();
-        }
         $this->role = $aRole;
     }
 
@@ -76,15 +66,5 @@ class UserRole
     public function __toString()
     {
         return $this->role;
-    }
-
-    /**
-     * Contains the different roles that the domain supports.
-     *
-     * @return array
-     */
-    protected function roles()
-    {
-        return ['ROLE_USER', 'ROLE_ADMIN'];
     }
 }

@@ -17,7 +17,10 @@ use BenGor\User\Domain\Model\Event\UserLoggedIn;
 use BenGor\User\Domain\Model\Event\UserLoggedOut;
 use BenGor\User\Domain\Model\Event\UserRegistered;
 use BenGor\User\Domain\Model\Event\UserRememberPasswordRequested;
+use BenGor\User\Domain\Model\Event\UserRoleGranted;
+use BenGor\User\Domain\Model\Event\UserRoleRevoked;
 use BenGor\User\Domain\Model\Exception\UserInvalidPasswordException;
+use BenGor\User\Domain\Model\Exception\UserInvalidRoleException;
 use Ddd\Domain\DomainEventPublisher;
 
 /**
@@ -80,7 +83,7 @@ class User
     /**
      * Array which contains roles.
      *
-     * @var Role[]
+     * @var UserRole[]
      */
     protected $roles;
 
@@ -194,6 +197,23 @@ class User
     }
 
     /**
+     * Adds the given role.
+     *
+     * @param UserRole $aRole The user role
+     */
+    public function grant(UserRole $aRole)
+    {
+        if (false === $this->isRoleAllowed($aRole)) {
+            throw new UserInvalidRoleException();
+        }
+        if (false === $this->isGranted($aRole)) {
+            $this->roles[] = $aRole;
+
+            DomainEventPublisher::instance()->publish(new UserRoleGranted($this));
+        }
+    }
+
+    /**
      * Checks if the user is enabled or not.
      *
      * @return bool
@@ -201,6 +221,36 @@ class User
     public function isEnabled()
     {
         return null === $this->confirmationToken;
+    }
+
+    /**
+     * Checks if the user has the given role.
+     *
+     * @param UserRole $aRole The user role
+     *
+     * @return bool
+     */
+    public function isGranted(UserRole $aRole)
+    {
+        foreach ($this->roles as $role) {
+            if ($role->equals($aRole)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks if the role given appears between allowed roles.
+     *
+     * @param UserRole $aRole The user role
+     *
+     * @return bool
+     */
+    public function isRoleAllowed(UserRole $aRole)
+    {
+        return in_array($aRole->role(), $this->availableRoles());
     }
 
     /**
@@ -262,37 +312,28 @@ class User
     }
 
     /**
+     * Removes the given role.
+     *
+     * @param UserRole $aRole The user role
+     */
+    public function revoke(UserRole $aRole)
+    {
+        foreach ($this->roles as $key => $role) {
+            if ($role->equals($aRole)) {
+                unset($this->roles[$key]);
+            }
+        }
+        DomainEventPublisher::instance()->publish(new UserRoleRevoked($this));
+    }
+
+    /**
      * Gets the roles.
      *
      * @return UserRole[]
      */
     public function roles()
     {
-        return array_map(function ($role) {
-            return $role->role();
-        }, $this->roles);
-    }
-
-    /**
-     * Adds the given roles.
-     *
-     * @param array $roles     Array which contains the roles
-     * @param bool  $overwrite Overwrite flag, by default is true
-     */
-    public function setRoles(array $roles, $overwrite = true)
-    {
-        $entities = array_map(function ($role) {
-            if (!$role instanceof UserRole) {
-                throw new \InvalidArgumentException('This is not a role instance');
-            }
-
-            return new Role(new RoleId(), $role);
-        }, $roles);
-
-        if (true === $overwrite) {
-            $this->roles = [];
-        }
-        $this->roles = array_unique(array_merge($this->roles, $entities), SORT_REGULAR);
+        return $this->roles;
     }
 
     /**
@@ -303,5 +344,18 @@ class User
     public function updatedOn()
     {
         return $this->updatedOn;
+    }
+
+    /**
+     * Gets the available roles in scalar type.
+     *
+     * This method is an extension point that it allows
+     * to add more roles easily in the domain.
+     *
+     * @return array
+     */
+    protected function availableRoles()
+    {
+        return ['ROLE_USER', 'ROLE_ADMIN'];
     }
 }

@@ -13,11 +13,11 @@
 namespace BenGor\User\Application\Service;
 
 /**
- * Change user privileges request class.
+ * Grant user role request class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  */
-final class ChangeUserPrivilegesRequest
+final class GrantUserRoleRequest
 {
     /**
      * The user id.
@@ -27,22 +27,22 @@ final class ChangeUserPrivilegesRequest
     private $id;
 
     /**
-     * Array which contains the roles.
+     * The role
      *
-     * @var array
+     * @var string
      */
-    private $roles;
+    private $role;
 
     /**
      * Constructor.
      *
      * @param string $anId  The user id
-     * @param array  $roles Array which contains the roles
+     * @param string $aRole The role
      */
-    public function __construct($anId, $roles)
+    public function __construct($anId, $aRole)
     {
         $this->id = $anId;
-        $this->roles = $roles;
+        $this->role = $aRole;
     }
 
     /**
@@ -56,12 +56,12 @@ final class ChangeUserPrivilegesRequest
     }
 
     /**
-     * Gets the roles.
+     * Gets the role.
      *
-     * @return array
+     * @return string
      */
-    public function roles()
+    public function role()
     {
-        return $this->roles;
+        return $this->role;
     }
 }

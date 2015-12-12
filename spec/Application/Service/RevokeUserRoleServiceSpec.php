@@ -12,9 +12,8 @@
 
 namespace spec\BenGor\User\Application\Service;
 
-use BenGor\User\Application\Service\ChangeUserPrivilegesRequest;
+use BenGor\User\Application\Service\RevokeUserRoleRequest;
 use BenGor\User\Domain\Model\User;
-use BenGor\User\Domain\Model\UserFactory;
 use BenGor\User\Domain\Model\UserId;
 use BenGor\User\Domain\Model\UserRepository;
 use BenGor\User\Domain\Model\UserRole;
@@ -22,11 +21,11 @@ use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
 /**
- * Spec file of change user privileges service class.
+ * Spec file of revoke user role service class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  */
-class ChangeUserPrivilegesServiceSpec extends ObjectBehavior
+class RevokeUserRoleServiceSpec extends ObjectBehavior
 {
     function let(UserRepository $repository)
     {
@@ -35,7 +34,7 @@ class ChangeUserPrivilegesServiceSpec extends ObjectBehavior
 
     function it_is_initializable()
     {
-        $this->shouldHaveType('BenGor\User\Application\Service\ChangeUserPrivilegesService');
+        $this->shouldHaveType('BenGor\User\Application\Service\RevokeUserRoleService');
     }
 
     function it_implements_application_service()
@@ -43,23 +42,23 @@ class ChangeUserPrivilegesServiceSpec extends ObjectBehavior
         $this->shouldImplement('Ddd\Application\Service\ApplicationService');
     }
 
-    function it_changes_the_user_privileges(UserRepository $repository, UserFactory $factory, User $user)
+    function it_revokes_the_user_role(UserRepository $repository, User $user)
     {
-        $request = new ChangeUserPrivilegesRequest('user-id', ['ROLE_USER']);
+        $request = new RevokeUserRoleRequest('user-id', 'ROLE_USER');
         $id = new UserId('user-id');
-        $roles = [new UserRole('ROLE_USER')];
+        $role = new UserRole('ROLE_USER');
 
         $repository->userOfId($id)->shouldBeCalled()->willReturn($user);
 
-        $user->setRoles($roles)->shouldBeCalled();
+        $user->revoke($role)->shouldBeCalled();
         $repository->persist($user)->shouldBeCalled();
 
         $this->execute($request);
     }
 
-    function it_does_not_change_the_user_privileges_because_the_user_does_not_exist(UserRepository $repository)
+    function it_does_not_revoke_the_user_role_because_the_user_does_not_exist(UserRepository $repository)
     {
-        $request = new ChangeUserPrivilegesRequest('user-id', ['ROLE_USER']);
+        $request = new RevokeUserRoleRequest('user-id', 'ROLE_USER');
         $id = new UserId('user-id');
 
         $repository->userOfId($id)->shouldBeCalled()->willReturn(null);

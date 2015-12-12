@@ -9,6 +9,6 @@
 BenGor\User\Domain\Model\UserRole:
     type: embeddable
     fields:
-        token:
+        role:
             type: string
-            length: 30
+            length: 50

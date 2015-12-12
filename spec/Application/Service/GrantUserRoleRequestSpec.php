@@ -15,18 +15,18 @@ namespace spec\BenGor\User\Application\Service;
 use PhpSpec\ObjectBehavior;
 
 /**
- * Spec file of change user privileges request class.
+ * Spec file of grant user role request class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  */
-class ChangeUserPrivilegesRequestSpec extends ObjectBehavior
+class GrantUserRoleRequestSpec extends ObjectBehavior
 {
     function it_creates_request()
     {
-        $this->beConstructedWith('user-id', ['ROLE_USER', 'ROLE_ADMIN']);
-        $this->shouldHaveType('BenGor\User\Application\Service\ChangeUserPrivilegesRequest');
+        $this->beConstructedWith('user-id', ['ROLE_USER']);
+        $this->shouldHaveType('BenGor\User\Application\Service\GrantUserRoleRequest');
 
         $this->id()->shouldReturn('user-id');
-        $this->roles()->shouldReturn(['ROLE_USER', 'ROLE_ADMIN']);
+        $this->role()->shouldReturn(['ROLE_USER']);
     }
 }

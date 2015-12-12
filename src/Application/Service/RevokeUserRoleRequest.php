@@ -10,48 +10,45 @@
  * file that was distributed with this source code.
  */
 
-namespace BenGor\User\Domain\Model;
+namespace BenGor\User\Application\Service;
 
 /**
- * Role entity class that decorates the UserRole domain class.
- *
- * It is required to resolve the relationship
- * between User and UserRole domain objects.
+ * Revoke user role request class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  */
-final class Role
+final class RevokeUserRoleRequest
 {
     /**
-     * The role id.
+     * The user id.
      *
-     * @var RoleId
+     * @var string
      */
     private $id;
 
     /**
-     * The role.
+     * The role
      *
-     * @var UserRole
+     * @var string
      */
     private $role;
 
     /**
      * Constructor.
      *
-     * @param RoleId   $anId  The id
-     * @param UserRole $aRole The role domain object
+     * @param string $anId  The user id
+     * @param string $aRole The role
      */
-    public function __construct(RoleId $anId, UserRole $aRole)
+    public function __construct($anId, $aRole)
     {
         $this->id = $anId;
         $this->role = $aRole;
     }
 
     /**
-     * Gets the id.
+     * Gets the user id.
      *
-     * @return RoleId
+     * @return string
      */
     public function id()
     {
@@ -61,7 +58,7 @@ final class Role
     /**
      * Gets the role.
      *
-     * @return UserRole
+     * @return string
      */
     public function role()
     {
