@@ -16,4 +16,6 @@
 
 ##Remove user
 
-##Change privileges (roles)
+##Grant role
+
+##Revoke role
