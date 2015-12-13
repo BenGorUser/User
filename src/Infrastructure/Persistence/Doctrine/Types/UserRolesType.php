@@ -10,7 +10,7 @@
  * file that was distributed with this source code.
  */
 
-namespace BenGor\User\Infrastructure\Persistence\Types;
+namespace BenGor\User\Infrastructure\Persistence\Doctrine\Types;
 
 use BenGor\User\Domain\Model\UserRole;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
@@ -45,5 +45,13 @@ final class UserRolesType extends JsonArrayType
         }, json_decode($value));
 
         return $userRoles;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return 'user_roles';
     }
 }
