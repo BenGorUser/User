@@ -12,6 +12,7 @@
 
 namespace Lw\Infrastructure\Persistence\Doctrine;
 
+use BenGor\User\Infrastructure\Persistence\Doctrine\Types\UserRolesType;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Setup;
@@ -34,7 +35,7 @@ class EntityManagerFactory
      */
     public function build($aConnection, $isDevMode = true)
     {
-        Type::addType('user_roles', 'BenGor\User\Infrastructure\Persistence\Types\UserRolesType');
+        Type::addType('user_roles', UserRolesType::class);
 
         return EntityManager::create(
             $aConnection,

@@ -17,6 +17,7 @@ use BenGor\User\Domain\Model\UserEmail;
 use BenGor\User\Domain\Model\UserId;
 use BenGor\User\Domain\Model\UserPassword;
 use BenGor\User\Domain\Model\UserRepository;
+use BenGor\User\Domain\Model\UserRole;
 use BenGor\User\Domain\Model\UserToken;
 
 /**
@@ -150,6 +151,7 @@ CREATE TABLE user (
     last_login DATETIME,
     password VARCHAR(30) NOT NULL,
     remember_password_token VARCHAR(36),
+    roles LONGTEXT NOT NULL COMMENT '(DC2Type:user_roles)',
     updated_on DATETIME NOT NULL
 )
 SQL
@@ -180,8 +182,26 @@ SQL
     private function insert(User $aUser)
     {
         $sql = 'INSERT INTO user (
-            id, confirmation_token, created_on, email, last_login, password, remember_password_token, updated_on
-            ) VALUES (:id, :token, :createdOn, :email, :lastLogin, :password, :rememberPasswordToken, :updatedOn)';
+            id,
+            confirmation_token,
+            created_on,
+            email,
+            last_login,
+            password,
+            remember_password_token,
+            roles,
+            updated_on
+        ) VALUES (
+            :id,
+            :token,
+            :createdOn,
+            :email,
+            :lastLogin,
+            :password,
+            :rememberPasswordToken,
+            :roles,
+            :updatedOn
+        )';
         $this->execute($sql, [
             'id'                    => $aUser->id()->id(),
             'token'                 => $aUser->confirmationToken()->token(),
@@ -190,6 +210,7 @@ SQL
             'lastLogin'             => $aUser->lastLogin()->format(self::DATE_FORMAT),
             'password'              => $aUser->password()->encodedPassword(),
             'rememberPasswordToken' => $aUser->rememberPasswordToken()->token(),
+            'roles'                 => $this->rolesToString($aUser->roles()),
             'updatedOn'             => $aUser->updatedOn()->format(self::DATE_FORMAT),
         ]);
     }
@@ -206,6 +227,7 @@ SQL
             last_login = :lastLogin,
             password = :password,
             remember_password_token = :rememberPasswordToken
+            roles = :roles,
             updated_on = :updatedOn,
             WHERE id = :id';
         $this->execute($sql, [
@@ -214,6 +236,7 @@ SQL
             'lastLogin'             => $aUser->lastLogin(),
             'password'              => $aUser->password()->encodedPassword(),
             'rememberPasswordToken' => $aUser->rememberPasswordToken()->token(),
+            'roles'                 => $this->rolesToString($aUser->roles()),
             'updatedOn'             => $aUser->updatedOn(),
         ]);
     }
@@ -258,11 +281,42 @@ SQL
             new UserId($row['id']),
             new UserEmail($row['email']),
             UserPassword::fromEncoded($row['password'], $row['salt']),
+            $this->rolesToArray($row['user_roles']),
             new \DateTime($row['created_on']),
             new \DateTime($row['updated_on']),
             $lastLogin,
             $confirmationToken,
             $rememberPasswordToken
         );
+    }
+
+    /**
+     * Transforms given user roles into encoded plain json array.
+     *
+     * @param array $userRoles Array which contains the user roles
+     *
+     * @return string
+     */
+    private function rolesToString(array $userRoles)
+    {
+        return json_encode(
+            array_map(function ($userRole) {
+                return $userRole->role();
+            }, $userRoles)
+        );
+    }
+
+    /**
+     * Transforms given user roles encoded array into user roles collection.
+     *
+     * @param array $userRoles Encoded json array
+     *
+     * @return UserRole[]
+     */
+    private function rolesToArray($userRoles)
+    {
+        return array_map(function ($userRole) {
+            return new UserRole($userRole);
+        }, json_decode($userRoles));
     }
 }

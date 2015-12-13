@@ -12,6 +12,8 @@
 
 namespace BenGor\User\Infrastructure\Mailing\SwiftMailer;
 
+use BenGor\User\Domain\Model\Exception\UserInvalidEmailException;
+use BenGor\User\Domain\Model\UserEmail;
 use BenGor\User\Domain\Model\UserMailer;
 
 /**
@@ -42,14 +44,28 @@ final class SwiftMailerUserMailer implements UserMailer
     /**
      * {@inheritdoc}
      */
-    public function mail($aSubject, $from, $to, $aBody)
+    public function mail($aSubject, UserEmail $from, $to, $aBody)
     {
+        if (is_array($to)) {
+            $receivers = array_map(function ($receiver) {
+                if (!$receiver instanceof UserEmail) {
+                    throw new UserInvalidEmailException();
+                }
+
+                return $receiver->email();
+            }, $to);
+            $to = $receivers;
+        } elseif ($to instanceof UserEmail) {
+            $to = $to->email();
+        } else {
+            throw new UserInvalidEmailException();
+        }
+
         $message = \Swift_Message::newInstance()
             ->setSubject($aSubject)
-            ->setFrom($from)
+            ->setFrom($from->email())
             ->setTo($to)
             ->setBody($aBody);
-
         $this->swiftMailer->send($message);
     }
 }

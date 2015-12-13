@@ -12,6 +12,7 @@
 
 namespace BenGor\User\Infrastructure\Domain\Model;
 
+use BenGor\User\Domain\Model\User;
 use BenGor\User\Domain\Model\UserEmail;
 use BenGor\User\Domain\Model\UserFactory as BaseUserFactory;
 use BenGor\User\Domain\Model\UserId;
@@ -37,7 +38,7 @@ final class UserFactory implements BaseUserFactory
      *
      * @param string $aClass The entity fully qualified namespace
      */
-    public function __construct($aClass = 'BenGor\User\Domain\Model\User')
+    public function __construct($aClass = User::class)
     {
         $this->class = $aClass;
     }

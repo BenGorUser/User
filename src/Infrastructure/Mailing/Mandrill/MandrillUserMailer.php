@@ -12,6 +12,8 @@
 
 namespace BenGor\User\Infrastructure\Mailing\Mandrill;
 
+use BenGor\User\Domain\Model\Exception\UserInvalidEmailException;
+use BenGor\User\Domain\Model\UserEmail;
 use BenGor\User\Domain\Model\UserMailer;
 
 /**
@@ -42,8 +44,51 @@ final class MandrillUserMailer implements UserMailer
     /**
      * {@inheritdoc}
      */
-    public function mail($aSubject, $from, $to, $aBody)
+    public function mail($aSubject, UserEmail $from, $to, $aBody)
     {
-        // TODO: Implement mail() method.
+        if (is_array($to)) {
+            $receivers = array_map(function ($receiver) {
+                if (!$receiver instanceof UserEmail) {
+                    throw new UserInvalidEmailException();
+                }
+
+                return [
+                    'email' => $receiver->email(),
+                    'name'  => $receiver->email(),
+                    'type'  => 'to',
+                ];
+            }, $to);
+            $to = $receivers;
+        } elseif ($to instanceof UserEmail) {
+            $to = $to->email();
+        } else {
+            throw new UserInvalidEmailException();
+        }
+
+        $message = [
+            'subject'             => $aSubject,
+            'from_email'          => $from->email(),
+            'from_name'           => $from->email(),
+            'to'                  => $to,
+            'headers'             => ['Reply-To' => $from->email()],
+            'important'           => true,
+            'track_opens'         => true,
+            'track_clicks'        => null,
+            'auto_text'           => $aBody,
+            'auto_html'           => null,
+            'inline_css'          => null,
+            'url_strip_qs'        => null,
+            'preserve_recipients' => false,
+            'view_content_link'   => false,
+            'tracking_domain'     => null,
+            'signing_domain'      => null,
+            'return_path_domain'  => null,
+            'merge'               => true,
+            'tags'                => [],
+            'global_merge_vars'   => [$to],
+        ];
+
+        $this->mandrill->messages->send($message);
+
     }
 }
