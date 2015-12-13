@@ -35,15 +35,24 @@ final class SignUpUserRequest
     private $plainPassword;
 
     /**
+     * Array which contains the roles.
+     *
+     * @var array
+     */
+    private $roles;
+
+    /**
      * Constructor.
      *
      * @param string $anEmail        The user email
      * @param string $aPlainPassword The user password
+     * @param array  $roles          Array which contains the roles
      */
-    public function __construct($anEmail, $aPlainPassword)
+    public function __construct($anEmail, $aPlainPassword, array $roles)
     {
         $this->email = $anEmail;
         $this->plainPassword = $aPlainPassword;
+        $this->roles = $roles;
     }
 
     /**
@@ -64,5 +73,15 @@ final class SignUpUserRequest
     public function password()
     {
         return $this->plainPassword;
+    }
+
+    /**
+     * Gets the roles.
+     *
+     * @return array
+     */
+    public function roles()
+    {
+        return $this->roles;
     }
 }

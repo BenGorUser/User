@@ -15,3 +15,7 @@
 ##Change password
 
 ##Remove user
+
+##Grant role
+
+##Revoke role

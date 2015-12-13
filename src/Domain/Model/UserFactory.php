@@ -26,8 +26,9 @@ interface UserFactory
      * @param UserId       $anId      The user id
      * @param UserEmail    $anEmail   The user email
      * @param UserPassword $aPassword The user password
+     * @param array        $roles     List of roles
      *
      * @return User
      */
-    public function register(UserId $anId, UserEmail $anEmail, UserPassword $aPassword);
+    public function register(UserId $anId, UserEmail $anEmail, UserPassword $aPassword, array $roles);
 }

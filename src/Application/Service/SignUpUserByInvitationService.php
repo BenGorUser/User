@@ -19,6 +19,7 @@ use BenGor\User\Domain\Model\UserGuestRepository;
 use BenGor\User\Domain\Model\UserPassword;
 use BenGor\User\Domain\Model\UserPasswordEncoder;
 use BenGor\User\Domain\Model\UserRepository;
+use BenGor\User\Domain\Model\UserRole;
 use BenGor\User\Domain\Model\UserToken;
 use Ddd\Application\Service\ApplicationService;
 
@@ -84,6 +85,7 @@ final class SignUpUserByInvitationService implements ApplicationService
     {
         $token = $request->invitationToken();
         $password = $request->password();
+        $roles = $request->roles();
 
         $userGuest = $this->userGuestRepository->userGuestOfInvitationToken(new UserToken($token));
         if (null === $userGuest) {
@@ -92,10 +94,15 @@ final class SignUpUserByInvitationService implements ApplicationService
         if (null !== $this->userRepository->userOfEmail($userGuest->email())) {
             throw new UserAlreadyExistException();
         }
+        $userRoles = array_map(function ($role) {
+            return new UserRole($role);
+        }, $roles);
+
         $user = $this->factory->register(
             $this->userRepository->nextIdentity(),
             $userGuest->email(),
-            UserPassword::fromPlain($password, $this->encoder)
+            UserPassword::fromPlain($password, $this->encoder),
+            $userRoles
         );
 
         $this->userRepository->persist($user);

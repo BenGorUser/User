@@ -18,6 +18,7 @@ use BenGor\User\Domain\Model\UserEmail;
 use BenGor\User\Domain\Model\UserFactory;
 use BenGor\User\Domain\Model\UserId;
 use BenGor\User\Domain\Model\UserRepository;
+use BenGor\User\Domain\Model\UserRole;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use spec\BenGor\User\Domain\Model\DummyUserPasswordEncoder;
@@ -51,15 +52,16 @@ class SignUpUserServiceSpec extends ObjectBehavior
 
     function it_signs_the_user_up(UserRepository $repository, UserFactory $factory, User $user)
     {
-        $request = new SignUpUserRequest('user@user.com', 'plainPassword');
+        $request = new SignUpUserRequest('user@user.com', 'plainPassword', ['ROLE_USER']);
         $email = new UserEmail('user@user.com');
         $id = new UserId('id');
+        $roles = [new UserRole('ROLE_USER')];
 
         $repository->userOfEmail($email)->shouldBeCalled()->willReturn(null);
         $repository->nextIdentity()->shouldBeCalled()->willReturn($id);
 
         $factory->register(
-            $id, $email, Argument::type('BenGor\User\Domain\Model\UserPassword')
+            $id, $email, Argument::type('BenGor\User\Domain\Model\UserPassword'), $roles
         )->shouldBeCalled()->willReturn($user);
         $repository->persist($user)->shouldBeCalled();
 
@@ -68,7 +70,7 @@ class SignUpUserServiceSpec extends ObjectBehavior
 
     function it_does_not_sign_up_if_user_exists(UserRepository $repository, User $user)
     {
-        $request = new SignUpUserRequest('user@user.com', 'plainPassword');
+        $request = new SignUpUserRequest('user@user.com', 'plainPassword', ['ROLE_USER']);
 
         $repository->userOfEmail(
             Argument::type('BenGor\User\Domain\Model\UserEmail')

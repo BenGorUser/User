@@ -24,10 +24,11 @@ class SignUpUserRequestSpec extends ObjectBehavior
 {
     function it_creates_request()
     {
-        $this->beConstructedWith('user@user.net', 'plainPassword');
+        $this->beConstructedWith('user@user.net', 'plainPassword', ['ROLE_USER', 'ROLE_ADMIN']);
         $this->shouldHaveType('BenGor\User\Application\Service\SignUpUserRequest');
 
-        $this->email()->shouldBe('user@user.net');
-        $this->password()->shouldBe('plainPassword');
+        $this->email()->shouldReturn('user@user.net');
+        $this->password()->shouldReturn('plainPassword');
+        $this->roles()->shouldReturn(['ROLE_USER', 'ROLE_ADMIN']);
     }
 }

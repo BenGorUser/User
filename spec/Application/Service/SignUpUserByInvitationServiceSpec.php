@@ -21,6 +21,7 @@ use BenGor\User\Domain\Model\UserGuestRepository;
 use BenGor\User\Domain\Model\UserId;
 use BenGor\User\Domain\Model\UserPasswordEncoder;
 use BenGor\User\Domain\Model\UserRepository;
+use BenGor\User\Domain\Model\UserRole;
 use BenGor\User\Domain\Model\UserToken;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
@@ -32,7 +33,8 @@ use Prophecy\Argument;
  */
 class SignUpUserByInvitationServiceSpec extends ObjectBehavior
 {
-    function let(UserRepository $userRepository,
+    function let(
+        UserRepository $userRepository,
         UserGuestRepository $userGuestRepository,
         UserPasswordEncoder $encoder,
         UserFactory $factory
@@ -57,10 +59,11 @@ class SignUpUserByInvitationServiceSpec extends ObjectBehavior
         UserGuest $userGuest,
         UserFactory $factory
     ) {
-        $request = new SignUpUserByInvitationRequest('dummy-invitation-token', 'plainPassword');
+        $request = new SignUpUserByInvitationRequest('dummy-invitation-token', 'plainPassword', ['ROLE_ADMIN']);
         $token = new UserToken('dummy-invitation-token');
         $email = new UserEmail('mail@mail.com');
         $id = new UserId('id');
+        $roles = [new UserRole('ROLE_ADMIN')];
 
         $userGuestRepository->userGuestOfInvitationToken($token)->shouldBeCalled()->willReturn($userGuest);
         $userRepository->userOfEmail(
@@ -70,7 +73,7 @@ class SignUpUserByInvitationServiceSpec extends ObjectBehavior
         $userGuest->email()->shouldBeCalled()->willReturn($email);
         $userRepository->nextIdentity()->shouldBeCalled()->willReturn($id);
         $factory->register(
-            $id, $email, Argument::type('BenGor\User\Domain\Model\UserPassword')
+            $id, $email, Argument::type('BenGor\User\Domain\Model\UserPassword'), $roles
         )->shouldBeCalled()->willReturn($user);
         $userRepository->persist($user)->shouldBeCalled();
         $userGuestRepository->remove($userGuest)->shouldBeCalled();
@@ -80,7 +83,7 @@ class SignUpUserByInvitationServiceSpec extends ObjectBehavior
 
     function it_does_not_sign_up_by_invitation_if_user_guest_does_not_exist(UserGuestRepository $userGuestRepository)
     {
-        $request = new SignUpUserByInvitationRequest('dummy-invitation-token', 'plainPassword');
+        $request = new SignUpUserByInvitationRequest('dummy-invitation-token', 'plainPassword', ['ROLE_USER']);
         $token = new UserToken('dummy-invitation-token');
 
         $userGuestRepository->userGuestOfInvitationToken($token)->shouldBeCalled()->willReturn(null);
@@ -94,7 +97,7 @@ class SignUpUserByInvitationServiceSpec extends ObjectBehavior
         User $user,
         UserGuest $userGuest
     ) {
-        $request = new SignUpUserByInvitationRequest('dummy-invitation-token', 'plainPassword');
+        $request = new SignUpUserByInvitationRequest('dummy-invitation-token', 'plainPassword', ['ROLE_USER']);
         $token = new UserToken('dummy-invitation-token');
         $email = new UserEmail('mail@mail.com');
 

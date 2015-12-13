@@ -35,15 +35,24 @@ final class SignUpUserByInvitationRequest
     private $plainPassword;
 
     /**
+     * Array which contains the roles.
+     *
+     * @var array
+     */
+    private $roles;
+
+    /**
      * Constructor.
      *
      * @param string $anInvitationToken The invitation token
      * @param string $aPlainPassword    The plain password
+     * @param array  $roles             Array which contains the roles
      */
-    public function __construct($anInvitationToken, $aPlainPassword)
+    public function __construct($anInvitationToken, $aPlainPassword, array $roles)
     {
         $this->invitationToken = $anInvitationToken;
         $this->plainPassword = $aPlainPassword;
+        $this->roles = $roles;
     }
 
     /**
@@ -64,5 +73,15 @@ final class SignUpUserByInvitationRequest
     public function password()
     {
         return $this->plainPassword;
+    }
+
+    /**
+     * Gets the roles.
+     *
+     * @return array
+     */
+    public function roles()
+    {
+        return $this->roles;
     }
 }

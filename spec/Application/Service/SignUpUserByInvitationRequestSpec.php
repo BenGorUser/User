@@ -23,10 +23,11 @@ class SignUpUserByInvitationRequestSpec extends ObjectBehavior
 {
     function it_creates_request()
     {
-        $this->beConstructedWith('dummy-invitation-token', 'plainPassword');
+        $this->beConstructedWith('dummy-invitation-token', 'plainPassword', ['ROLE_USER', 'ROLE_ADMIN']);
         $this->shouldHaveType('BenGor\User\Application\Service\SignUpUserByInvitationRequest');
 
         $this->invitationToken()->shouldBe('dummy-invitation-token');
         $this->password()->shouldBe('plainPassword');
+        $this->roles()->shouldReturn(['ROLE_USER', 'ROLE_ADMIN']);
     }
 }

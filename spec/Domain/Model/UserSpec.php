@@ -12,9 +12,11 @@
 
 namespace spec\BenGor\User\Domain\Model;
 
+use BenGor\User\Domain\Model\Exception\UserInvalidRoleException;
 use BenGor\User\Domain\Model\UserEmail;
 use BenGor\User\Domain\Model\UserId;
 use BenGor\User\Domain\Model\UserPassword;
+use BenGor\User\Domain\Model\UserRole;
 use PhpSpec\ObjectBehavior;
 
 /**
@@ -32,7 +34,8 @@ class UserSpec extends ObjectBehavior
         $this->beConstructedWith(
             new UserId(),
             new UserEmail('test@test.com'),
-            UserPassword::fromPlain('strongpassword', $encoder)
+            UserPassword::fromPlain('strongpassword', $encoder),
+            [new UserRole('ROLE_USER')]
         );
     }
 
@@ -82,5 +85,24 @@ class UserSpec extends ObjectBehavior
         $this->changePassword($this->password(), $newPassword);
         $this->rememberPasswordToken()->shouldReturn(null);
         $this->password()->shouldReturn($newPassword);
+    }
+
+    function it_manages_roles()
+    {
+        $role = new UserRole('ROLE_USER');
+        $roleAdmin = new UserRole('ROLE_ADMIN');
+
+        $this->isRoleAllowed($role)->shouldReturn(true);
+        $this->grant($role);
+        $this->roles()->shouldHaveCount(1);
+        $this->grant($roleAdmin);
+        $this->roles()->shouldHaveCount(2);
+        $this->revoke($role);
+        $this->roles()->shouldHaveCount(1);
+    }
+
+    function it_does_not_grant_role_because_the_role_is_not_a_user_role_instance()
+    {
+        $this->shouldThrow(new UserInvalidRoleException())->duringGrant(new UserRole('ROLE_NOT_AVAILABLE'));
     }
 }

@@ -19,6 +19,7 @@ use BenGor\User\Domain\Model\UserFactory;
 use BenGor\User\Domain\Model\UserPassword;
 use BenGor\User\Domain\Model\UserPasswordEncoder;
 use BenGor\User\Domain\Model\UserRepository;
+use BenGor\User\Domain\Model\UserRole;
 use Ddd\Application\Service\ApplicationService;
 
 /**
@@ -71,16 +72,22 @@ final class SignUpUserService implements ApplicationService
     {
         $email = $request->email();
         $password = $request->password();
+        $roles = $request->roles();
 
         $email = new UserEmail($email);
         if (null !== $this->repository->userOfEmail($email)) {
             throw new UserAlreadyExistException();
         }
 
+        $userRoles = array_map(function ($role) {
+            return new UserRole($role);
+        }, $roles);
+
         $user = $this->factory->register(
             $this->repository->nextIdentity(),
             $email,
-            UserPassword::fromPlain($password, $this->encoder)
+            UserPassword::fromPlain($password, $this->encoder),
+            $userRoles
         );
 
         $this->repository->persist($user);

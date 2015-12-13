@@ -33,6 +33,9 @@ BenGor\User\Domain\Model\User:
         lastLogin:
             column: last_login
             type: datetime
+        roles:
+            column: roles
+            type: user_roles
         updatedOn:
             column: updated_on
             type: datetime

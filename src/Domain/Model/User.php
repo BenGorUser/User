@@ -17,7 +17,10 @@ use BenGor\User\Domain\Model\Event\UserLoggedIn;
 use BenGor\User\Domain\Model\Event\UserLoggedOut;
 use BenGor\User\Domain\Model\Event\UserRegistered;
 use BenGor\User\Domain\Model\Event\UserRememberPasswordRequested;
+use BenGor\User\Domain\Model\Event\UserRoleGranted;
+use BenGor\User\Domain\Model\Event\UserRoleRevoked;
 use BenGor\User\Domain\Model\Exception\UserInvalidPasswordException;
+use BenGor\User\Domain\Model\Exception\UserInvalidRoleException;
 use Ddd\Domain\DomainEventPublisher;
 
 /**
@@ -78,6 +81,13 @@ class User
     protected $rememberPasswordToken;
 
     /**
+     * Array which contains roles.
+     *
+     * @var UserRole[]
+     */
+    protected $roles;
+
+    /**
      * Updated on.
      *
      * @var \DateTime
@@ -90,16 +100,18 @@ class User
      * @param UserId         $anId                   The id
      * @param UserEmail      $anEmail                The email
      * @param UserPassword   $aPassword              The encoded password
+     * @param array          $userRoles              Array which contains the roles
      * @param \DateTime|null $aCreatedOn             The created on
      * @param \DateTime|null $anUpdatedOn            The updated on
      * @param \DateTime|null $aLastLogin             The last login
-     * @param userToken|null $aConfirmationToken     The confirmation token
+     * @param UserToken|null $aConfirmationToken     The confirmation token
      * @param UserToken|null $aRememberPasswordToken The remember me token
      */
     public function __construct(
         UserId $anId,
         UserEmail $anEmail,
         UserPassword $aPassword,
+        array $userRoles,
         \DateTime $aCreatedOn = null,
         \DateTime $anUpdatedOn = null,
         \DateTime $aLastLogin = null,
@@ -114,6 +126,11 @@ class User
         $this->updatedOn = $anUpdatedOn ?: new \DateTime();
         $this->lastLogin = $aLastLogin ?: null;
         $this->rememberPasswordToken = $aRememberPasswordToken;
+
+        $this->roles = [];
+        foreach ($userRoles as $userRole) {
+            $this->grant($userRole);
+        }
 
         DomainEventPublisher::instance()->publish(new UserRegistered($this));
     }
@@ -184,13 +201,60 @@ class User
     }
 
     /**
+     * Adds the given role.
+     *
+     * @param UserRole $aRole The user role
+     */
+    public function grant(UserRole $aRole)
+    {
+        if (false === $this->isRoleAllowed($aRole)) {
+            throw new UserInvalidRoleException();
+        }
+        if (false === $this->isGranted($aRole)) {
+            $this->roles[] = $aRole;
+
+            DomainEventPublisher::instance()->publish(new UserRoleGranted($this));
+        }
+    }
+
+    /**
      * Checks if the user is enabled or not.
      *
      * @return bool
      */
     public function isEnabled()
     {
-        return null === $this->confirmationToken || '' === trim($this->confirmationToken->token());
+        return null === $this->confirmationToken;
+    }
+
+    /**
+     * Checks if the user has the given role.
+     *
+     * @param UserRole $aRole The user role
+     *
+     * @return bool
+     */
+    public function isGranted(UserRole $aRole)
+    {
+        foreach ($this->roles as $role) {
+            if ($role->equals($aRole)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks if the role given appears between allowed roles.
+     *
+     * @param UserRole $aRole The user role
+     *
+     * @return bool
+     */
+    public function isRoleAllowed(UserRole $aRole)
+    {
+        return in_array($aRole->role(), $this->availableRoles());
     }
 
     /**
@@ -252,6 +316,31 @@ class User
     }
 
     /**
+     * Removes the given role.
+     *
+     * @param UserRole $aRole The user role
+     */
+    public function revoke(UserRole $aRole)
+    {
+        foreach ($this->roles as $key => $role) {
+            if ($role->equals($aRole)) {
+                unset($this->roles[$key]);
+            }
+        }
+        DomainEventPublisher::instance()->publish(new UserRoleRevoked($this));
+    }
+
+    /**
+     * Gets the roles.
+     *
+     * @return UserRole[]
+     */
+    public function roles()
+    {
+        return $this->roles;
+    }
+
+    /**
      * Gets the updated on.
      *
      * @return \DateTime
@@ -259,5 +348,18 @@ class User
     public function updatedOn()
     {
         return $this->updatedOn;
+    }
+
+    /**
+     * Gets the available roles in scalar type.
+     *
+     * This method is an extension point that it allows
+     * to add more roles easily in the domain.
+     *
+     * @return array
+     */
+    protected function availableRoles()
+    {
+        return ['ROLE_USER', 'ROLE_ADMIN'];
     }
 }

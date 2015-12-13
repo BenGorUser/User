@@ -16,6 +16,9 @@ this library offers a well tested and documented codebase with many common use c
  * Log in / log out
  * User invitation
  * User removal
+ * Role management
+    * Grant
+    * Revoke
 
 ##Installation
 The easiest way to install this component is using [Composer][7]
