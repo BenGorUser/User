@@ -38,7 +38,7 @@ final class UserInvited implements DomainEvent, PublishableDomainEvent
     public function __construct(UserGuest $aUserGuest)
     {
         $this->guest = $aUserGuest;
-        $this->occurredOn = new \DateTime();
+        $this->occurredOn = new \DateTimeImmutable();
     }
 
     /**
@@ -54,7 +54,7 @@ final class UserInvited implements DomainEvent, PublishableDomainEvent
     /**
      * Gets the occurred on.
      *
-     * @return \DateTime
+     * @return \DateTimeImmutable
      */
     public function occurredOn()
     {
