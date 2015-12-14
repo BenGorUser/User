@@ -13,11 +13,11 @@
 namespace BenGor\User\Domain\Model\Exception;
 
 /**
- * User invalid email exception class.
+ * User email invalid exception class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-final class UserInvalidEmailException extends \InvalidArgumentException
+final class UserEmailInvalidException extends \InvalidArgumentException
 {
 }

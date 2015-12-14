@@ -37,6 +37,6 @@ class UserEmailSpec extends ObjectBehavior
     {
         $this->beConstructedWith('invalid string');
 
-        $this->shouldThrow('BenGor\User\Domain\Model\Exception\UserInvalidEmailException')->duringInstantiation();
+        $this->shouldThrow('BenGor\User\Domain\Model\Exception\UserEmailInvalidException')->duringInstantiation();
     }
 }

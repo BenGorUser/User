@@ -53,7 +53,7 @@ class RemoveUserServiceSpec extends ObjectBehavior
         $user->password()->willReturn($password);
         $repository->userOfId(Argument::type('BenGor\User\Domain\Model\UserId'))->shouldBeCalled()->willReturn($user);
 
-        $this->shouldThrow('BenGor\User\Domain\Model\Exception\UserInvalidPasswordException')->duringExecute($request);
+        $this->shouldThrow('BenGor\User\Domain\Model\Exception\UserPasswordInvalidException')->duringExecute($request);
     }
 
     function it_removes_user(UserRepository $repository, User $user)

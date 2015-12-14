@@ -13,11 +13,11 @@
 namespace BenGor\User\Domain\Model\Exception;
 
 /**
- * User invalid password exception class.
+ * User password invalid exception class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-final class UserInvalidPasswordException extends \InvalidArgumentException
+final class UserPasswordInvalidException extends \InvalidArgumentException
 {
 }

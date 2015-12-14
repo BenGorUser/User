@@ -12,7 +12,7 @@
 
 namespace BenGor\User\Application\Service;
 
-use BenGor\User\Domain\Model\Exception\UserInvalidPasswordException;
+use BenGor\User\Domain\Model\Exception\UserPasswordInvalidException;
 use BenGor\User\Domain\Model\UserId;
 use BenGor\User\Domain\Model\UserPassword;
 use BenGor\User\Domain\Model\UserPasswordEncoder;
@@ -65,7 +65,7 @@ final class RemoveUserService implements ApplicationService
         $user = $this->repository->userOfId(new UserId($id));
 
         if (false === $user->password()->equals($password)) {
-            throw new UserInvalidPasswordException();
+            throw new UserPasswordInvalidException();
         }
 
         $this->repository->remove($user);

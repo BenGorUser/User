@@ -12,7 +12,9 @@
 
 namespace spec\BenGor\User\Domain\Model;
 
-use BenGor\User\Domain\Model\Exception\UserInvalidRoleException;
+use BenGor\User\Domain\Model\Exception\UserRoleAlreadyGrantedException;
+use BenGor\User\Domain\Model\Exception\UserRoleAlreadyRevokedException;
+use BenGor\User\Domain\Model\Exception\UserRoleInvalidException;
 use BenGor\User\Domain\Model\UserEmail;
 use BenGor\User\Domain\Model\UserId;
 use BenGor\User\Domain\Model\UserPassword;
@@ -93,16 +95,28 @@ class UserSpec extends ObjectBehavior
         $roleAdmin = new UserRole('ROLE_ADMIN');
 
         $this->isRoleAllowed($role)->shouldReturn(true);
-        $this->grant($role);
+        $this->shouldThrow(new UserRoleAlreadyGrantedException())->duringGrant($role);
         $this->roles()->shouldHaveCount(1);
         $this->grant($roleAdmin);
         $this->roles()->shouldHaveCount(2);
         $this->revoke($role);
         $this->roles()->shouldHaveCount(1);
+        $this->shouldThrow(new UserRoleAlreadyRevokedException())->duringRevoke($role);
+        $this->roles()->shouldHaveCount(1);
     }
 
     function it_does_not_grant_role_because_the_role_is_not_a_user_role_instance()
     {
-        $this->shouldThrow(new UserInvalidRoleException())->duringGrant(new UserRole('ROLE_NOT_AVAILABLE'));
+        $this->isRoleAllowed(new UserRole('ROLE_NOT_AVAILABLE'))->shouldReturn(false);
+        $this->shouldThrow(new UserRoleInvalidException())->duringGrant(new UserRole('ROLE_NOT_AVAILABLE'));
+    }
+
+    function it_does_not_grant_role_because_the_role_is_already_granted()
+    {
+        $role = new UserRole('ROLE_USER');
+
+        $this->isRoleAllowed($role)->shouldReturn(true);
+        $this->isGranted($role)->shouldReturn(true);
+        $this->shouldThrow(new UserRoleAlreadyGrantedException())->duringGrant($role);
     }
 }

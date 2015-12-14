@@ -12,7 +12,7 @@
 
 namespace BenGor\User\Domain\Model;
 
-use BenGor\User\Domain\Model\Exception\UserInvalidEmailException;
+use BenGor\User\Domain\Model\Exception\UserEmailInvalidException;
 
 /**
  * User email domain class.
@@ -48,12 +48,12 @@ final class UserEmail
      *
      * @param string $anEmail An email in primitive string
      *
-     * @throws UserInvalidEmailException when the email is not valid
+     * @throws UserEmailInvalidException when the email is not valid
      */
     public function __construct($anEmail)
     {
         if (!filter_var($anEmail, FILTER_VALIDATE_EMAIL)) {
-            throw new UserInvalidEmailException();
+            throw new UserEmailInvalidException();
         }
         $this->email = $anEmail;
         $this->localPart = implode(explode('@', $this->email, -1), '@');
@@ -99,7 +99,7 @@ final class UserEmail
      */
     public function equals(UserEmail $anEmail)
     {
-        return strtolower((string) $this) === strtolower((string) $anEmail);
+        return strtolower((string)$this) === strtolower((string)$anEmail);
     }
 
     /**

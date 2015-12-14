@@ -14,7 +14,7 @@ namespace BenGor\User\Application\Service;
 
 use BenGor\User\Domain\Model\Exception\UserDoesNotExistException;
 use BenGor\User\Domain\Model\Exception\UserInactiveException;
-use BenGor\User\Domain\Model\Exception\UserInvalidPasswordException;
+use BenGor\User\Domain\Model\Exception\UserPasswordInvalidException;
 use BenGor\User\Domain\Model\UserEmail;
 use BenGor\User\Domain\Model\UserPassword;
 use BenGor\User\Domain\Model\UserPasswordEncoder;
@@ -74,7 +74,7 @@ final class LogInUserService implements ApplicationService
         $password = UserPassword::fromPlain($plainPassword, $this->encoder, $user->password()->salt());
 
         if (false === $user->password()->equals($password)) {
-            throw new UserInvalidPasswordException();
+            throw new UserPasswordInvalidException();
         }
         $user->login();
 

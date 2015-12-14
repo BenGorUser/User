@@ -106,7 +106,7 @@ class LogInUserServiceSpec extends ObjectBehavior
             ->willReturn($user);
         $repository->persist($user)->shouldNotBeCalled();
 
-        $this->shouldThrow('BenGor\User\Domain\Model\Exception\UserInvalidPasswordException')
+        $this->shouldThrow('BenGor\User\Domain\Model\Exception\UserPasswordInvalidException')
             ->duringExecute($request);
     }
 }
