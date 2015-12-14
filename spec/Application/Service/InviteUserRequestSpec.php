@@ -12,6 +12,7 @@
 
 namespace spec\BenGor\User\Application\Service;
 
+use BenGor\User\Application\Service\InviteUserRequest;
 use PhpSpec\ObjectBehavior;
 
 /**
@@ -24,7 +25,7 @@ class InviteUserRequestSpec extends ObjectBehavior
     function it_creates_request()
     {
         $this->beConstructedWith('email@email.com');
-        $this->shouldHaveType('BenGor\User\Application\Service\InviteUserRequest');
+        $this->shouldHaveType(InviteUserRequest::class);
 
         $this->email()->shouldBe('email@email.com');
     }

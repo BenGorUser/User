@@ -25,6 +25,11 @@ use Prophecy\Argument;
  */
 class UserPasswordSpec extends ObjectBehavior
 {
+    function it_is_initializable()
+    {
+        $this->shouldHaveType(UserPassword::class);
+    }
+
     function it_generates_from_encoded_password()
     {
         $encodedPassword = 'akjodsjfiqrfiheqiufhuieqwfjewi';

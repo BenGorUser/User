@@ -12,6 +12,7 @@
 
 namespace spec\BenGor\User\Domain\Model;
 
+use BenGor\User\Domain\Model\UserRole;
 use PhpSpec\ObjectBehavior;
 
 /**
@@ -24,7 +25,7 @@ class UserRoleSpec extends ObjectBehavior
     function it_constructs_with_valid_role()
     {
         $this->beConstructedWith('ROLE_USER');
-        $this->shouldHaveType('BenGor\User\Domain\Model\UserRole');
+        $this->shouldHaveType(UserRole::class);
 
         $this->role()->shouldBe('ROLE_USER');
         $this->__toString()->shouldBe('ROLE_USER');

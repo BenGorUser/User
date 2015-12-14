@@ -13,13 +13,15 @@
 namespace spec\BenGor\User\Application\Service;
 
 use BenGor\User\Application\Service\ChangeUserPasswordUsingRememberPasswordTokenRequest;
+use BenGor\User\Application\Service\ChangeUserPasswordUsingRememberPasswordTokenService;
 use BenGor\User\Domain\Model\Exception\UserDoesNotExistException;
 use BenGor\User\Domain\Model\User;
 use BenGor\User\Domain\Model\UserPassword;
 use BenGor\User\Domain\Model\UserRepository;
+use BenGor\User\Infrastructure\Security\Test\DummyUserPasswordEncoder;
+use Ddd\Application\Service\ApplicationService;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
-use spec\BenGor\User\Domain\Model\DummyUserPasswordEncoder;
 
 /**
  * Spec file of change user password using remember password token service class.
@@ -37,12 +39,12 @@ class ChangeUserPasswordUsingRememberPasswordTokenServiceSpec extends ObjectBeha
 
     function it_is_initializable()
     {
-        $this->shouldHaveType('BenGor\User\Application\Service\ChangeUserPasswordUsingRememberPasswordTokenService');
+        $this->shouldHaveType(ChangeUserPasswordUsingRememberPasswordTokenService::class);
     }
 
     function it_implements_application_service()
     {
-        $this->shouldImplement('Ddd\Application\Service\ApplicationService');
+        $this->shouldImplement(ApplicationService::class);
     }
 
     function it_restores_password(UserRepository $repository, User $user)
@@ -57,9 +59,7 @@ class ChangeUserPasswordUsingRememberPasswordTokenServiceSpec extends ObjectBeha
             ->shouldBeCalled()->willReturn($user);
 
         $user->password()->shouldBeCalled()->willReturn($oldPassword);
-        $user->changePassword(
-            $oldPassword, Argument::type('BenGor\User\Domain\Model\UserPassword')
-        )->shouldBeCalled();
+        $user->changePassword($oldPassword, Argument::type(UserPassword::class))->shouldBeCalled();
 
         $repository->persist($user)->shouldBeCalled();
 

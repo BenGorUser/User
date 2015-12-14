@@ -257,7 +257,7 @@ class User
      */
     public function isRoleAllowed(UserRole $aRole)
     {
-        return in_array($aRole->role(), $this->availableRoles());
+        return in_array($aRole->role(), $this->availableRoles(), true);
     }
 
     /**

@@ -13,12 +13,19 @@
 namespace spec\BenGor\User\Application\Service;
 
 use BenGor\User\Application\Service\LogInUserRequest;
+use BenGor\User\Application\Service\LogInUserResponse;
+use BenGor\User\Application\Service\LogInUserService;
+use BenGor\User\Domain\Model\Exception\UserDoesNotExistException;
+use BenGor\User\Domain\Model\Exception\UserInactiveException;
+use BenGor\User\Domain\Model\Exception\UserPasswordInvalidException;
 use BenGor\User\Domain\Model\User;
+use BenGor\User\Domain\Model\UserEmail;
 use BenGor\User\Domain\Model\UserPassword;
 use BenGor\User\Domain\Model\UserRepository;
+use BenGor\User\Infrastructure\Security\Test\DummyUserPasswordEncoder;
+use Ddd\Application\Service\ApplicationService;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
-use spec\BenGor\User\Domain\Model\DummyUserPasswordEncoder;
 
 /**
  * Spec file of log in user service class.
@@ -38,12 +45,12 @@ class LogInUserServiceSpec extends ObjectBehavior
 
     function it_is_initializable()
     {
-        $this->shouldHaveType('BenGor\User\Application\Service\LogInUserService');
+        $this->shouldHaveType(LogInUserService::class);
     }
 
     function it_implements_application_service()
     {
-        $this->shouldImplement('Ddd\Application\Service\ApplicationService');
+        $this->shouldImplement(ApplicationService::class);
     }
 
     function it_logs_the_user_in(UserRepository $repository, User $user)
@@ -56,11 +63,10 @@ class LogInUserServiceSpec extends ObjectBehavior
             UserPassword::fromPlain('plainPassword', new DummyUserPasswordEncoder('encodedPassword'))
         );
 
-        $repository->userOfEmail(Argument::type('BenGor\User\Domain\Model\UserEmail'))
-            ->shouldBeCalled()->willReturn($user);
+        $repository->userOfEmail(Argument::type(UserEmail::class))->shouldBeCalled()->willReturn($user);
         $repository->persist($user)->shouldBeCalled();
 
-        $this->execute($request)->shouldReturnAnInstanceOf('BenGor\User\Application\Service\LogInUserResponse');
+        $this->execute($request)->shouldReturnAnInstanceOf(LogInUserResponse::class);
     }
 
     function it_doesnt_log_if_user_not_enabled(UserRepository $repository, User $user)
@@ -70,12 +76,10 @@ class LogInUserServiceSpec extends ObjectBehavior
         $user->login()->shouldNotBeCalled();
         $user->isEnabled()->shouldBeCalled()->willReturn(false);
 
-        $repository->userOfEmail(Argument::type('BenGor\User\Domain\Model\UserEmail'))
-            ->shouldBeCalled()->willReturn($user);
+        $repository->userOfEmail(Argument::type(UserEmail::class))->shouldBeCalled()->willReturn($user);
         $repository->persist($user)->shouldNotBeCalled();
 
-        $this->shouldThrow('BenGor\User\Domain\Model\Exception\UserInactiveException')
-            ->duringExecute($request);
+        $this->shouldThrow(UserInactiveException::class)->duringExecute($request);
     }
 
     function it_doesnt_log_if_user_does_not_exist(UserRepository $repository, User $user)
@@ -84,12 +88,10 @@ class LogInUserServiceSpec extends ObjectBehavior
 
         $user->login()->shouldNotBeCalled();
 
-        $repository->userOfEmail(Argument::type('BenGor\User\Domain\Model\UserEmail'))
-            ->shouldBeCalled()->willReturn(null);
+        $repository->userOfEmail(Argument::type(UserEmail::class))->shouldBeCalled()->willReturn(null);
         $repository->persist($user)->shouldNotBeCalled();
 
-        $this->shouldThrow('BenGor\User\Domain\Model\Exception\UserDoesNotExistException')
-            ->duringExecute($request);
+        $this->shouldThrow(UserDoesNotExistException::class)->duringExecute($request);
     }
 
     function it_does_not_log_if_user_invalid_password(UserRepository $repository, User $user)
@@ -102,11 +104,9 @@ class LogInUserServiceSpec extends ObjectBehavior
             UserPassword::fromPlain('otherPassword', new DummyUserPasswordEncoder('otherEncodedPassword'))
         );
 
-        $repository->userOfEmail(Argument::type('BenGor\User\Domain\Model\UserEmail'))
-            ->willReturn($user);
+        $repository->userOfEmail(Argument::type(UserEmail::class))->shouldBeCalled()->willReturn($user);
         $repository->persist($user)->shouldNotBeCalled();
 
-        $this->shouldThrow('BenGor\User\Domain\Model\Exception\UserPasswordInvalidException')
-            ->duringExecute($request);
+        $this->shouldThrow(UserPasswordInvalidException::class)->duringExecute($request);
     }
 }

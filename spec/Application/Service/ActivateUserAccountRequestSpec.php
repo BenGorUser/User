@@ -12,6 +12,7 @@
 
 namespace spec\BenGor\User\Application\Service;
 
+use BenGor\User\Application\Service\ActivateUserAccountRequest;
 use PhpSpec\ObjectBehavior;
 
 /**
@@ -27,7 +28,7 @@ class ActivateUserAccountRequestSpec extends ObjectBehavior
         $confirmationToken = 'asojasiudasjuidsajiu';
 
         $this->beConstructedWith($confirmationToken);
-        $this->shouldHaveType('BenGor\User\Application\Service\ActivateUserAccountRequest');
+        $this->shouldHaveType(ActivateUserAccountRequest::class);
 
         $this->confirmationToken()->shouldBe($confirmationToken);
     }

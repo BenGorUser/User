@@ -12,6 +12,7 @@
 
 namespace spec\BenGor\User\Application\Service;
 
+use BenGor\User\Application\Service\ChangeUserPasswordUsingRememberPasswordTokenRequest;
 use PhpSpec\ObjectBehavior;
 
 /**
@@ -25,7 +26,7 @@ class ChangeUserPasswordUsingRememberPasswordTokenRequestSpec extends ObjectBeha
     function it_creates_request()
     {
         $this->beConstructedWith('newPassword', 'dummy-password-remember-token');
-        $this->shouldHaveType('BenGor\User\Application\Service\ChangeUserPasswordUsingRememberPasswordTokenRequest');
+        $this->shouldHaveType(ChangeUserPasswordUsingRememberPasswordTokenRequest::class);
 
         $this->newPlainPassword()->shouldBe('newPassword');
         $this->rememberPasswordToken()->shouldBe('dummy-password-remember-token');

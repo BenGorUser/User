@@ -12,6 +12,7 @@
 
 namespace spec\BenGor\User\Application\Service;
 
+use BenGor\User\Application\Service\LogOutUserRequest;
 use PhpSpec\ObjectBehavior;
 
 /**
@@ -25,7 +26,7 @@ class LogOutUserRequestSpec extends ObjectBehavior
     function it_creates_request()
     {
         $this->beConstructedWith('id');
-        $this->shouldHaveType('BenGor\User\Application\Service\LogOutUserRequest');
+        $this->shouldHaveType(LogOutUserRequest::class);
 
         $this->id()->shouldBe('id');
     }

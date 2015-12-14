@@ -27,7 +27,7 @@ final class GrantUserRoleRequest
     private $id;
 
     /**
-     * The role
+     * The role.
      *
      * @var string
      */

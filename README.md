@@ -20,6 +20,9 @@ this library offers a well tested and documented codebase with many common use c
     * Grant
     * Revoke
 
+##Requirements
+PHP >= 5.5
+
 ##Installation
 The easiest way to install this component is using [Composer][7]
 ```bash

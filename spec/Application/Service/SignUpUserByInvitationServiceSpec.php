@@ -13,16 +13,21 @@
 namespace spec\BenGor\User\Application\Service;
 
 use BenGor\User\Application\Service\SignUpUserByInvitationRequest;
+use BenGor\User\Application\Service\SignUpUserByInvitationService;
+use BenGor\User\Domain\Model\Exception\UserAlreadyExistException;
+use BenGor\User\Domain\Model\Exception\UserGuestDoesNotExistException;
 use BenGor\User\Domain\Model\User;
 use BenGor\User\Domain\Model\UserEmail;
 use BenGor\User\Domain\Model\UserFactory;
 use BenGor\User\Domain\Model\UserGuest;
 use BenGor\User\Domain\Model\UserGuestRepository;
 use BenGor\User\Domain\Model\UserId;
+use BenGor\User\Domain\Model\UserPassword;
 use BenGor\User\Domain\Model\UserPasswordEncoder;
 use BenGor\User\Domain\Model\UserRepository;
 use BenGor\User\Domain\Model\UserRole;
 use BenGor\User\Domain\Model\UserToken;
+use Ddd\Application\Service\ApplicationService;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
@@ -44,12 +49,12 @@ class SignUpUserByInvitationServiceSpec extends ObjectBehavior
 
     function it_is_initializable()
     {
-        $this->shouldHaveType('BenGor\User\Application\Service\SignUpUserByInvitationService');
+        $this->shouldHaveType(SignUpUserByInvitationService::class);
     }
 
     function it_implements_application_service()
     {
-        $this->shouldImplement('Ddd\Application\Service\ApplicationService');
+        $this->shouldImplement(ApplicationService::class);
     }
 
     function it_signs_the_user_up_by_invitation(
@@ -66,14 +71,12 @@ class SignUpUserByInvitationServiceSpec extends ObjectBehavior
         $roles = [new UserRole('ROLE_ADMIN')];
 
         $userGuestRepository->userGuestOfInvitationToken($token)->shouldBeCalled()->willReturn($userGuest);
-        $userRepository->userOfEmail(
-            Argument::type('BenGor\User\Domain\Model\UserEmail')
-        )->shouldBeCalled()->willReturn(null);
+        $userRepository->userOfEmail(Argument::type(UserEmail::class))->shouldBeCalled()->willReturn(null);
 
         $userGuest->email()->shouldBeCalled()->willReturn($email);
         $userRepository->nextIdentity()->shouldBeCalled()->willReturn($id);
         $factory->register(
-            $id, $email, Argument::type('BenGor\User\Domain\Model\UserPassword'), $roles
+            $id, $email, Argument::type(UserPassword::class), $roles
         )->shouldBeCalled()->willReturn($user);
         $userRepository->persist($user)->shouldBeCalled();
         $userGuestRepository->remove($userGuest)->shouldBeCalled();
@@ -88,7 +91,7 @@ class SignUpUserByInvitationServiceSpec extends ObjectBehavior
 
         $userGuestRepository->userGuestOfInvitationToken($token)->shouldBeCalled()->willReturn(null);
 
-        $this->shouldThrow('BenGor\User\Domain\Model\Exception\UserGuestDoesNotExistException')->duringExecute($request);
+        $this->shouldThrow(UserGuestDoesNotExistException::class)->duringExecute($request);
     }
 
     function it_does_not_sign_up_if_user_exists(
@@ -105,6 +108,6 @@ class SignUpUserByInvitationServiceSpec extends ObjectBehavior
         $userGuest->email()->shouldBeCalled()->willReturn($email);
         $userRepository->userOfEmail($email)->shouldBeCalled()->willReturn($user);
 
-        $this->shouldThrow('BenGor\User\Domain\Model\Exception\UserAlreadyExistException')->duringExecute($request);
+        $this->shouldThrow(UserAlreadyExistException::class)->duringExecute($request);
     }
 }

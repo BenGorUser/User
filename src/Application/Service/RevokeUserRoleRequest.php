@@ -27,7 +27,7 @@ final class RevokeUserRoleRequest
     private $id;
 
     /**
-     * The role
+     * The role.
      *
      * @var string
      */

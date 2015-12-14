@@ -13,15 +13,18 @@
 namespace spec\BenGor\User\Application\Service;
 
 use BenGor\User\Application\Service\SignUpUserRequest;
+use BenGor\User\Application\Service\SignUpUserService;
+use BenGor\User\Domain\Model\Exception\UserAlreadyExistException;
 use BenGor\User\Domain\Model\User;
 use BenGor\User\Domain\Model\UserEmail;
 use BenGor\User\Domain\Model\UserFactory;
 use BenGor\User\Domain\Model\UserId;
+use BenGor\User\Domain\Model\UserPassword;
 use BenGor\User\Domain\Model\UserRepository;
 use BenGor\User\Domain\Model\UserRole;
+use BenGor\User\Infrastructure\Security\Test\DummyUserPasswordEncoder;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
-use spec\BenGor\User\Domain\Model\DummyUserPasswordEncoder;
 
 /**
  * Spec file of sign up user service class.
@@ -42,7 +45,7 @@ class SignUpUserServiceSpec extends ObjectBehavior
 
     function it_is_initializable()
     {
-        $this->shouldHaveType('BenGor\User\Application\Service\SignUpUserService');
+        $this->shouldHaveType(SignUpUserService::class);
     }
 
     function it_implements_application_service()
@@ -61,7 +64,7 @@ class SignUpUserServiceSpec extends ObjectBehavior
         $repository->nextIdentity()->shouldBeCalled()->willReturn($id);
 
         $factory->register(
-            $id, $email, Argument::type('BenGor\User\Domain\Model\UserPassword'), $roles
+            $id, $email, Argument::type(UserPassword::class), $roles
         )->shouldBeCalled()->willReturn($user);
         $repository->persist($user)->shouldBeCalled();
 
@@ -72,10 +75,8 @@ class SignUpUserServiceSpec extends ObjectBehavior
     {
         $request = new SignUpUserRequest('user@user.com', 'plainPassword', ['ROLE_USER']);
 
-        $repository->userOfEmail(
-            Argument::type('BenGor\User\Domain\Model\UserEmail')
-        )->shouldBeCalled()->willReturn($user);
+        $repository->userOfEmail(Argument::type(UserEmail::class))->shouldBeCalled()->willReturn($user);
 
-        $this->shouldThrow('BenGor\User\Domain\Model\Exception\UserAlreadyExistException')->duringExecute($request);
+        $this->shouldThrow(UserAlreadyExistException::class)->duringExecute($request);
     }
 }

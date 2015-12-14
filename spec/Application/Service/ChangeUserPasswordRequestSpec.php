@@ -12,6 +12,7 @@
 
 namespace spec\BenGor\User\Application\Service;
 
+use BenGor\User\Application\Service\ChangeUserPasswordRequest;
 use PhpSpec\ObjectBehavior;
 
 /**
@@ -25,7 +26,7 @@ class ChangeUserPasswordRequestSpec extends ObjectBehavior
     function it_creates_request()
     {
         $this->beConstructedWith('id', 'newPassword', 'oldPassword');
-        $this->shouldHaveType('BenGor\User\Application\Service\ChangeUserPasswordRequest');
+        $this->shouldHaveType(ChangeUserPasswordRequest::class);
 
         $this->id()->shouldBe('id');
         $this->newPlainPassword()->shouldBe('newPassword');

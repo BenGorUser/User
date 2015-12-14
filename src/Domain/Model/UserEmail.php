@@ -99,7 +99,7 @@ final class UserEmail
      */
     public function equals(UserEmail $anEmail)
     {
-        return strtolower((string)$this) === strtolower((string)$anEmail);
+        return strtolower((string) $this) === strtolower((string) $anEmail);
     }
 
     /**

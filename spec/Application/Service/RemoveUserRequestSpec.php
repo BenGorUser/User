@@ -12,6 +12,7 @@
 
 namespace spec\BenGor\User\Application\Service;
 
+use BenGor\User\Application\Service\RemoveUserRequest;
 use PhpSpec\ObjectBehavior;
 
 /**
@@ -29,7 +30,7 @@ class RemoveUserRequestSpec extends ObjectBehavior
 
     function it_is_initializable()
     {
-        $this->shouldHaveType('BenGor\User\Application\Service\RemoveUserRequest');
+        $this->shouldHaveType(RemoveUserRequest::class);
     }
 
     function it_should_have_an_id()

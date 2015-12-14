@@ -12,6 +12,7 @@
 
 namespace spec\BenGor\User\Application\Service;
 
+use BenGor\User\Application\Service\SignUpUserRequest;
 use PhpSpec\ObjectBehavior;
 
 /**
@@ -25,7 +26,7 @@ class SignUpUserRequestSpec extends ObjectBehavior
     function it_creates_request()
     {
         $this->beConstructedWith('user@user.net', 'plainPassword', ['ROLE_USER', 'ROLE_ADMIN']);
-        $this->shouldHaveType('BenGor\User\Application\Service\SignUpUserRequest');
+        $this->shouldHaveType(SignUpUserRequest::class);
 
         $this->email()->shouldReturn('user@user.net');
         $this->password()->shouldReturn('plainPassword');

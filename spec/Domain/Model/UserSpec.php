@@ -15,10 +15,13 @@ namespace spec\BenGor\User\Domain\Model;
 use BenGor\User\Domain\Model\Exception\UserRoleAlreadyGrantedException;
 use BenGor\User\Domain\Model\Exception\UserRoleAlreadyRevokedException;
 use BenGor\User\Domain\Model\Exception\UserRoleInvalidException;
+use BenGor\User\Domain\Model\User;
 use BenGor\User\Domain\Model\UserEmail;
 use BenGor\User\Domain\Model\UserId;
 use BenGor\User\Domain\Model\UserPassword;
 use BenGor\User\Domain\Model\UserRole;
+use BenGor\User\Domain\Model\UserToken;
+use BenGor\User\Infrastructure\Security\Test\DummyUserPasswordEncoder;
 use PhpSpec\ObjectBehavior;
 
 /**
@@ -43,7 +46,7 @@ class UserSpec extends ObjectBehavior
 
     function it_is_initializable()
     {
-        $this->shouldHaveType('BenGor\User\Domain\Model\User');
+        $this->shouldHaveType(User::class);
     }
 
     function it_registers_a_user()
@@ -57,7 +60,7 @@ class UserSpec extends ObjectBehavior
     function it_enables_an_account()
     {
         $this->isEnabled()->shouldBe(false);
-        $this->confirmationToken()->shouldReturnAnInstanceOf('BenGor\User\Domain\Model\UserToken');
+        $this->confirmationToken()->shouldReturnAnInstanceOf(UserToken::class);
         $this->enableAccount();
         $this->isEnabled()->shouldBe(true);
         $this->confirmationToken()->shouldReturn(null);
@@ -74,7 +77,7 @@ class UserSpec extends ObjectBehavior
     {
         $this->rememberPasswordToken()->shouldReturn(null);
         $this->rememberPassword();
-        $this->rememberPasswordToken()->shouldReturnAnInstanceOf('BenGor\User\Domain\Model\UserToken');
+        $this->rememberPasswordToken()->shouldReturnAnInstanceOf(UserToken::class);
     }
 
     function it_changes_password()
@@ -83,7 +86,7 @@ class UserSpec extends ObjectBehavior
         $newPassword = UserPassword::fromPlain('strongnewpassword', $encoder);
 
         $this->rememberPassword();
-        $this->rememberPasswordToken()->shouldReturnAnInstanceOf('BenGor\User\Domain\Model\UserToken');
+        $this->rememberPasswordToken()->shouldReturnAnInstanceOf(UserToken::class);
         $this->changePassword($this->password(), $newPassword);
         $this->rememberPasswordToken()->shouldReturn(null);
         $this->password()->shouldReturn($newPassword);

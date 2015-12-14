@@ -12,6 +12,7 @@
 
 namespace spec\BenGor\User\Application\Service;
 
+use BenGor\User\Application\Service\LogInUserResponse;
 use BenGor\User\Domain\Model\User;
 use BenGor\User\Domain\Model\UserEmail;
 use BenGor\User\Domain\Model\UserId;
@@ -36,7 +37,7 @@ class LogInUserResponseSpec extends ObjectBehavior
         );
 
         $this->beConstructedWith($user);
-        $this->shouldHaveType('BenGor\User\Application\Service\LogInUserResponse');
+        $this->shouldHaveType(LogInUserResponse::class);
 
         $this->user()->shouldBe($user);
     }

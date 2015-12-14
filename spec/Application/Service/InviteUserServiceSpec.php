@@ -13,11 +13,15 @@
 namespace spec\BenGor\User\Application\Service;
 
 use BenGor\User\Application\Service\InviteUserRequest;
+use BenGor\User\Application\Service\InviteUserService;
+use BenGor\User\Domain\Model\Exception\UserAlreadyExistException;
 use BenGor\User\Domain\Model\User;
+use BenGor\User\Domain\Model\UserEmail;
 use BenGor\User\Domain\Model\UserGuest;
 use BenGor\User\Domain\Model\UserGuestId;
 use BenGor\User\Domain\Model\UserGuestRepository;
 use BenGor\User\Domain\Model\UserRepository;
+use Ddd\Application\Service\ApplicationService;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
@@ -35,12 +39,12 @@ class InviteUserServiceSpec extends ObjectBehavior
 
     function it_is_initializable()
     {
-        $this->shouldHaveType('BenGor\User\Application\Service\InviteUserService');
+        $this->shouldHaveType(InviteUserService::class);
     }
 
     function it_implements_application_service()
     {
-        $this->shouldImplement('Ddd\Application\Service\ApplicationService');
+        $this->shouldImplement(ApplicationService::class);
     }
 
     function it_invites_user(
@@ -50,13 +54,12 @@ class InviteUserServiceSpec extends ObjectBehavior
         $request = new InviteUserRequest('user@user.com');
         $id = new UserGuestId('id');
 
-        $userRepository->userOfEmail(Argument::type('BenGor\User\Domain\Model\UserEmail'))
-            ->shouldBeCalled()->willReturn(null);
-        $userGuestRepository->userGuestOfEmail(Argument::type('BenGor\User\Domain\Model\UserEmail'))
+        $userRepository->userOfEmail(Argument::type(UserEmail::class))->shouldBeCalled()->willReturn(null);
+        $userGuestRepository->userGuestOfEmail(Argument::type(UserEmail::class))
             ->shouldBeCalled()->willReturn(null);
 
         $userGuestRepository->nextIdentity()->shouldBeCalled()->willReturn($id);
-        $userGuestRepository->persist(Argument::type('BenGor\User\Domain\Model\UserGuest'))->shouldBeCalled();
+        $userGuestRepository->persist(Argument::type(UserGuest::class))->shouldBeCalled();
 
         $this->execute($request);
     }
@@ -68,9 +71,9 @@ class InviteUserServiceSpec extends ObjectBehavior
     ) {
         $request = new InviteUserRequest('user@user.com');
 
-        $userRepository->userOfEmail(Argument::type('BenGor\User\Domain\Model\UserEmail'))
+        $userRepository->userOfEmail(Argument::type(UserEmail::class))
             ->shouldBeCalled()->willReturn(null);
-        $userGuestRepository->userGuestOfEmail(Argument::type('BenGor\User\Domain\Model\UserEmail'))
+        $userGuestRepository->userGuestOfEmail(Argument::type(UserEmail::class))
             ->shouldBeCalled()->willReturn($userGuest);
         $userGuest->regenerateInvitationToken()->shouldBeCalled();
 
@@ -83,9 +86,8 @@ class InviteUserServiceSpec extends ObjectBehavior
     {
         $request = new InviteUserRequest('user@user.com');
 
-        $userRepository->userOfEmail(Argument::type('BenGor\User\Domain\Model\UserEmail'))
-            ->shouldBeCalled()->willReturn($user);
+        $userRepository->userOfEmail(Argument::type(UserEmail::class))->shouldBeCalled()->willReturn($user);
 
-        $this->shouldThrow('BenGor\User\Domain\Model\Exception\UserAlreadyExistException')->duringExecute($request);
+        $this->shouldThrow(UserAlreadyExistException::class)->duringExecute($request);
     }
 }

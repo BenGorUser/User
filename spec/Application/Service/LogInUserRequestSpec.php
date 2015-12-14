@@ -12,6 +12,7 @@
 
 namespace spec\BenGor\User\Application\Service;
 
+use BenGor\User\Application\Service\LogInUserRequest;
 use PhpSpec\ObjectBehavior;
 
 /**
@@ -25,7 +26,7 @@ class LogInUserRequestSpec extends ObjectBehavior
     function it_creates_request()
     {
         $this->beConstructedWith('user@user.net', 'plainPassword');
-        $this->shouldHaveType('BenGor\User\Application\Service\LogInUserRequest');
+        $this->shouldHaveType(LogInUserRequest::class);
 
         $this->email()->shouldBe('user@user.net');
         $this->password()->shouldBe('plainPassword');

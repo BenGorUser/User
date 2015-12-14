@@ -13,6 +13,7 @@
 namespace spec\BenGor\User\Domain\Model;
 
 use BenGor\User\Domain\Model\UserEmail;
+use BenGor\User\Domain\Model\UserGuest;
 use BenGor\User\Domain\Model\UserGuestId;
 use PhpSpec\ObjectBehavior;
 
@@ -33,7 +34,7 @@ class UserGuestSpec extends ObjectBehavior
 
     function it_is_initializable()
     {
-        $this->shouldHaveType('BenGor\User\Domain\Model\UserGuest');
+        $this->shouldHaveType(UserGuest::class);
     }
 
     function it_creates_a_user_guest()

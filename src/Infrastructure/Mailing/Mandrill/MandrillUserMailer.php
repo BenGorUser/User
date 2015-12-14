@@ -89,6 +89,5 @@ final class MandrillUserMailer implements UserMailer
         ];
 
         $this->mandrill->messages->send($message);
-
     }
 }

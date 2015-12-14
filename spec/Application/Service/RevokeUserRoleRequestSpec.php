@@ -12,6 +12,7 @@
 
 namespace spec\BenGor\User\Application\Service;
 
+use BenGor\User\Application\Service\RevokeUserRoleRequest;
 use PhpSpec\ObjectBehavior;
 
 /**
@@ -24,7 +25,7 @@ class RevokeUserRoleRequestSpec extends ObjectBehavior
     function it_creates_request()
     {
         $this->beConstructedWith('user-id', ['ROLE_USER']);
-        $this->shouldHaveType('BenGor\User\Application\Service\RevokeUserRoleRequest');
+        $this->shouldHaveType(RevokeUserRoleRequest::class);
 
         $this->id()->shouldReturn('user-id');
         $this->role()->shouldReturn(['ROLE_USER']);

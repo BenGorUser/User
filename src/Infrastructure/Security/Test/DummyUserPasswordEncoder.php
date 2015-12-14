@@ -10,7 +10,7 @@
  * file that was distributed with this source code.
  */
 
-namespace spec\BenGor\User\Domain\Model;
+namespace BenGor\User\Infrastructure\Security\Test;
 
 use BenGor\User\Domain\Model\UserPasswordEncoder;
 
@@ -20,7 +20,7 @@ use BenGor\User\Domain\Model\UserPasswordEncoder;
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-class DummyUserPasswordEncoder implements UserPasswordEncoder
+final class DummyUserPasswordEncoder implements UserPasswordEncoder
 {
     /**
      * The expected response.

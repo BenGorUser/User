@@ -13,8 +13,13 @@
 namespace spec\BenGor\User\Application\Service;
 
 use BenGor\User\Application\Service\LogOutUserRequest;
+use BenGor\User\Application\Service\LogOutUserService;
+use BenGor\User\Domain\Model\Exception\UserDoesNotExistException;
+use BenGor\User\Domain\Model\Exception\UserInactiveException;
 use BenGor\User\Domain\Model\User;
+use BenGor\User\Domain\Model\UserId;
 use BenGor\User\Domain\Model\UserRepository;
+use Ddd\Application\Service\ApplicationService;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
@@ -33,12 +38,12 @@ class LogOutUserServiceSpec extends ObjectBehavior
 
     function it_is_initializable()
     {
-        $this->shouldHaveType('BenGor\User\Application\Service\LogOutUserService');
+        $this->shouldHaveType(LogOutUserService::class);
     }
 
     function it_implements_application_service()
     {
-        $this->shouldImplement('Ddd\Application\Service\ApplicationService');
+        $this->shouldImplement(ApplicationService::class);
     }
 
     function it_logs_the_user_out(UserRepository $repository, User $user)
@@ -48,7 +53,7 @@ class LogOutUserServiceSpec extends ObjectBehavior
         $user->isEnabled()->shouldBeCalled()->willReturn(true);
         $user->logout()->shouldBeCalled();
 
-        $repository->userOfId(Argument::type('BenGor\User\Domain\Model\UserId'))->shouldBeCalled()->willReturn($user);
+        $repository->userOfId(Argument::type(UserId::class))->shouldBeCalled()->willReturn($user);
         $repository->persist($user)->shouldBeCalled();
 
         $this->execute($request);
@@ -61,10 +66,10 @@ class LogOutUserServiceSpec extends ObjectBehavior
         $user->isEnabled()->shouldBeCalled()->willReturn(false);
         $user->logout()->shouldNotBeCalled();
 
-        $repository->userOfId(Argument::type('BenGor\User\Domain\Model\UserId'))->shouldBeCalled()->willReturn($user);
+        $repository->userOfId(Argument::type(UserId::class))->shouldBeCalled()->willReturn($user);
         $repository->persist($user)->shouldNotBeCalled();
 
-        $this->shouldThrow('BenGor\User\Domain\Model\Exception\UserInactiveException')->duringExecute($request);
+        $this->shouldThrow(UserInactiveException::class)->duringExecute($request);
     }
 
     function it_doesnt_logout_unknown_user(UserRepository $repository, User $user)
@@ -74,9 +79,9 @@ class LogOutUserServiceSpec extends ObjectBehavior
         $user->isEnabled()->shouldNotBeCalled();
         $user->logout()->shouldNotBeCalled();
 
-        $repository->userOfId(Argument::type('BenGor\User\Domain\Model\UserId'))->shouldBeCalled()->willReturn(null);
+        $repository->userOfId(Argument::type(UserId::class))->shouldBeCalled()->willReturn(null);
         $repository->persist($user)->shouldNotBeCalled();
 
-        $this->shouldThrow('BenGor\User\Domain\Model\Exception\UserDoesNotExistException')->duringExecute($request);
+        $this->shouldThrow(UserDoesNotExistException::class)->duringExecute($request);
     }
 }

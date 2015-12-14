@@ -13,12 +13,14 @@
 namespace spec\BenGor\User\Application\Service;
 
 use BenGor\User\Application\Service\RevokeUserRoleRequest;
+use BenGor\User\Application\Service\RevokeUserRoleService;
+use BenGor\User\Domain\Model\Exception\UserDoesNotExistException;
 use BenGor\User\Domain\Model\User;
 use BenGor\User\Domain\Model\UserId;
 use BenGor\User\Domain\Model\UserRepository;
 use BenGor\User\Domain\Model\UserRole;
+use Ddd\Application\Service\ApplicationService;
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 
 /**
  * Spec file of revoke user role service class.
@@ -34,12 +36,12 @@ class RevokeUserRoleServiceSpec extends ObjectBehavior
 
     function it_is_initializable()
     {
-        $this->shouldHaveType('BenGor\User\Application\Service\RevokeUserRoleService');
+        $this->shouldHaveType(RevokeUserRoleService::class);
     }
 
     function it_implements_application_service()
     {
-        $this->shouldImplement('Ddd\Application\Service\ApplicationService');
+        $this->shouldImplement(ApplicationService::class);
     }
 
     function it_revokes_the_user_role(UserRepository $repository, User $user)
@@ -63,6 +65,6 @@ class RevokeUserRoleServiceSpec extends ObjectBehavior
 
         $repository->userOfId($id)->shouldBeCalled()->willReturn(null);
 
-        $this->shouldThrow('BenGor\User\Domain\Model\Exception\UserDoesNotExistException')->duringExecute($request);
+        $this->shouldThrow(UserDoesNotExistException::class)->duringExecute($request);
     }
 }

@@ -12,6 +12,8 @@
 
 namespace spec\BenGor\User\Domain\Model;
 
+use BenGor\User\Domain\Model\Exception\UserEmailInvalidException;
+use BenGor\User\Domain\Model\UserEmail;
 use PhpSpec\ObjectBehavior;
 
 /**
@@ -25,7 +27,7 @@ class UserEmailSpec extends ObjectBehavior
     function it_constructs_with_valid_email()
     {
         $this->beConstructedWith('test@test.com');
-        $this->shouldHaveType('BenGor\User\Domain\Model\UserEmail');
+        $this->shouldHaveType(UserEmail::class);
 
         $this->email()->shouldBe('test@test.com');
         $this->domain()->shouldBe('test.com');
@@ -37,6 +39,6 @@ class UserEmailSpec extends ObjectBehavior
     {
         $this->beConstructedWith('invalid string');
 
-        $this->shouldThrow('BenGor\User\Domain\Model\Exception\UserEmailInvalidException')->duringInstantiation();
+        $this->shouldThrow(UserEmailInvalidException::class)->duringInstantiation();
     }
 }

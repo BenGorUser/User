@@ -25,7 +25,7 @@ class UserTokenSpec extends ObjectBehavior
 {
     function it_is_initializable()
     {
-        $this->shouldHaveType('BenGor\User\Domain\Model\UserToken');
+        $this->shouldHaveType(UserToken::class);
     }
 
     function it_constructs_with_null_token()

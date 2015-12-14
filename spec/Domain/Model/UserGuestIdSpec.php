@@ -25,7 +25,7 @@ class UserGuestIdSpec extends ObjectBehavior
 {
     function it_is_initializable()
     {
-        $this->shouldHaveType('BenGor\User\Domain\Model\UserGuestId');
+        $this->shouldHaveType(UserGuestId::class);
     }
 
     function it_constructs_with_null_id()

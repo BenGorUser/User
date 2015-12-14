@@ -13,8 +13,12 @@
 namespace spec\BenGor\User\Application\Service;
 
 use BenGor\User\Application\Service\ActivateUserAccountRequest;
+use BenGor\User\Application\Service\ActivateUserAccountService;
+use BenGor\User\Domain\Model\Exception\UserTokenNotFoundException;
 use BenGor\User\Domain\Model\User;
 use BenGor\User\Domain\Model\UserRepository;
+use BenGor\User\Domain\Model\UserToken;
+use Ddd\Application\Service\ApplicationService;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
@@ -33,12 +37,12 @@ class ActivateUserAccountServiceSpec extends ObjectBehavior
 
     function it_is_initializable()
     {
-        $this->shouldHaveType('BenGor\User\Application\Service\ActivateUserAccountService');
+        $this->shouldHaveType(ActivateUserAccountService::class);
     }
 
     function it_implements_application_service()
     {
-        $this->shouldImplement('Ddd\Application\Service\ApplicationService');
+        $this->shouldImplement(ApplicationService::class);
     }
 
     function it_activates_user(UserRepository $repository, User $user)
@@ -46,8 +50,7 @@ class ActivateUserAccountServiceSpec extends ObjectBehavior
         $request = new ActivateUserAccountRequest('dsfjadjfkdasjkfdajskf');
 
         $user->enableAccount()->shouldBeCalled();
-        $repository->userOfConfirmationToken(Argument::type('BenGor\User\Domain\Model\UserToken'))
-            ->shouldBeCalled()->willReturn($user);
+        $repository->userOfConfirmationToken(Argument::type(UserToken::class))->shouldBeCalled()->willReturn($user);
         $repository->persist($user)->shouldBeCalled();
 
         $this->execute($request);
@@ -58,11 +61,9 @@ class ActivateUserAccountServiceSpec extends ObjectBehavior
         $request = new ActivateUserAccountRequest('dsfjadjfkdasjkfdajskf');
 
         $user->enableAccount()->shouldNotBeCalled();
-        $repository->userOfConfirmationToken(Argument::type('BenGor\User\Domain\Model\UserToken'))
-            ->shouldBeCalled()->willReturn(null);
+        $repository->userOfConfirmationToken(Argument::type(UserToken::class))->shouldBeCalled()->willReturn(null);
         $repository->persist($user)->shouldNotBeCalled();
 
-        $this->shouldThrow('BenGor\User\Domain\Model\Exception\UserTokenNotFoundException')
-            ->duringExecute($request);
+        $this->shouldThrow(new UserTokenNotFoundException())->duringExecute($request);
     }
 }
