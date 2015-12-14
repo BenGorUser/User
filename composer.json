@@ -24,7 +24,7 @@
     "require-dev": {
         "fabpot/php-cs-fixer":    "^1.10",
         "mmoreram/php-formatter": "^1.0",
-        "phpspec/phpspec":        "~2.3.0"
+        "phpspec/phpspec":        "^2.4"
     },
     "scripts": {
         "cs": [
@@ -45,14 +45,9 @@
     },
     "autoload": {
         "psr-4": {
-            "BenGor\\User\\": "src/"
+            "": "src/"
         },
         "exclude-from-classmap": ["/spec/"]
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "spec\\BenGor\\User\\": "spec/"
-        }
     },
     "extra": {
         "branch-alias": {
