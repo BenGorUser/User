@@ -32,7 +32,7 @@ class UserGuest
     /**
      * Created on.
      *
-     * @var \DateTime
+     * @var \DateTimeImmutable
      */
     protected $createdOn;
 
@@ -53,15 +53,15 @@ class UserGuest
     /**
      * Constructor.
      *
-     * @param UserGuestId $anId       The id
-     * @param UserEmail   $anEmail    The email
-     * @param \DateTime   $aCreatedOn The created on
+     * @param UserGuestId        $anId       The id
+     * @param UserEmail          $anEmail    The email
+     * @param \DateTimeImmutable $aCreatedOn The created on
      */
-    public function __construct(UserGuestId $anId, UserEmail $anEmail, \DateTime $aCreatedOn = null)
+    public function __construct(UserGuestId $anId, UserEmail $anEmail, \DateTimeImmutable $aCreatedOn = null)
     {
         $this->id = $anId;
         $this->email = $anEmail;
-        $this->createdOn = $aCreatedOn ?: new \DateTime();
+        $this->createdOn = $aCreatedOn ?: new \DateTimeImmutable();
         $this->regenerateInvitationToken();
     }
 
@@ -78,7 +78,7 @@ class UserGuest
     /**
      * Gets the created on.
      *
-     * @return \DateTime
+     * @return \DateTimeImmutable
      */
     public function createdOn()
     {

@@ -146,13 +146,13 @@ DROP TABLE IF EXISTS user;
 CREATE TABLE user (
     id CHAR(36) PRIMARY KEY,
     confirmation_token VARCHAR(36),
-    created_on DATETIME NOT NULL,
+    created_on DateTimeImmutable NOT NULL,
     email VARCHAR(36) NOT NULL,
-    last_login DATETIME,
+    last_login DateTimeImmutable,
     password VARCHAR(30) NOT NULL,
     remember_password_token VARCHAR(36),
     roles LONGTEXT NOT NULL COMMENT '(DC2Type:user_roles)',
-    updated_on DATETIME NOT NULL
+    updated_on DateTimeImmutable NOT NULL
 )
 SQL
         );
@@ -269,7 +269,7 @@ SQL
     {
         $lastLogin = null === $row['last_login']
             ? null
-            : new \DateTime($row['last_login']);
+            : new \DateTimeImmutable($row['last_login']);
         $confirmationToken = null === $row['confirmation_token']
             ? null
             : new UserToken($row['confirmation_token']);
@@ -282,8 +282,8 @@ SQL
             new UserEmail($row['email']),
             UserPassword::fromEncoded($row['password'], $row['salt']),
             $this->rolesToArray($row['user_roles']),
-            new \DateTime($row['created_on']),
-            new \DateTime($row['updated_on']),
+            new \DateTimeImmutable($row['created_on']),
+            new \DateTimeImmutable($row['updated_on']),
             $lastLogin,
             $confirmationToken,
             $rememberPasswordToken

@@ -29,13 +29,13 @@ BenGor\User\Domain\Model\User:
     fields:
         createdOn:
             column: created_on
-            type: datetime
+            type: DateTimeImmutable
         lastLogin:
             column: last_login
-            type: datetime
+            type: DateTimeImmutable
         roles:
             column: roles
             type: user_roles
         updatedOn:
             column: updated_on
-            type: datetime
+            type: DateTimeImmutable

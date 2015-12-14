@@ -23,4 +23,4 @@ BenGor\User\Domain\Model\UserGuest:
     fields:
         createdOn:
             column: created_on
-            type: datetime
+            type: DateTimeImmutable

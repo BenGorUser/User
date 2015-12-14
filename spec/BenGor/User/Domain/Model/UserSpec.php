@@ -22,6 +22,7 @@ use BenGor\User\Domain\Model\UserPassword;
 use BenGor\User\Domain\Model\UserRole;
 use BenGor\User\Domain\Model\UserToken;
 use BenGor\User\Infrastructure\Security\Test\DummyUserPasswordEncoder;
+use DateTimeImmutable;
 use PhpSpec\ObjectBehavior;
 
 /**
@@ -70,7 +71,7 @@ class UserSpec extends ObjectBehavior
     {
         $this->lastLogin()->shouldReturn(null);
         $this->login();
-        $this->lastLogin()->shouldReturnAnInstanceOf('\Datetime');
+        $this->lastLogin()->shouldReturnAnInstanceOf(DateTimeImmutable::class);
     }
 
     function it_remembers_password()

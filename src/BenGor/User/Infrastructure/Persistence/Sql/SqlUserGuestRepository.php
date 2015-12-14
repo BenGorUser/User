@@ -124,7 +124,7 @@ final class SqlUserGuestRepository implements UserGuestRepository
 DROP TABLE IF EXISTS user;
 CREATE TABLE user_guest (
     id CHAR(36) PRIMARY KEY,
-    created_on DATETIME NOT NULL,
+    created_on DateTimeImmutable NOT NULL,
     email VARCHAR(36) NOT NULL,
     invitation_token VARCHAR(36)
 )
@@ -193,7 +193,7 @@ SQL
         return new UserGuest(
             new UserGuestId($row['id']),
             new UserEmail($row['email']),
-            new \DateTime($row['created_on']),
+            new \DateTimeImmutable($row['created_on']),
             new UserToken($row['invitation_token'])
         );
     }
