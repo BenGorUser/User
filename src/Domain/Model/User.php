@@ -20,7 +20,9 @@ use BenGor\User\Domain\Model\Event\UserRememberPasswordRequested;
 use BenGor\User\Domain\Model\Event\UserRoleGranted;
 use BenGor\User\Domain\Model\Event\UserRoleRevoked;
 use BenGor\User\Domain\Model\Exception\UserInvalidPasswordException;
-use BenGor\User\Domain\Model\Exception\UserInvalidRoleException;
+use BenGor\User\Domain\Model\Exception\UserRoleAlreadyGrantedException;
+use BenGor\User\Domain\Model\Exception\UserRoleAlreadyRevokedException;
+use BenGor\User\Domain\Model\Exception\UserRoleInvalidException;
 use Ddd\Domain\DomainEventPublisher;
 
 /**
@@ -208,13 +210,14 @@ class User
     public function grant(UserRole $aRole)
     {
         if (false === $this->isRoleAllowed($aRole)) {
-            throw new UserInvalidRoleException();
+            throw new UserRoleInvalidException();
         }
-        if (false === $this->isGranted($aRole)) {
-            $this->roles[] = $aRole;
+        if (true === $this->isGranted($aRole)) {
+            new UserRoleAlreadyGrantedException();
+        }
+        $this->roles[] = $aRole;
 
-            DomainEventPublisher::instance()->publish(new UserRoleGranted($this));
-        }
+        DomainEventPublisher::instance()->publish(new UserRoleGranted($this));
     }
 
     /**
@@ -322,10 +325,15 @@ class User
      */
     public function revoke(UserRole $aRole)
     {
+        if (false === $this->isRoleAllowed($aRole)) {
+            throw new UserRoleInvalidException();
+        }
         foreach ($this->roles as $key => $role) {
             if ($role->equals($aRole)) {
                 unset($this->roles[$key]);
+                break;
             }
+            throw new UserRoleAlreadyRevokedException();
         }
         DomainEventPublisher::instance()->publish(new UserRoleRevoked($this));
     }

@@ -13,10 +13,10 @@
 namespace BenGor\User\Domain\Model\Exception;
 
 /**
- * User invalid role exception class.
+ * User role invalid exception class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  */
-final class UserInvalidRoleException extends \InvalidArgumentException
+final class UserRoleInvalidException extends \InvalidArgumentException
 {
 }
