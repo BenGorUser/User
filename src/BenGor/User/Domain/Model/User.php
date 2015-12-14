@@ -50,7 +50,7 @@ class User
     /**
      * Created on.
      *
-     * @var \DateTime
+     * @var \DateTimeImmutable
      */
     protected $createdOn;
 
@@ -64,7 +64,7 @@ class User
     /**
      * The last login.
      *
-     * @var \DateTime|null
+     * @var \DateTimeImmutable|null
      */
     protected $lastLogin;
 
@@ -92,31 +92,31 @@ class User
     /**
      * Updated on.
      *
-     * @var \DateTime
+     * @var \DateTimeImmutable
      */
     protected $updatedOn;
 
     /**
      * Constructor.
      *
-     * @param UserId         $anId                   The id
-     * @param UserEmail      $anEmail                The email
-     * @param UserPassword   $aPassword              The encoded password
-     * @param array          $userRoles              Array which contains the roles
-     * @param \DateTime|null $aCreatedOn             The created on
-     * @param \DateTime|null $anUpdatedOn            The updated on
-     * @param \DateTime|null $aLastLogin             The last login
-     * @param UserToken|null $aConfirmationToken     The confirmation token
-     * @param UserToken|null $aRememberPasswordToken The remember me token
+     * @param UserId                  $anId                   The id
+     * @param UserEmail               $anEmail                The email
+     * @param UserPassword            $aPassword              The encoded password
+     * @param array                   $userRoles              Array which contains the roles
+     * @param \DateTimeImmutable|null $aCreatedOn             The created on
+     * @param \DateTimeImmutable|null $anUpdatedOn            The updated on
+     * @param \DateTimeImmutable|null $aLastLogin             The last login
+     * @param UserToken|null          $aConfirmationToken     The confirmation token
+     * @param UserToken|null          $aRememberPasswordToken The remember me token
      */
     public function __construct(
         UserId $anId,
         UserEmail $anEmail,
         UserPassword $aPassword,
         array $userRoles,
-        \DateTime $aCreatedOn = null,
-        \DateTime $anUpdatedOn = null,
-        \DateTime $aLastLogin = null,
+        \DateTimeImmutable $aCreatedOn = null,
+        \DateTimeImmutable $anUpdatedOn = null,
+        \DateTimeImmutable $aLastLogin = null,
         UserToken $aConfirmationToken = null,
         UserToken $aRememberPasswordToken = null
     ) {
@@ -124,8 +124,8 @@ class User
         $this->email = $anEmail;
         $this->password = $aPassword;
         $this->confirmationToken = $aConfirmationToken ?: new UserToken();
-        $this->createdOn = $aCreatedOn ?: new \DateTime();
-        $this->updatedOn = $anUpdatedOn ?: new \DateTime();
+        $this->createdOn = $aCreatedOn ?: new \DateTimeImmutable();
+        $this->updatedOn = $anUpdatedOn ?: new \DateTimeImmutable();
         $this->lastLogin = $aLastLogin ?: null;
         $this->rememberPasswordToken = $aRememberPasswordToken;
 
@@ -175,7 +175,7 @@ class User
     /**
      * Gets the created on.
      *
-     * @return \DateTime
+     * @return \DateTimeImmutable
      */
     public function createdOn()
     {
@@ -263,7 +263,7 @@ class User
     /**
      * Gets the last login.
      *
-     * @return \DateTime
+     * @return \DateTimeImmutable
      */
     public function lastLogin()
     {
@@ -275,7 +275,7 @@ class User
      */
     public function login()
     {
-        $this->lastLogin = new \DateTime();
+        $this->lastLogin = new \DateTimeImmutable();
 
         DomainEventPublisher::instance()->publish(new UserLoggedIn($this));
     }
@@ -351,7 +351,7 @@ class User
     /**
      * Gets the updated on.
      *
-     * @return \DateTime
+     * @return \DateTimeImmutable
      */
     public function updatedOn()
     {

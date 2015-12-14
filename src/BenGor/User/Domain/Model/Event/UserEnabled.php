@@ -32,6 +32,13 @@ final class UserEnabled implements DomainEvent, PublishableDomainEvent
     private $user;
 
     /**
+     * The occurred on.
+     *
+     * @var \DateTimeImmutable
+     */
+    private $occurredOn;
+
+    /**
      * Constructor.
      *
      * @param User $aUser The user
@@ -39,7 +46,7 @@ final class UserEnabled implements DomainEvent, PublishableDomainEvent
     public function __construct(User $aUser)
     {
         $this->user = $aUser;
-        $this->occurredOn = new \DateTime();
+        $this->occurredOn = new \DateTimeImmutable();
     }
 
     /**
@@ -55,7 +62,7 @@ final class UserEnabled implements DomainEvent, PublishableDomainEvent
     /**
      * Gets the occurred on.
      *
-     * @return \DateTime
+     * @return \DateTimeImmutable
      */
     public function occurredOn()
     {

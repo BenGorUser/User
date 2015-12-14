@@ -269,7 +269,7 @@ SQL
     {
         $lastLogin = null === $row['last_login']
             ? null
-            : new \DateTime($row['last_login']);
+            : new \DateTimeImmutable($row['last_login']);
         $confirmationToken = null === $row['confirmation_token']
             ? null
             : new UserToken($row['confirmation_token']);
@@ -282,8 +282,8 @@ SQL
             new UserEmail($row['email']),
             UserPassword::fromEncoded($row['password'], $row['salt']),
             $this->rolesToArray($row['user_roles']),
-            new \DateTime($row['created_on']),
-            new \DateTime($row['updated_on']),
+            new \DateTimeImmutable($row['created_on']),
+            new \DateTimeImmutable($row['updated_on']),
             $lastLogin,
             $confirmationToken,
             $rememberPasswordToken

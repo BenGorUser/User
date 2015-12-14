@@ -193,7 +193,7 @@ SQL
         return new UserGuest(
             new UserGuestId($row['id']),
             new UserEmail($row['email']),
-            new \DateTime($row['created_on']),
+            new \DateTimeImmutable($row['created_on']),
             new UserToken($row['invitation_token'])
         );
     }
