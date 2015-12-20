@@ -31,6 +31,13 @@ final class UserInvited implements DomainEvent, PublishableDomainEvent
     private $guest;
 
     /**
+     * The occurred on.
+     *
+     * @var \DateTimeImmutable
+     */
+    private $occurredOn;
+
+    /**
      * Constructor.
      *
      * @param UserGuest $aUserGuest The user

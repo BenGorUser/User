@@ -32,6 +32,13 @@ final class UserLoggedOut implements DomainEvent, PublishableDomainEvent
     private $user;
 
     /**
+     * The occurred on.
+     *
+     * @var \DateTimeImmutable
+     */
+    private $occurredOn;
+
+    /**
      * Constructor.
      *
      * @param User $aUser The user

@@ -32,6 +32,13 @@ final class UserRememberPasswordRequested implements DomainEvent, PublishableDom
     private $user;
 
     /**
+     * The occurred on.
+     *
+     * @var \DateTimeImmutable
+     */
+    private $occurredOn;
+
+    /**
      * Constructor.
      *
      * @param User $aUser The user

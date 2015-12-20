@@ -13,6 +13,7 @@
 namespace BenGor\User\Domain\Event;
 
 use BenGor\User\Domain\Model\Event\UserInvited;
+use BenGor\User\Domain\Model\UserEmail;
 use BenGor\User\Domain\Model\UserMailer;
 use Ddd\Domain\DomainEventSubscriber;
 
@@ -74,7 +75,7 @@ final class UserInvitedMailerSubscriber implements DomainEventSubscriber
     {
         $guest = $aDomainEvent->userGuest();
 
-        $this->mailer->mail($this->subject, $this->fromEmail, $guest->email(), $this->body);
+        $this->mailer->mail($this->subject, new UserEmail($this->fromEmail), $guest->email(), $this->body);
     }
 
     /**

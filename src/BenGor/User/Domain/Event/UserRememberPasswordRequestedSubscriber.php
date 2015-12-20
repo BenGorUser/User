@@ -13,6 +13,7 @@
 namespace BenGor\User\Domain\Event;
 
 use BenGor\User\Domain\Model\Event\UserRememberPasswordRequested;
+use BenGor\User\Domain\Model\UserEmail;
 use BenGor\User\Domain\Model\UserMailer;
 use Ddd\Domain\DomainEventSubscriber;
 
@@ -75,7 +76,7 @@ final class UserRememberPasswordRequestedSubscriber implements DomainEventSubscr
     {
         $user = $aDomainEvent->user();
 
-        $this->mailer->mail($this->subject, $this->fromEmail, $user->email(), $this->body);
+        $this->mailer->mail($this->subject, new UserEmail($this->fromEmail), $user->email(), $this->body);
     }
 
     /**
