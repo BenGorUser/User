@@ -28,7 +28,7 @@ final class UserRolesType extends JsonArrayType
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-        $roles = array_map(function ($role) {
+        $roles = array_map(function (UserRole $role) {
             return $role->role();
         }, $value);
 

@@ -300,7 +300,7 @@ SQL
     private function rolesToString(array $userRoles)
     {
         return json_encode(
-            array_map(function ($userRole) {
+            array_map(function (UserRole $userRole) {
                 return $userRole->role();
             }, $userRoles)
         );
