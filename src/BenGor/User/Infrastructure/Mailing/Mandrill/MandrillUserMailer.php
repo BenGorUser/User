@@ -44,7 +44,7 @@ final class MandrillUserMailer implements UserMailer
     /**
      * {@inheritdoc}
      */
-    public function mail($aSubject, UserEmail $from, $to, $aBody)
+    public function mail($aSubject, UserEmail $from, $to, $aBody = null, array $parameters = [])
     {
         if (is_array($to)) {
             $receivers = array_map(function ($receiver) {

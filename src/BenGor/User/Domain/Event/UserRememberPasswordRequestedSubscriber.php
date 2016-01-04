@@ -26,11 +26,11 @@ use Ddd\Domain\DomainEventSubscriber;
 final class UserRememberPasswordRequestedSubscriber implements DomainEventSubscriber
 {
     /**
-     * The body of email.
+     * The content of email.
      *
      * @var string
      */
-    private $body;
+    private $content;
 
     /**
      * The sender email.
@@ -58,14 +58,14 @@ final class UserRememberPasswordRequestedSubscriber implements DomainEventSubscr
      *
      * @param UserMailer $aMailer    The mailer
      * @param string     $aFromEmail The sender email
-     * @param string     $aBody      The body of email
+     * @param string     $aContent   The content of email
      * @param string     $aSubject   The subject of email, by default is "Remember password"
      */
-    public function __construct(UserMailer $aMailer, $aFromEmail, $aBody, $aSubject = 'Remember password')
+    public function __construct(UserMailer $aMailer, $aFromEmail, $aContent, $aSubject = 'Remember password')
     {
         $this->mailer = $aMailer;
         $this->fromEmail = $aFromEmail;
-        $this->body = $aBody;
+        $this->content = $aContent;
         $this->subject = $aSubject;
     }
 
@@ -76,7 +76,13 @@ final class UserRememberPasswordRequestedSubscriber implements DomainEventSubscr
     {
         $user = $aDomainEvent->user();
 
-        $this->mailer->mail($this->subject, new UserEmail($this->fromEmail), $user->email(), $this->body);
+        $this->mailer->mail(
+            $this->subject,
+            new UserEmail($this->fromEmail),
+            $user->email(),
+            $this->content,
+            ['user' => $user]
+        );
     }
 
     /**

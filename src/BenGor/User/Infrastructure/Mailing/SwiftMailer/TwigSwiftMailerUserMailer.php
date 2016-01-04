@@ -17,12 +17,11 @@ use BenGor\User\Domain\Model\UserEmail;
 use BenGor\User\Domain\Model\UserMailer;
 
 /**
- * SwiftMailer user mailer class.
+ * Twig SwiftMailer user mailer class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
- * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-final class SwiftMailerUserMailer implements UserMailer
+final class TwigSwiftMailerUserMailer implements UserMailer
 {
     /**
      * The swift mailer instance.
@@ -32,19 +31,28 @@ final class SwiftMailerUserMailer implements UserMailer
     private $swiftMailer;
 
     /**
+     * The Twig engine.
+     *
+     * @var \Twig_Environment
+     */
+    private $twig;
+
+    /**
      * Constructor.
      *
-     * @param \Swift_Mailer $swiftMailer The swift mailer instance
+     * @param \Swift_Mailer     $swiftMailer The swift mailer instance
+     * @param \Twig_Environment $twig        The twig environment
      */
-    public function __construct(\Swift_Mailer $swiftMailer)
+    public function __construct(\Swift_Mailer $swiftMailer, \Twig_Environment $twig)
     {
         $this->swiftMailer = $swiftMailer;
+        $this->twig = $twig;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function mail($aSubject, UserEmail $from, $to, $aBody = null, array $parameters = [])
+    public function mail($aSubject, UserEmail $from, $to, $aContent, array $parameters = [])
     {
         if (is_array($to)) {
             $receivers = array_map(function ($receiver) {
@@ -61,11 +69,16 @@ final class SwiftMailerUserMailer implements UserMailer
             throw new UserEmailInvalidException();
         }
 
+        $template = $this->twig->loadTemplate($aContent);
+        $bodyText = $template->renderBlock('body_text', $parameters);
+        $bodyHtml = $template->renderBlock('body_html', $parameters);
+
         $message = \Swift_Message::newInstance()
             ->setSubject($aSubject)
             ->setFrom($from->email())
             ->setTo($to)
-            ->setBody($aBody);
+            ->setBody($bodyText, 'text/plain')
+            ->addPart($bodyHtml, 'text/html');
         $this->swiftMailer->send($message);
     }
 }

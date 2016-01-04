@@ -26,11 +26,11 @@ use Ddd\Domain\DomainEventSubscriber;
 final class UserRegisteredMailerSubscriber implements DomainEventSubscriber
 {
     /**
-     * The body of email.
+     * The content of email.
      *
      * @var string
      */
-    private $body;
+    private $content;
 
     /**
      * The sender email.
@@ -58,15 +58,15 @@ final class UserRegisteredMailerSubscriber implements DomainEventSubscriber
      *
      * @param UserMailer $aMailer    The mailer
      * @param string     $aFromEmail The sender email
-     * @param string     $aBody      The body of email
+     * @param string     $aContent   The content of email
      * @param string     $aSubject   The subject of email, by default is "Registered successfully"
      */
-    public function __construct(UserMailer $aMailer, $aFromEmail, $aBody, $aSubject = 'Registered successfully')
+    public function __construct(UserMailer $aMailer, $aFromEmail, $aContent, $aSubject = 'Registered successfully')
     {
         $this->mailer = $aMailer;
         $this->fromEmail = $aFromEmail;
-        $this->body = $aBody;
         $this->subject = $aSubject;
+        $this->content = $aContent;
     }
 
     /**
@@ -76,7 +76,13 @@ final class UserRegisteredMailerSubscriber implements DomainEventSubscriber
     {
         $user = $aDomainEvent->user();
 
-        $this->mailer->mail($this->subject, new UserEmail($this->fromEmail), $user->email(), $this->body);
+        $this->mailer->mail(
+            $this->subject,
+            new UserEmail($this->fromEmail),
+            $user->email(),
+            $this->content,
+            ['user' => $user]
+        );
     }
 
     /**

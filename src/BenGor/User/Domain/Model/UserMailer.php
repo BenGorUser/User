@@ -23,10 +23,11 @@ interface UserMailer
     /**
      * Mails an email with the given data.
      *
-     * @param string    $aSubject The subject of the email
-     * @param UserEmail $from     The mail sending address
-     * @param array     $to       The mail receiving address
-     * @param string    $aBody    The mail body
+     * @param string          $aSubject   The subject of the email
+     * @param UserEmail       $from       The mail sending address
+     * @param UserEmail|array $to         The mail receiving address
+     * @param string          $aContent   The mail content
+     * @param array           $parameters Array which contains the parameters
      */
-    public function mail($aSubject, UserEmail $from, $to, $aBody);
+    public function mail($aSubject, UserEmail $from, $to, $aContent, array $parameters = []);
 }
