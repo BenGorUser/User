@@ -13,30 +13,23 @@
 namespace BenGor\User\Domain\Event;
 
 use BenGor\User\Domain\Model\Event\UserInvited;
-use BenGor\User\Domain\Model\UserEmail;
+use BenGor\User\Domain\Model\UserMailableFactory;
 use BenGor\User\Domain\Model\UserMailer;
 use Ddd\Domain\DomainEventSubscriber;
 
 /**
- * User invited mailer subscriber class.
+ * Abstract user invited mailer subscriber class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  */
-final class UserInvitedMailerSubscriber implements DomainEventSubscriber
+abstract class UserInvitedMailerSubscriber implements DomainEventSubscriber
 {
     /**
-     * The content of email.
+     * The mailable factory.
      *
-     * @var string
+     * @var UserMailableFactory
      */
-    private $content;
-
-    /**
-     * The sender email.
-     *
-     * @var string
-     */
-    private $fromEmail;
+    private $mailableFactory;
 
     /**
      * The mailer.
@@ -46,42 +39,15 @@ final class UserInvitedMailerSubscriber implements DomainEventSubscriber
     private $mailer;
 
     /**
-     * The subject of the email.
-     *
-     * @var string
-     */
-    private $subject;
-
-    /**
      * Constructor.
      *
-     * @param UserMailer $aMailer    The mailer
-     * @param string     $aFromEmail The sender email
-     * @param string     $aContent   The content of email
-     * @param string     $aSubject   The subject of email, by default is "You're invited!"
+     * @param UserMailer          $aMailer          The mailer
+     * @param UserMailableFactory $aMailableFactory The mailable factory
      */
-    public function __construct(UserMailer $aMailer, $aFromEmail, $aContent, $aSubject = "You're invited!")
+    public function __construct(UserMailer $aMailer, UserMailableFactory $aMailableFactory)
     {
         $this->mailer = $aMailer;
-        $this->fromEmail = $aFromEmail;
-        $this->content = $aContent;
-        $this->subject = $aSubject;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function handle($aDomainEvent)
-    {
-        $guest = $aDomainEvent->userGuest();
-
-        $this->mailer->mail(
-            $this->subject,
-            new UserEmail($this->fromEmail),
-            $guest->email(),
-            $this->content,
-            ['guest' => $guest]
-        );
+        $this->mailableFactory = $aMailableFactory;
     }
 
     /**
@@ -91,4 +57,9 @@ final class UserInvitedMailerSubscriber implements DomainEventSubscriber
     {
         return $aDomainEvent instanceof UserInvited;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    abstract public function handle($aDomainEvent);
 }
