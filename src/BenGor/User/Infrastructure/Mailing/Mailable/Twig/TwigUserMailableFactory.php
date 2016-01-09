@@ -10,9 +10,8 @@
  * file that was distributed with this source code.
  */
 
-namespace BenGor\User\Infrastructure\Domain\Model;
+namespace BenGor\User\Infrastructure\Mailing\Mailable\Twig;
 
-use BenGor\User\Domain\Model\User;
 use BenGor\User\Domain\Model\UserEmail;
 use BenGor\User\Domain\Model\UserMailable;
 use BenGor\User\Domain\Model\UserMailableFactory;
@@ -53,7 +52,7 @@ final class TwigUserMailableFactory implements UserMailableFactory
      * @param string            $aView The view name
      * @param string            $aFrom The from email address
      */
-    public function __construct(\Twig_Environment $twig, $aView, $aFrom, $router)
+    public function __construct(\Twig_Environment $twig, $aView, $aFrom)
     {
         $this->twig = $twig;
         $this->view = $aView;
@@ -63,10 +62,9 @@ final class TwigUserMailableFactory implements UserMailableFactory
     /**
      * {@inheritdoc}
      */
-    public function build(User $user, array $parameters = [])
+    public function build($to, array $parameters = [])
     {
         $template = $this->twig->loadTemplate($this->view);
-        $to = $user->email()->email();
         $subject = $template->renderBlock('subject', $parameters);
         $bodyText = $template->renderBlock('body_text', $parameters);
         $bodyHtml = $template->renderBlock('body_html', $parameters);

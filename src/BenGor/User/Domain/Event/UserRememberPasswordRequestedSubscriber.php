@@ -13,76 +13,42 @@
 namespace BenGor\User\Domain\Event;
 
 use BenGor\User\Domain\Model\Event\UserRememberPasswordRequested;
-use BenGor\User\Domain\Model\UserEmail;
+use BenGor\User\Domain\Model\UserMailableFactory;
 use BenGor\User\Domain\Model\UserMailer;
 use Ddd\Domain\DomainEventSubscriber;
 
 /**
- * User remember password requested subscriber class.
+ * Abstract user remember password requested subscriber class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-final class UserRememberPasswordRequestedSubscriber implements DomainEventSubscriber
+abstract class UserRememberPasswordRequestedSubscriber implements DomainEventSubscriber
 {
     /**
-     * The content of email.
+     * The mailable factory.
      *
-     * @var string
+     * @var UserMailableFactory
      */
-    private $content;
-
-    /**
-     * The sender email.
-     *
-     * @var string
-     */
-    private $fromEmail;
+    protected $mailableFactory;
 
     /**
      * The mailer.
      *
      * @var UserMailer
      */
-    private $mailer;
-
-    /**
-     * The subject of the email.
-     *
-     * @var string
-     */
-    private $subject;
+    protected $mailer;
 
     /**
      * Constructor.
      *
-     * @param UserMailer $aMailer    The mailer
-     * @param string     $aFromEmail The sender email
-     * @param string     $aContent   The content of email
-     * @param string     $aSubject   The subject of email, by default is "Remember password"
+     * @param UserMailer          $aMailer          The mailer
+     * @param UserMailableFactory $aMailableFactory The mailable factory
      */
-    public function __construct(UserMailer $aMailer, $aFromEmail, $aContent, $aSubject = 'Remember password')
+    public function __construct(UserMailer $aMailer, UserMailableFactory $aMailableFactory)
     {
         $this->mailer = $aMailer;
-        $this->fromEmail = $aFromEmail;
-        $this->content = $aContent;
-        $this->subject = $aSubject;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function handle($aDomainEvent)
-    {
-        $user = $aDomainEvent->user();
-
-        $this->mailer->mail(
-            $this->subject,
-            new UserEmail($this->fromEmail),
-            $user->email(),
-            $this->content,
-            ['user' => $user]
-        );
+        $this->mailableFactory = $aMailableFactory;
     }
 
     /**

@@ -14,15 +14,15 @@ namespace BenGor\User\Infrastructure\Domain\Event;
 
 use BenGor\User\Domain\Model\UserMailableFactory;
 use BenGor\User\Domain\Model\UserMailer;
-use BenGor\User\Domain\Event\UserInvitedMailerSubscriber as BaseUserInvitedMailerSubscriber;
+use BenGor\User\Domain\Event\UserRememberPasswordRequestedSubscriber as BaseUserRememberPasswordRequestedSubscriber;
 use Symfony\Component\Routing\Router;
 
 /**
- * User invited mailer subscriber class.
+ * User remember password requested subscriber class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  */
-final class UserInvitedMailerSubscriber extends BaseUserInvitedMailerSubscriber
+final class UserRememberPasswordRequestedSubscriber extends BaseUserRememberPasswordRequestedSubscriber
 {
     /**
      * The route name.
@@ -58,10 +58,10 @@ final class UserInvitedMailerSubscriber extends BaseUserInvitedMailerSubscriber
      */
     public function handle($aDomainEvent)
     {
-        $guest = $aDomainEvent->userGuest();
-        $url = $this->router->generate($this->route, $guest->invitationToken());
-        $mail = $this->mailableFactory->build($guest->email(), [
-            'user' => $guest, 'url' => $url,
+        $user = $aDomainEvent->user();
+        $url = $this->router->generate($this->route, $user->rememberPasswordToken());
+        $mail = $this->mailableFactory->build($user->email(), [
+            'user' => $user, 'url' => $url,
         ]);
 
         $this->mailer->mail($mail);

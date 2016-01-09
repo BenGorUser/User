@@ -12,7 +12,6 @@
 
 namespace BenGor\User\Domain\Event;
 
-use BenGor\User\Domain\Model\Event\UserInvited;
 use BenGor\User\Domain\Model\UserMailableFactory;
 use BenGor\User\Domain\Model\UserMailer;
 use Ddd\Domain\DomainEventSubscriber;
@@ -22,21 +21,21 @@ use Ddd\Domain\DomainEventSubscriber;
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  */
-abstract class UserInvitedMailerSubscriber implements DomainEventSubscriber
+abstract class UserInvitedMailerSubscriber extends DomainEventSubscriber
 {
     /**
      * The mailable factory.
      *
      * @var UserMailableFactory
      */
-    private $mailableFactory;
+    protected $mailableFactory;
 
     /**
      * The mailer.
      *
      * @var UserMailer
      */
-    private $mailer;
+    protected $mailer;
 
     /**
      * Constructor.
@@ -51,15 +50,10 @@ abstract class UserInvitedMailerSubscriber implements DomainEventSubscriber
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc}
      */
     public function isSubscribedTo($aDomainEvent)
     {
-        return $aDomainEvent instanceof UserInvited;
+        return $aDomainEvent instanceof UserInvitedMailerSubscriber;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    abstract public function handle($aDomainEvent);
 }

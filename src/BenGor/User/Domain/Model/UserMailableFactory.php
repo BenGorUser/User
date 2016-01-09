@@ -23,10 +23,10 @@ interface UserMailableFactory
     /**
      * Builds a user mailable domain object with the given parameters.
      *
-     * @param UserEmail       $from       The from address
+     * @param array|UserEmail $to         Array which contains UserEmails or a simple UserEmail domain object
      * @param array           $parameters Array which contains parameters
      *
      * @return UserMailable
      */
-    public function build(User $user);
+    public function build($to, array $parameters = []);
 }

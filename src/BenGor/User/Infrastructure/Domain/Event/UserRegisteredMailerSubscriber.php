@@ -10,19 +10,22 @@
  * file that was distributed with this source code.
  */
 
-namespace BenGor\User\Infrastructure\Domain\Event;
+namespace BenGor\User\Domain\Event;
 
+use BenGor\User\Domain\Model\Event\UserRegistered;
 use BenGor\User\Domain\Model\UserMailableFactory;
 use BenGor\User\Domain\Model\UserMailer;
-use BenGor\User\Domain\Event\UserInvitedMailerSubscriber as BaseUserInvitedMailerSubscriber;
+use BenGor\User\Domain\Event\UserRememberPasswordRequestedSubscriber as BaseUserRegisteredMailerSubscriber;
+use Ddd\Domain\DomainEventSubscriber;
 use Symfony\Component\Routing\Router;
 
 /**
- * User invited mailer subscriber class.
+ * User registered mailer subscriber class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
+ * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-final class UserInvitedMailerSubscriber extends BaseUserInvitedMailerSubscriber
+final class UserRegisteredMailerSubscriber extends BaseUserRegisteredMailerSubscriber
 {
     /**
      * The route name.
@@ -58,12 +61,20 @@ final class UserInvitedMailerSubscriber extends BaseUserInvitedMailerSubscriber
      */
     public function handle($aDomainEvent)
     {
-        $guest = $aDomainEvent->userGuest();
-        $url = $this->router->generate($this->route, $guest->invitationToken());
-        $mail = $this->mailableFactory->build($guest->email(), [
-            'user' => $guest, 'url' => $url,
+        $user = $aDomainEvent->user();
+        $url = $this->router->generate($this->route, $user->confirmationToken());
+        $mail = $this->mailableFactory->build($user->email(), [
+            'user' => $user, 'url' => $url,
         ]);
 
         $this->mailer->mail($mail);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isSubscribedTo($aDomainEvent)
+    {
+        return $aDomainEvent instanceof UserRegistered;
     }
 }

@@ -1,7 +1,17 @@
+{% block subject %}
+    This an invitation for the registration
+{% endblock %}
+
 {% block body_html %}
-    This is an invitation for <strong>{{ guest.email }}</strong>.
+    <h1>
+        Hi, <strong>{{ user.email }}</strong>.
+    </h1>
+    <p>
+        In order to accept this invitation please, you need to follow this <a href="{{ url }}">link</a>.
+    </p>
 {% endblock %}
 
 {% block body_text %}
-    This is an invitation for {{ guest.email }}.
+    Hi, {{ user.email }}.
+    In order to accept this invitation please, you need to follow this link: {{ url }}.
 {% endblock %}

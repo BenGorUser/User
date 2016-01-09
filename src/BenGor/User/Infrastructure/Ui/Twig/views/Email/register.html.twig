@@ -1,7 +1,19 @@
+{% block subject %}
+    You're successfully register!
+{% endblock %}
+
 {% block body_html %}
-    You are registered successfully <strong>{{ user.email }}</strong>.
+    <h1>
+        Hi, <strong>{{ user.email }}</strong>.
+    </h1>
+    <p>
+        You are registered successfully.<br/>
+        In order to confirm your email account please, you need to follow this <a href="{{ url }}">link</a>.
+    </p>
 {% endblock %}
 
 {% block body_text %}
-    You are registered successfully {{ user.email }}.
+    Hi, {{ user.email }}.
+    You are registered successfully.
+    In order to confirm your email account please, you need to follow this link: {{ url }}.
 {% endblock %}

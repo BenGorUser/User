@@ -10,7 +10,7 @@
  * file that was distributed with this source code.
  */
 
-namespace BenGor\User\Infrastructure\Mailing\SwiftMailer;
+namespace BenGor\User\Infrastructure\Mailing\Mailer\SwiftMailer;
 
 use BenGor\User\Domain\Model\UserMailable;
 use BenGor\User\Domain\Model\UserMailer;
