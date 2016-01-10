@@ -40,6 +40,7 @@ $loader = new Twig_Loader_Filesystem('path_to_infrastructure_folder/Ui/Twig/view
 $twig = new Twig_Environment($loader);
 $factory = new TwigUserMailableFactory($twig, 'Email/invite.html.twig', 'no-reply@domain.com');
 $mailer = new SwiftMailerUserMailer($swiftmailer); //Check swiftmailers docs
+$router = new Router("(... required parameters)"); // http://symfony.com/doc/current/components/routing/introduction.html
 DomainEventPublisher::instance()->subscribe(
     new \BenGor\User\Infrastructure\Domain\Event\Symfony\UserInvitedMailerSubscriber($mailer, $factory, $router, 'sign_up_by_invitation_path')
 );
@@ -55,6 +56,7 @@ $loader = new Twig_Loader_Filesystem('path_to_infrastructure_folder/Ui/Twig/view
 $twig = new Twig_Environment($loader);
 $factory = new TwigUserMailableFactory($twig, 'Email/register.html.twig', 'no-reply@domain.com');
 $mailer = new SwiftMailerUserMailer($swiftmailer); //Check swiftmailers docs
+$router = new Router("(... required parameters)"); // http://symfony.com/doc/current/components/routing/introduction.html
 DomainEventPublisher::instance()->subscribe(
     new UserRegisteredMailerSubscriber($mailer, $factory, $router, 'activate_user_route'))
 );
@@ -70,6 +72,7 @@ $loader = new Twig_Loader_Filesystem('path_to_infrastructure_folder/Ui/Twig/view
 $twig = new Twig_Environment($loader);
 $factory = new TwigUserMailableFactory($twig, 'Email/remember_password.html.twig', 'no-reply@domain.com');
 $mailer = new SwiftMailerUserMailer($swiftmailer); //Check swiftmailers docs
+$router = new Router("(... required parameters)"); // http://symfony.com/doc/current/components/routing/introduction.html
 DomainEventPublisher::instance()->subscribe(
     new UserRememberPaswordRequestSubscriber($mailer, $factory, $router, 'change_user_password_path'))
 );
