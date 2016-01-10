@@ -13,17 +13,20 @@
 namespace BenGor\User\Domain\Model;
 
 /**
- * User mailer domain class.
+ * User mailable factory domain class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-interface UserMailer
+interface UserMailableFactory
 {
     /**
-     * Mails an email with the given mailable.
+     * Builds a user mailable domain object with the given parameters.
      *
-     * @param UserMailable $mail The user mailable
+     * @param array|UserEmail $to         Array which contains UserEmails or a simple UserEmail domain object
+     * @param array           $parameters Array which contains parameters
+     *
+     * @return UserMailable
      */
-    public function mail(UserMailable $mail);
+    public function build($to, array $parameters = []);
 }

@@ -1,9 +1,10 @@
 #Basic Usage
 
 ##Configuring dependencies
-First of all, you need to define the types of repository, encoder and mailer you will be using to make everything work.
+First of all, you need to decide the types of repository, encoder and mailer you will be using to make everything work.
 Services will use the repository and encoder chosen to handle the request, whereas mailer will be used mainly in the 
-event subscribers.
+event subscribers. These decisions are important because as you will see almost all use cases will require you to pass
+some of this dependencies.
 
 To instantiate the repository and encoder just do it as you would with a normal class:
 
@@ -19,9 +20,9 @@ $encoder = new YourUserPasswordEncoder();
 
 ## Using services
 This library has a number of use cases that are ready to use. Everything has been abstracted to be as easy as calling 
-a service containing the use case you want to use. You just need to create an instance of the service you want 
+a service containing the use case you need. Just create an instance of the service you want 
 to use and call `execute()` with your request. All services have the own related request, for example 
-`ActivateUserAccountService` has its own `ActivateUserAccountService` and so on.
+`ActivateUserAccountService` has its own `ActivateUserAccountRequest` and so on.
 
 > All application services and related requests are located under `src/Application/Service` folder
 
@@ -38,18 +39,14 @@ $service->execute(new SignUpUserRequest($email, $plainPassword));
 file
 
 ##Subscribing to events
-**Important:** In order to receive registration confirmation mail and remember password mail you need to subscribe to the 
-[domain events](events.md) triggered by the model. This two subscribers have been already implemented and are 
-ready to use
+**Important:** In order to receive registration confirmation mail and remember password mail you need to subscribe to
+the [domain events](events.md) triggered by the model. `DomainEventPublisher` triggers the subscribers based on domain 
+events. To subscribe to those events just do the following:
 
 ```php
-$mailer = new SwiftMailerUserMailer($swiftMailer);
 DomainEventPublisher::instance()->subscribe(
-    new UserRegisteredMailerSubscriber($mailer, $fromEmail, $body)
-);
-DomainEventPublisher::instance()->subscribe(
-    new UseRememberPasswordRequestSubscriber($mailer, $fromEmail, $body)
+    new YourSubscriber()
 );
 ```
  
-> You may want to read more about [events and subscribers](events.md)
+> Some subscribers have been already implemented. For more info read about [events and subscribers](events.md)

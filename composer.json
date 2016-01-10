@@ -41,11 +41,13 @@
         "doctrine/orm": "Required to persist users using Doctrine repository",
         "mandrill/mandrill": "Required to send emails using Mandrill adapter",
         "swiftmailer/swiftmailer": "Required to send emails using Swiftmailer adapter",
-        "symfony/security-core": "Required to encode user passwords using Symfony adapter"
+        "symfony/security-core": "Required to encode user passwords using Symfony adapter",
+        "symfony/routing": "Required to use default implementation of event subscribers",
+        "twig/twig": "Required to render emails with this template engine"
     },
     "autoload": {
         "psr-4": {
-            "": "src/"
+            "BenGor\\User\\": "src/BenGor/User/"
         },
         "exclude-from-classmap": ["/spec/"]
     },

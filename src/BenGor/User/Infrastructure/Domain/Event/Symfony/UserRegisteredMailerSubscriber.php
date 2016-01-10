@@ -10,12 +10,13 @@
  * file that was distributed with this source code.
  */
 
-namespace BenGor\User\Domain\Event;
+namespace BenGor\User\Infrastructure\Domain\Event\Symfony;
 
 use BenGor\User\Domain\Model\Event\UserRegistered;
-use BenGor\User\Domain\Model\UserEmail;
+use BenGor\User\Domain\Model\UserMailableFactory;
 use BenGor\User\Domain\Model\UserMailer;
 use Ddd\Domain\DomainEventSubscriber;
+use Symfony\Component\Routing\Router;
 
 /**
  * User registered mailer subscriber class.
@@ -26,18 +27,11 @@ use Ddd\Domain\DomainEventSubscriber;
 final class UserRegisteredMailerSubscriber implements DomainEventSubscriber
 {
     /**
-     * The body of email.
+     * The mailable factory.
      *
-     * @var string
+     * @var UserMailableFactory
      */
-    private $body;
-
-    /**
-     * The sender email.
-     *
-     * @var string
-     */
-    private $fromEmail;
+    private $mailableFactory;
 
     /**
      * The mailer.
@@ -47,26 +41,33 @@ final class UserRegisteredMailerSubscriber implements DomainEventSubscriber
     private $mailer;
 
     /**
-     * The subject of the email.
+     * The route name.
      *
      * @var string
      */
-    private $subject;
+    private $route;
+
+    /**
+     * The Symfony router component.
+     *
+     * @var Router
+     */
+    private $router;
 
     /**
      * Constructor.
      *
-     * @param UserMailer $aMailer    The mailer
-     * @param string     $aFromEmail The sender email
-     * @param string     $aBody      The body of email
-     * @param string     $aSubject   The subject of email, by default is "Registered successfully"
+     * @param UserMailer          $aMailer          The mailer
+     * @param UserMailableFactory $aMailableFactory The mailable factory
+     * @param Router              $aRouter          The Symfony router
+     * @param string              $aRoute           The route name
      */
-    public function __construct(UserMailer $aMailer, $aFromEmail, $aBody, $aSubject = 'Registered successfully')
+    public function __construct(UserMailer $aMailer, UserMailableFactory $aMailableFactory, Router $aRouter, $aRoute)
     {
         $this->mailer = $aMailer;
-        $this->fromEmail = $aFromEmail;
-        $this->body = $aBody;
-        $this->subject = $aSubject;
+        $this->mailableFactory = $aMailableFactory;
+        $this->router = $aRouter;
+        $this->route = $aRoute;
     }
 
     /**
@@ -75,8 +76,12 @@ final class UserRegisteredMailerSubscriber implements DomainEventSubscriber
     public function handle($aDomainEvent)
     {
         $user = $aDomainEvent->user();
+        $url = $this->router->generate($this->route, $user->confirmationToken());
+        $mail = $this->mailableFactory->build($user->email(), [
+            'user' => $user, 'url' => $url,
+        ]);
 
-        $this->mailer->mail($this->subject, new UserEmail($this->fromEmail), $user->email(), $this->body);
+        $this->mailer->mail($mail);
     }
 
     /**

@@ -10,10 +10,10 @@
  * file that was distributed with this source code.
  */
 
-namespace BenGor\User\Infrastructure\Mailing\Mandrill;
+namespace BenGor\User\Infrastructure\Mailing\Mailer\Mandrill;
 
-use BenGor\User\Domain\Model\Exception\UserEmailInvalidException;
 use BenGor\User\Domain\Model\UserEmail;
+use BenGor\User\Domain\Model\UserMailable;
 use BenGor\User\Domain\Model\UserMailer;
 
 /**
@@ -44,38 +44,27 @@ final class MandrillUserMailer implements UserMailer
     /**
      * {@inheritdoc}
      */
-    public function mail($aSubject, UserEmail $from, $to, $aBody)
+    public function mail(UserMailable $mail)
     {
-        if (is_array($to)) {
-            $receivers = array_map(function ($receiver) {
-                if (!$receiver instanceof UserEmail) {
-                    throw new UserEmailInvalidException();
-                }
-
-                return [
-                    'email' => $receiver->email(),
-                    'name'  => $receiver->email(),
-                    'type'  => 'to',
-                ];
-            }, $to);
-            $to = $receivers;
-        } elseif ($to instanceof UserEmail) {
-            $to = $to->email();
+        if (is_array($mail->to())) {
+            $to = array_map(function (UserEmail $receiver) {
+                return $receiver->email();
+            }, $mail->to());
         } else {
-            throw new UserEmailInvalidException();
+            $to = $mail->to();
         }
 
         $message = [
-            'subject'             => $aSubject,
-            'from_email'          => $from->email(),
-            'from_name'           => $from->email(),
+            'subject'             => $mail->subject(),
+            'from_email'          => $mail->from()->email(),
+            'from_name'           => $mail->from()->email(),
             'to'                  => $to,
-            'headers'             => ['Reply-To' => $from->email()],
+            'headers'             => ['Reply-To' => $mail->from()->email()],
             'important'           => true,
             'track_opens'         => true,
             'track_clicks'        => null,
-            'auto_text'           => $aBody,
-            'auto_html'           => null,
+            'auto_text'           => $mail->bodyText(),
+            'auto_html'           => $mail->bodyHtml(),
             'inline_css'          => null,
             'url_strip_qs'        => null,
             'preserve_recipients' => false,

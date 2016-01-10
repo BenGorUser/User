@@ -10,34 +10,27 @@
  * file that was distributed with this source code.
  */
 
-namespace BenGor\User\Domain\Event;
+namespace BenGor\User\Infrastructure\Domain\Event\Symfony;
 
 use BenGor\User\Domain\Model\Event\UserRememberPasswordRequested;
-use BenGor\User\Domain\Model\UserEmail;
+use BenGor\User\Domain\Model\UserMailableFactory;
 use BenGor\User\Domain\Model\UserMailer;
 use Ddd\Domain\DomainEventSubscriber;
+use Symfony\Component\Routing\Router;
 
 /**
  * User remember password requested subscriber class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
- * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
 final class UserRememberPasswordRequestedSubscriber implements DomainEventSubscriber
 {
     /**
-     * The body of email.
+     * The mailable factory.
      *
-     * @var string
+     * @var UserMailableFactory
      */
-    private $body;
-
-    /**
-     * The sender email.
-     *
-     * @var string
-     */
-    private $fromEmail;
+    private $mailableFactory;
 
     /**
      * The mailer.
@@ -47,26 +40,33 @@ final class UserRememberPasswordRequestedSubscriber implements DomainEventSubscr
     private $mailer;
 
     /**
-     * The subject of the email.
+     * The route name.
      *
      * @var string
      */
-    private $subject;
+    private $route;
+
+    /**
+     * The Symfony router component.
+     *
+     * @var Router
+     */
+    private $router;
 
     /**
      * Constructor.
      *
-     * @param UserMailer $aMailer    The mailer
-     * @param string     $aFromEmail The sender email
-     * @param string     $aBody      The body of email
-     * @param string     $aSubject   The subject of email, by default is "Remember password"
+     * @param UserMailer          $aMailer          The mailer
+     * @param UserMailableFactory $aMailableFactory The mailable factory
+     * @param Router              $aRouter          The Symfony router
+     * @param string              $aRoute           The route name
      */
-    public function __construct(UserMailer $aMailer, $aFromEmail, $aBody, $aSubject = 'Remember password')
+    public function __construct(UserMailer $aMailer, UserMailableFactory $aMailableFactory, Router $aRouter, $aRoute)
     {
         $this->mailer = $aMailer;
-        $this->fromEmail = $aFromEmail;
-        $this->body = $aBody;
-        $this->subject = $aSubject;
+        $this->mailableFactory = $aMailableFactory;
+        $this->router = $aRouter;
+        $this->route = $aRoute;
     }
 
     /**
@@ -75,8 +75,12 @@ final class UserRememberPasswordRequestedSubscriber implements DomainEventSubscr
     public function handle($aDomainEvent)
     {
         $user = $aDomainEvent->user();
+        $url = $this->router->generate($this->route, $user->rememberPasswordToken());
+        $mail = $this->mailableFactory->build($user->email(), [
+            'user' => $user, 'url' => $url,
+        ]);
 
-        $this->mailer->mail($this->subject, new UserEmail($this->fromEmail), $user->email(), $this->body);
+        $this->mailer->mail($mail);
     }
 
     /**
