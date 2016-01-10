@@ -47,7 +47,7 @@
     },
     "autoload": {
         "psr-4": {
-            "": "src/"
+            "BenGor\\User\\": "src/BenGor/User/"
         },
         "exclude-from-classmap": ["/spec/"]
     },

@@ -12,6 +12,7 @@
 
 namespace BenGor\User\Infrastructure\Mailing\Mailer\Mandrill;
 
+use BenGor\User\Domain\Model\UserEmail;
 use BenGor\User\Domain\Model\UserMailable;
 use BenGor\User\Domain\Model\UserMailer;
 
@@ -46,7 +47,7 @@ final class MandrillUserMailer implements UserMailer
     public function mail(UserMailable $mail)
     {
         if (is_array($mail->to())) {
-            $to = array_map(function ($receiver) {
+            $to = array_map(function (UserEmail $receiver) {
                 return $receiver->email();
             }, $mail->to());
         } else {
