@@ -12,6 +12,7 @@
 
 namespace BenGor\User\Infrastructure\Domain\Event\Symfony;
 
+use BenGor\User\Domain\Model\Event\UserInvited;
 use BenGor\User\Domain\Model\UserMailableFactory;
 use BenGor\User\Domain\Model\UserMailer;
 use Ddd\Domain\DomainEventSubscriber;
@@ -87,6 +88,6 @@ final class UserInvitedMailerSubscriber extends DomainEventSubscriber
      */
     public function isSubscribedTo($aDomainEvent)
     {
-        return $aDomainEvent instanceof self;
+        return $aDomainEvent instanceof UserInvited;
     }
 }
