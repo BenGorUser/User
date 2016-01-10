@@ -78,7 +78,7 @@ $twig = new \Twig_Environment($loader);
 
 $router = new Router("(... required parameters)");      // http://symfony.com/doc/current/components/routing/introduction.html
 
-$factory = new TwigUserMailableFactory($twig, 'Email/invite.html.twig', 'no-reply@domain.com');
+$factory = new TwigUserMailableFactory($twig, 'Email/register.html.twig', 'no-reply@domain.com');
 $mailer = new SwiftMailerUserMailer($swiftmailer);      // Check SwiftMailer docs
 
 DomainEventPublisher::instance()->subscribe(
@@ -105,11 +105,11 @@ $twig = new \Twig_Environment($loader);
 
 $router = new Router("(... required parameters)");      // http://symfony.com/doc/current/components/routing/introduction.html
 
-$factory = new TwigUserMailableFactory($twig, 'Email/invite.html.twig', 'no-reply@domain.com');
+$factory = new TwigUserMailableFactory($twig, 'Email/remember_password_request.html.twig', 'no-reply@domain.com');
 $mailer = new SwiftMailerUserMailer($swiftmailer);      // Check SwiftMailer docs
 
 DomainEventPublisher::instance()->subscribe(
-    new UserRegisteredMailerSubscriber($mailer, $factory, $router, 'change_user_password_route')
+    new UserRememberPasswordRequestedSubscriber($mailer, $factory, $router, 'change_user_password_route')
 );
 ```
 
