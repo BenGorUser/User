@@ -15,7 +15,6 @@ namespace BenGor\User\Domain\Event;
 use BenGor\User\Domain\Model\Event\UserRegistered;
 use BenGor\User\Domain\Model\UserMailableFactory;
 use BenGor\User\Domain\Model\UserMailer;
-use BenGor\User\Domain\Event\UserRememberPasswordRequestedSubscriber as BaseUserRegisteredMailerSubscriber;
 use Ddd\Domain\DomainEventSubscriber;
 use Symfony\Component\Routing\Router;
 
@@ -25,8 +24,22 @@ use Symfony\Component\Routing\Router;
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-final class UserRegisteredMailerSubscriber extends BaseUserRegisteredMailerSubscriber
+final class UserRegisteredMailerSubscriber implements DomainEventSubscriber
 {
+    /**
+     * The mailable factory.
+     *
+     * @var UserMailableFactory
+     */
+    private $mailableFactory;
+
+    /**
+     * The mailer.
+     *
+     * @var UserMailer
+     */
+    private $mailer;
+
     /**
      * The route name.
      *
@@ -51,7 +64,8 @@ final class UserRegisteredMailerSubscriber extends BaseUserRegisteredMailerSubsc
      */
     public function __construct(UserMailer $aMailer, UserMailableFactory $aMailableFactory, Router $aRouter, $aRoute)
     {
-        parent::__construct($aMailer, $aMailableFactory);
+        $this->mailer = $aMailer;
+        $this->mailableFactory = $aMailableFactory;
         $this->router = $aRouter;
         $this->route = $aRoute;
     }
