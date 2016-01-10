@@ -10,7 +10,7 @@
  * file that was distributed with this source code.
  */
 
-namespace BenGor\User\Infrastructure\Domain\Event;
+namespace BenGor\User\Infrastructure\Domain\Event\Symfony;
 
 use BenGor\User\Domain\Model\UserMailableFactory;
 use BenGor\User\Domain\Model\UserMailer;
