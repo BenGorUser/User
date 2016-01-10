@@ -42,7 +42,8 @@
         "mandrill/mandrill": "Required to send emails using Mandrill adapter",
         "swiftmailer/swiftmailer": "Required to send emails using Swiftmailer adapter",
         "symfony/security-core": "Required to encode user passwords using Symfony adapter",
-        "twig/twig": "Required to render emails bodies with this template engine"
+        "symfony/routing": "Required to use default implementation of event subscribers",
+        "twig/twig": "Required to render emails with this template engine"
     },
     "autoload": {
         "psr-4": {
