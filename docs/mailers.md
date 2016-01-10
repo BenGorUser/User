@@ -16,40 +16,31 @@ TL;DR: The mail sending flow works as follows:
 * Use an instance of `UserMailer` to send the `UserMailable` created in the previous step.
 
 ##UserMailer implementations
-
 Swiftmailer and Madrill mailers have been implemented for you to quickstart using this component. 
 
-###Swiftmailer
-
+###SwiftMailer
 You need to require the library used as is optional in this component:
 
-```
-    composer require swiftmailer/swiftmailer
+```shell
+$ composer require swiftmailer/swiftmailer
 ```
  
 `SwiftMailerUserMailer` is an implementation of `UserMailer` class and therefore uses `mail($userMailable)` method to
 send emails.
 
 ###Mandrill
-
 You need to require the library used as is optional in this component:
 
-```
-    composer require swiftmailer/swiftmailer
+```shell
+$ composer require mandrill/mandrill
 ```
  
 `MandrillUserMailer` is an implementation of `UserMailer` class and therefore uses `mail($userMailable)` method to
 send emails.
 
-```
-    composer require mandrill/mandrill
-```
-
 ###Your own mailer
-
 To implement an adapter to use it with your own mailer library just extend the `UserMailer` interface and implement
 `mail(UserMailable $userMailable)` to handle the `UserMailable` instance as required.
 
 ##UserMailerFactory implementations
-
 TODO

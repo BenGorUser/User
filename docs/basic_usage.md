@@ -39,8 +39,8 @@ $service->execute(new SignUpUserRequest($email, $plainPassword));
 file
 
 ##Subscribing to events
-**Important:** In order to receive registration confirmation mail and remember password mail you need to subscribe to the 
-[domain events](events.md) triggered by the model. `DomainEventPublisher` triggers the subscribers based on domain 
+**Important:** In order to receive registration confirmation mail and remember password mail you need to subscribe to
+the [domain events](events.md) triggered by the model. `DomainEventPublisher` triggers the subscribers based on domain 
 events. To subscribe to those events just do the following:
 
 ```php

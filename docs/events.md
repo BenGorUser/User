@@ -33,48 +33,83 @@ All these subscribers are located under `BenGor\User\Infrastructure\Subscriber` 
 ###Send mail after user invitation
 
 `UserInvitedMailerSubscriber` sends an email to the invited user with the token and instructions to register into the 
-application. An example of usage using Symfony subscriber with Twig and Swiftmailer:
+application. An example of usage using Symfony subscriber (because they need Symfony Routing component) with
+Twig and SwiftMailer:
 
 ```php
-$loader = new Twig_Loader_Filesystem('path_to_infrastructure_folder/Ui/Twig/views');
-$twig = new Twig_Environment($loader);
+<?php
+
+use BenGor\User\Infrastructure\Domain\Event\Symfony\UserInvitedMailerSubscriber;
+use BenGor\User\Infrastructure\Mailing\Mailable\Twig\TwigUserMailableFactory;
+use BenGor\User\Infrastructure\Mailing\Mailer\SwiftMailer\SwiftMailerUserMailer;
+use Ddd\Domain\DomainEventPublisher;
+use Symfony\Component\Routing\Router;
+
+$loader = new \Twig_Loader_Filesystem('path_to_infrastructure_folder/Ui/Twig/views');
+$twig = new \Twig_Environment($loader);
+
+$router = new Router("(... required parameters)");      // http://symfony.com/doc/current/components/routing/introduction.html
+
 $factory = new TwigUserMailableFactory($twig, 'Email/invite.html.twig', 'no-reply@domain.com');
-$mailer = new SwiftMailerUserMailer($swiftmailer); //Check swiftmailers docs
-$router = new Router("(... required parameters)"); // http://symfony.com/doc/current/components/routing/introduction.html
+$mailer = new SwiftMailerUserMailer($swiftmailer);      // Check SwiftMailer docs
+
 DomainEventPublisher::instance()->subscribe(
-    new \BenGor\User\Infrastructure\Domain\Event\Symfony\UserInvitedMailerSubscriber($mailer, $factory, $router, 'sign_up_by_invitation_path')
+    new UserInvitedMailerSubscriber($mailer, $factory, $router, 'sign_up_by_invitation_route')
 );
 ```
 
 ###Send mail after user is registered
 
 `UserRegisteredMailerSubscriber` sends an email to the registered user with the token and instructions to login into the 
-application. An example of usage using Symfony subscriber with Twig and Swiftmailer:
+application. An example of usage using Symfony subscriber (because they need Symfony Routing component) with
+Twig and SwiftMailer:
 
 ```php
-$loader = new Twig_Loader_Filesystem('path_to_infrastructure_folder/Ui/Twig/views');
-$twig = new Twig_Environment($loader);
-$factory = new TwigUserMailableFactory($twig, 'Email/register.html.twig', 'no-reply@domain.com');
-$mailer = new SwiftMailerUserMailer($swiftmailer); //Check swiftmailers docs
-$router = new Router("(... required parameters)"); // http://symfony.com/doc/current/components/routing/introduction.html
+<?php
+
+use BenGor\User\Infrastructure\Domain\Event\Symfony\UserRegisteredMailerSubscriber;
+use BenGor\User\Infrastructure\Mailing\Mailable\Twig\TwigUserMailableFactory;
+use BenGor\User\Infrastructure\Mailing\Mailer\SwiftMailer\SwiftMailerUserMailer;
+use Ddd\Domain\DomainEventPublisher;
+use Symfony\Component\Routing\Router;
+
+$loader = new \Twig_Loader_Filesystem('path_to_infrastructure_folder/Ui/Twig/views');
+$twig = new \Twig_Environment($loader);
+
+$router = new Router("(... required parameters)");      // http://symfony.com/doc/current/components/routing/introduction.html
+
+$factory = new TwigUserMailableFactory($twig, 'Email/invite.html.twig', 'no-reply@domain.com');
+$mailer = new SwiftMailerUserMailer($swiftmailer);      // Check SwiftMailer docs
+
 DomainEventPublisher::instance()->subscribe(
-    new UserRegisteredMailerSubscriber($mailer, $factory, $router, 'activate_user_route'))
+    new UserRegisteredMailerSubscriber($mailer, $factory, $router, 'confirmation_account_route')
 );
 ```
 
 ###Send mail with remember password instructions
 
 `UserRememberPaswordRequestSubscriber` send an email to a user that requested a remember password token. 
-An example of usage using Symfony subscriber with Twig and Swiftmailer:
+An example of usage using Symfony subscriber (because they need Symfony Routing component) with Twig and SwiftMailer:
 
 ```php
-$loader = new Twig_Loader_Filesystem('path_to_infrastructure_folder/Ui/Twig/views');
-$twig = new Twig_Environment($loader);
-$factory = new TwigUserMailableFactory($twig, 'Email/remember_password.html.twig', 'no-reply@domain.com');
-$mailer = new SwiftMailerUserMailer($swiftmailer); //Check swiftmailers docs
-$router = new Router("(... required parameters)"); // http://symfony.com/doc/current/components/routing/introduction.html
+<?php
+
+use BenGor\User\Infrastructure\Domain\Event\Symfony\UserRememberPasswordRequestedSubscriber;
+use BenGor\User\Infrastructure\Mailing\Mailable\Twig\TwigUserMailableFactory;
+use BenGor\User\Infrastructure\Mailing\Mailer\SwiftMailer\SwiftMailerUserMailer;
+use Ddd\Domain\DomainEventPublisher;
+use Symfony\Component\Routing\Router;
+
+$loader = new \Twig_Loader_Filesystem('path_to_infrastructure_folder/Ui/Twig/views');
+$twig = new \Twig_Environment($loader);
+
+$router = new Router("(... required parameters)");      // http://symfony.com/doc/current/components/routing/introduction.html
+
+$factory = new TwigUserMailableFactory($twig, 'Email/invite.html.twig', 'no-reply@domain.com');
+$mailer = new SwiftMailerUserMailer($swiftmailer);      // Check SwiftMailer docs
+
 DomainEventPublisher::instance()->subscribe(
-    new UserRememberPaswordRequestSubscriber($mailer, $factory, $router, 'change_user_password_path'))
+    new UserRegisteredMailerSubscriber($mailer, $factory, $router, 'change_user_password_route')
 );
 ```
 
@@ -99,4 +134,3 @@ The `handle()` method on the other side will implement the logic we want to exec
 The last but not least, register your subscriber as explained above in the "Listening to the events" section.
 
 > You may want to read more about [mailers](mailers.md)
-
