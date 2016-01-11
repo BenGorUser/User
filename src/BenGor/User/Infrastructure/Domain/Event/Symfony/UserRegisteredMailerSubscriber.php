@@ -76,7 +76,7 @@ final class UserRegisteredMailerSubscriber implements DomainEventSubscriber
     public function handle($aDomainEvent)
     {
         $user = $aDomainEvent->user();
-        $url = $this->router->generate($this->route, $user->confirmationToken());
+        $url = $this->router->generate($this->route, ['confirmationToken' => $user->confirmationToken()]);
         $mail = $this->mailableFactory->build($user->email(), [
             'user' => $user, 'url' => $url,
         ]);

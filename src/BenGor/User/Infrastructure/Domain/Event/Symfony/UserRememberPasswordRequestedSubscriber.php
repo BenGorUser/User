@@ -75,7 +75,7 @@ final class UserRememberPasswordRequestedSubscriber implements DomainEventSubscr
     public function handle($aDomainEvent)
     {
         $user = $aDomainEvent->user();
-        $url = $this->router->generate($this->route, $user->rememberPasswordToken());
+        $url = $this->router->generate($this->route, ['rememberPasswordToken' => $user->rememberPasswordToken()]);
         $mail = $this->mailableFactory->build($user->email(), [
             'user' => $user, 'url' => $url,
         ]);

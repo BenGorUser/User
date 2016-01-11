@@ -75,7 +75,7 @@ final class UserInvitedMailerSubscriber extends DomainEventSubscriber
     public function handle($aDomainEvent)
     {
         $guest = $aDomainEvent->userGuest();
-        $url = $this->router->generate($this->route, $guest->invitationToken());
+        $url = $this->router->generate($this->route, ['invitationToken' => $guest->invitationToken()]);
         $mail = $this->mailableFactory->build($guest->email(), [
             'user' => $guest, 'url' => $url,
         ]);
