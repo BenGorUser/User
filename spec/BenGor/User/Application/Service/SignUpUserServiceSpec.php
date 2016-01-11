@@ -13,6 +13,7 @@
 namespace spec\BenGor\User\Application\Service;
 
 use BenGor\User\Application\Service\SignUpUserRequest;
+use BenGor\User\Application\Service\SignUpUserResponse;
 use BenGor\User\Application\Service\SignUpUserService;
 use BenGor\User\Domain\Model\Exception\UserAlreadyExistException;
 use BenGor\User\Domain\Model\User;
@@ -68,7 +69,7 @@ class SignUpUserServiceSpec extends ObjectBehavior
         )->shouldBeCalled()->willReturn($user);
         $repository->persist($user)->shouldBeCalled();
 
-        $this->execute($request);
+        $this->execute($request)->shouldReturnAnInstanceOf(SignUpUserResponse::class);
     }
 
     function it_does_not_sign_up_if_user_exists(UserRepository $repository, User $user)

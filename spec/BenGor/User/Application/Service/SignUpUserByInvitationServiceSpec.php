@@ -13,6 +13,7 @@
 namespace spec\BenGor\User\Application\Service;
 
 use BenGor\User\Application\Service\SignUpUserByInvitationRequest;
+use BenGor\User\Application\Service\SignUpUserByInvitationResponse;
 use BenGor\User\Application\Service\SignUpUserByInvitationService;
 use BenGor\User\Domain\Model\Exception\UserAlreadyExistException;
 use BenGor\User\Domain\Model\Exception\UserGuestDoesNotExistException;
@@ -81,7 +82,7 @@ class SignUpUserByInvitationServiceSpec extends ObjectBehavior
         $userRepository->persist($user)->shouldBeCalled();
         $userGuestRepository->remove($userGuest)->shouldBeCalled();
 
-        $this->execute($request);
+        $this->execute($request)->shouldReturnAnInstanceOf(SignUpUserByInvitationResponse::class);
     }
 
     function it_does_not_sign_up_by_invitation_if_user_guest_does_not_exist(UserGuestRepository $userGuestRepository)

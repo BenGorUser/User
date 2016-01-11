@@ -107,5 +107,7 @@ final class SignUpUserByInvitationService implements ApplicationService
 
         $this->userRepository->persist($user);
         $this->userGuestRepository->remove($userGuest);
+
+        return new SignUpUserByInvitationResponse($user);
     }
 }
