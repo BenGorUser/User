@@ -91,7 +91,7 @@ final class UserMailable
     /**
      * Gets the receiver or receivers.
      *
-     * @return string
+     * @return array|UserEmail
      */
     public function to()
     {
@@ -101,7 +101,7 @@ final class UserMailable
     /**
      * Gets the from address.
      *
-     * @return string
+     * @return UserEmail
      */
     public function from()
     {
