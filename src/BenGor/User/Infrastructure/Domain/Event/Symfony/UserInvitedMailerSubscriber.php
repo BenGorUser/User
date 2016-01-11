@@ -23,7 +23,7 @@ use Symfony\Component\Routing\Router;
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  */
-final class UserInvitedMailerSubscriber extends DomainEventSubscriber
+final class UserInvitedMailerSubscriber implements DomainEventSubscriber
 {
     /**
      * The mailable factory.
