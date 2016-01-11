@@ -14,7 +14,7 @@ namespace BenGor\User\Application\Service;
 
 use BenGor\User\Domain\Model\Exception\UserAlreadyExistException;
 use BenGor\User\Domain\Model\UserEmail;
-use BenGor\User\Domain\Model\UserGuest;
+use BenGor\User\Domain\Model\UserGuestFactory;
 use BenGor\User\Domain\Model\UserGuestRepository;
 use BenGor\User\Domain\Model\UserRepository;
 use Ddd\Application\Service\ApplicationService;
@@ -27,6 +27,13 @@ use Ddd\Application\Service\ApplicationService;
  */
 final class InviteUserService implements ApplicationService
 {
+    /**
+     * The user guest factory.
+     *
+     * @var UserGuestFactory
+     */
+    private $userGuestFactory;
+
     /**
      * The user repository.
      *
@@ -45,12 +52,17 @@ final class InviteUserService implements ApplicationService
      * Constructor.
      *
      * @param UserRepository      $aUserRepository      The user repository
-     * @param UserGuestRepository $aUserGuestRepository The password encoder
+     * @param UserGuestRepository $aUserGuestRepository The user guest repository
+     * @param UserGuestFactory    $aUserGuestFactory    The user guest factory
      */
-    public function __construct(UserRepository $aUserRepository, UserGuestRepository $aUserGuestRepository)
-    {
+    public function __construct(
+        UserRepository $aUserRepository,
+        UserGuestRepository $aUserGuestRepository,
+        UserGuestFactory $aUserGuestFactory
+    ) {
         $this->userRepository = $aUserRepository;
         $this->userGuestRepository = $aUserGuestRepository;
+        $this->userGuestFactory = $aUserGuestFactory;
     }
 
     /**
@@ -68,7 +80,7 @@ final class InviteUserService implements ApplicationService
 
         $userGuest = $this->userGuestRepository->userGuestOfEmail($email);
         if (null === $userGuest) {
-            $userGuest = new UserGuest(
+            $userGuest = $this->userGuestFactory->register(
                 $this->userGuestRepository->nextIdentity(),
                 $email
             );

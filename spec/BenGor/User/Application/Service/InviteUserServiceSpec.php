@@ -18,6 +18,7 @@ use BenGor\User\Domain\Model\Exception\UserAlreadyExistException;
 use BenGor\User\Domain\Model\User;
 use BenGor\User\Domain\Model\UserEmail;
 use BenGor\User\Domain\Model\UserGuest;
+use BenGor\User\Domain\Model\UserGuestFactory;
 use BenGor\User\Domain\Model\UserGuestId;
 use BenGor\User\Domain\Model\UserGuestRepository;
 use BenGor\User\Domain\Model\UserRepository;
@@ -32,9 +33,9 @@ use Prophecy\Argument;
  */
 class InviteUserServiceSpec extends ObjectBehavior
 {
-    function let(UserRepository $userRepository, UserGuestRepository $userGuestRepository)
+    function let(UserRepository $userRepository, UserGuestRepository $userGuestRepository, UserGuestFactory $factory)
     {
-        $this->beConstructedWith($userRepository, $userGuestRepository);
+        $this->beConstructedWith($userRepository, $userGuestRepository, $factory);
     }
 
     function it_is_initializable()
@@ -49,7 +50,9 @@ class InviteUserServiceSpec extends ObjectBehavior
 
     function it_invites_user(
         UserRepository $userRepository,
-        UserGuestRepository $userGuestRepository
+        UserGuestRepository $userGuestRepository,
+        UserGuestFactory $factory,
+        UserGuest $userGuest
     ) {
         $request = new InviteUserRequest('user@user.com');
         $id = new UserGuestId('id');
@@ -59,7 +62,9 @@ class InviteUserServiceSpec extends ObjectBehavior
             ->shouldBeCalled()->willReturn(null);
 
         $userGuestRepository->nextIdentity()->shouldBeCalled()->willReturn($id);
-        $userGuestRepository->persist(Argument::type(UserGuest::class))->shouldBeCalled();
+        $factory->register($id, Argument::type(UserEmail::class))->shouldBeCalled()->willReturn($userGuest);
+
+        $userGuestRepository->persist($userGuest)->shouldBeCalled();
 
         $this->execute($request);
     }
