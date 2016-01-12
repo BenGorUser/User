@@ -257,7 +257,7 @@ class User
      */
     public function isRoleAllowed(UserRole $aRole)
     {
-        return in_array($aRole->role(), $this->availableRoles(), true);
+        return in_array($aRole->role(), static::availableRoles(), true);
     }
 
     /**
@@ -366,7 +366,7 @@ class User
      *
      * @return array
      */
-    protected function availableRoles()
+    public static function availableRoles()
     {
         return ['ROLE_USER', 'ROLE_ADMIN'];
     }
