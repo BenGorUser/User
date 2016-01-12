@@ -51,7 +51,7 @@ final class MandrillUserMailer implements UserMailer
                 return $receiver->email();
             }, $mail->to());
         } else {
-            $to = $mail->to();
+            $to = $mail->to()->email();
         }
 
         $message = [

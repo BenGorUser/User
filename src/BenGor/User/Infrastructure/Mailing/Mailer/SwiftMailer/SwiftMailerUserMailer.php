@@ -51,7 +51,7 @@ final class SwiftMailerUserMailer implements UserMailer
                 return $receiver->email();
             }, $mail->to());
         } else {
-            $to = $mail->to();
+            $to = $mail->to()->email();
         }
 
         $message = \Swift_Message::newInstance()
