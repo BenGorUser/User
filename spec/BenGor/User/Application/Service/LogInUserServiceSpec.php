@@ -96,16 +96,15 @@ class LogInUserServiceSpec extends ObjectBehavior
 
     function it_does_not_log_if_user_invalid_password(UserRepository $repository, User $user)
     {
-        $request = new LogInUserRequest('user@user.com', 'plainPassword');
+        $encoder = new DummyUserPasswordEncoder('otherEncodedPassword', false);
+        $this->beConstructedWith($repository, $encoder);
 
-        $user->login()->shouldNotBeCalled();
-        $user->isEnabled()->shouldBeCalled()->willReturn(true);
-        $user->password()->shouldBeCalled()->willReturn(
-            UserPassword::fromPlain('otherPassword', new DummyUserPasswordEncoder('otherEncodedPassword'))
-        );
+        $request = new LogInUserRequest('user@user.com', 'plainPassword');
+        $password = UserPassword::fromPlain('otherPassword', $encoder);
 
         $repository->userOfEmail(Argument::type(UserEmail::class))->shouldBeCalled()->willReturn($user);
-        $repository->persist($user)->shouldNotBeCalled();
+        $user->isEnabled()->shouldBeCalled()->willReturn(true);
+        $user->password()->shouldBeCalled()->willReturn($password);
 
         $this->shouldThrow(UserPasswordInvalidException::class)->duringExecute($request);
     }

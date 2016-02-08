@@ -81,13 +81,14 @@ final class UserPassword
     /**
      * Method that checks if the password given is equal to the current.
      *
-     * @param UserPassword $aUserPassword A user password
+     * @param string              $aPlainPassword The plain password
+     * @param UserPasswordEncoder $anEncoder      The encoder
      *
      * @return bool
      */
-    public function equals(UserPassword $aUserPassword)
+    public function equals($aPlainPassword, UserPasswordEncoder $anEncoder)
     {
-        return $this->encodedPassword === $aUserPassword->encodedPassword;
+        return $anEncoder->isPasswordValid($this, $aPlainPassword);
     }
 
     /**

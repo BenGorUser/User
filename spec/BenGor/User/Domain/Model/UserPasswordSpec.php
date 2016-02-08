@@ -14,6 +14,7 @@ namespace spec\BenGor\User\Domain\Model;
 
 use BenGor\User\Domain\Model\UserPassword;
 use BenGor\User\Domain\Model\UserPasswordEncoder;
+use BenGor\User\Infrastructure\Security\Test\DummyUserPasswordEncoder;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
@@ -46,7 +47,7 @@ class UserPasswordSpec extends ObjectBehavior
         $plainPassword = 'secretPassword';
         $encodedPassword = 'iudfhiuewhfuiewhiufhewiufewhiufwe';
 
-        $encoder->encode($plainPassword, Argument::type('string'))->willReturn($encodedPassword);
+        $encoder->encode($plainPassword, Argument::type('string'))->shouldBecalled()->willReturn($encodedPassword);
 
         $this->beConstructedFromPlain($plainPassword, $encoder);
 
@@ -56,10 +57,9 @@ class UserPasswordSpec extends ObjectBehavior
 
     function it_compares_passwords()
     {
-        $encodedPassword = 'ajdqwjnfewnewnfewkjqnfewkjn';
+        $encoder = new DummyUserPasswordEncoder('ajdqwjnfewnewnfewkjqnfewkjn');
+        $this->beConstructedFromEncoded('ajdqwjnfewnewnfewkjqnfewkjn', 'thisIsTheSalt');
 
-        $this->beConstructedFromEncoded($encodedPassword, 'thisIsTheSalt');
-
-        $this->equals(UserPassword::fromEncoded($encodedPassword, 'thisIsTheSalt'))->shouldBe(true);
+        $this->equals(123456, $encoder)->shouldBe(true);
     }
 }

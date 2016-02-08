@@ -50,12 +50,14 @@ class RemoveUserServiceSpec extends ObjectBehavior
 
     function it_does_not_remove_user_password_do_not_match(UserRepository $repository, User $user)
     {
-        $encoder = new DummyUserPasswordEncoder('passwordThatDoesntMatch');
+        $encoder = new DummyUserPasswordEncoder('encodedPassword', false);
+        $this->beConstructedWith($repository, $encoder);
+
         $request = new RemoveUserRequest('userID', 'plainPassword');
         $password = UserPassword::fromPlain('wrongPassword', $encoder);
 
-        $user->password()->willReturn($password);
         $repository->userOfId(Argument::type(UserId::class))->shouldBeCalled()->willReturn($user);
+        $user->password()->shouldBeCalled()->willReturn($password);
 
         $this->shouldThrow(UserPasswordInvalidException::class)->duringExecute($request);
     }
@@ -66,8 +68,8 @@ class RemoveUserServiceSpec extends ObjectBehavior
         $request = new RemoveUserRequest('userID', 'plainPassword');
         $password = UserPassword::fromPlain('plainPassword', $encoder);
 
-        $user->password()->willReturn($password);
         $repository->userOfId(Argument::type(UserId::class))->shouldBeCalled()->willReturn($user);
+        $user->password()->shouldBeCalled()->willReturn($password);
         $repository->remove($user)->shouldBeCalled();
 
         $this->execute($request);

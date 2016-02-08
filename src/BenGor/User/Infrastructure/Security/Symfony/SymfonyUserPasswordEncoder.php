@@ -12,6 +12,7 @@
 
 namespace BenGor\User\Infrastructure\Security\Symfony;
 
+use BenGor\User\Domain\Model\UserPassword;
 use BenGor\User\Domain\Model\UserPasswordEncoder;
 use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
 
@@ -45,12 +46,18 @@ final class SymfonyUserPasswordEncoder implements UserPasswordEncoder
      */
     public function encode($aPlainPassword, $aSalt)
     {
-        $encodedPassword = $this->passwordEncoder->encodePassword($aPlainPassword, $aSalt);
+        return $this->passwordEncoder->encodePassword($aPlainPassword, $aSalt);
+    }
 
-        if (false === $this->passwordEncoder->isPasswordValid($encodedPassword, $aPlainPassword, $aSalt)) {
-            throw new \Exception('The password is invalid');
-        }
-
-        return $encodedPassword;
+    /**
+     * {@inheritdoc}
+     */
+    public function isPasswordValid(UserPassword $anEncoded, $aPlainPassword)
+    {
+        return $this->passwordEncoder->isPasswordValid(
+            $anEncoded->encodedPassword(),
+            $aPlainPassword,
+            $anEncoded->salt()
+        );
     }
 }

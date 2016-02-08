@@ -12,6 +12,7 @@
 
 namespace BenGor\User\Infrastructure\Security\Test;
 
+use BenGor\User\Domain\Model\UserPassword;
 use BenGor\User\Domain\Model\UserPasswordEncoder;
 
 /**
@@ -30,13 +31,22 @@ final class DummyUserPasswordEncoder implements UserPasswordEncoder
     private $expectedResponse;
 
     /**
+     * Is password valid boolean.
+     *
+     * @var bool
+     */
+    private $isPasswordValid;
+
+    /**
      * Constructor.
      *
      * @param string $expectedResponse The expected response
+     * @param bool   $isPasswordValid  Is password valid boolean, by default is true
      */
-    public function __construct($expectedResponse)
+    public function __construct($expectedResponse, $isPasswordValid = true)
     {
         $this->expectedResponse = $expectedResponse;
+        $this->isPasswordValid = $isPasswordValid;
     }
 
     /**
@@ -45,5 +55,13 @@ final class DummyUserPasswordEncoder implements UserPasswordEncoder
     public function encode($aPlainPassword, $aSalt)
     {
         return $this->expectedResponse;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isPasswordValid(UserPassword $anEncoded, $aPlainPassword)
+    {
+        return $this->isPasswordValid;
     }
 }

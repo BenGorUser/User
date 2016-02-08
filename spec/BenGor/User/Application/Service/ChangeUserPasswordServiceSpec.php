@@ -13,6 +13,7 @@
 namespace spec\BenGor\User\Application\Service;
 
 use BenGor\User\Application\Service\ChangeUserPasswordRequest;
+use BenGor\User\Application\Service\ChangeUserPasswordService;
 use BenGor\User\Domain\Model\User;
 use BenGor\User\Domain\Model\UserId;
 use BenGor\User\Domain\Model\UserPassword;
@@ -38,7 +39,7 @@ class ChangeUserPasswordServiceSpec extends ObjectBehavior
 
     function it_is_initializable()
     {
-        $this->shouldHaveType('BenGor\User\Application\Service\ChangeUserPasswordService');
+        $this->shouldHaveType(ChangeUserPasswordService::class);
     }
 
     function it_implements_application_service()
@@ -49,16 +50,13 @@ class ChangeUserPasswordServiceSpec extends ObjectBehavior
     function it_changes_password(UserRepository $repository, User $user)
     {
         $request = new ChangeUserPasswordRequest('id', 'newPassword', 'oldPassword');
-
-        $user->password()->shouldBeCalled()->willReturn(
-            UserPassword::fromPlain('oldPassword', new DummyUserPasswordEncoder('encodedPassword'))
-        );
-        $user->changePassword(
-            Argument::type(UserPassword::class),
-            Argument::type(UserPassword::class)
-        )->shouldBeCalled();
+        $encoder = new DummyUserPasswordEncoder('encodedPassword');
+        $oldPassword = UserPassword::fromPlain('oldPassword', $encoder, 'dummy-salt');
 
         $repository->userOfId(Argument::type(UserId::class))->shouldBeCalled()->willReturn($user);
+        $user->password()->shouldBeCalled()->willReturn($oldPassword);
+        $user->changePassword(Argument::type(UserPassword::class))->shouldBeCalled();
+
         $repository->persist($user)->shouldBeCalled();
 
         $this->execute($request);

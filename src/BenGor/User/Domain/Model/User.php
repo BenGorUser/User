@@ -19,7 +19,6 @@ use BenGor\User\Domain\Model\Event\UserRegistered;
 use BenGor\User\Domain\Model\Event\UserRememberPasswordRequested;
 use BenGor\User\Domain\Model\Event\UserRoleGranted;
 use BenGor\User\Domain\Model\Event\UserRoleRevoked;
-use BenGor\User\Domain\Model\Exception\UserPasswordInvalidException;
 use BenGor\User\Domain\Model\Exception\UserRoleAlreadyGrantedException;
 use BenGor\User\Domain\Model\Exception\UserRoleAlreadyRevokedException;
 use BenGor\User\Domain\Model\Exception\UserRoleInvalidException;
@@ -150,15 +149,11 @@ class User
     /**
      * Updates the user password.
      *
-     * @param UserPassword $anOldPassword The old password
-     * @param UserPassword $aNewPassword  The new password
+     * @param UserPassword $aPassword The old password
      */
-    public function changePassword(UserPassword $anOldPassword, UserPassword $aNewPassword)
+    public function changePassword(UserPassword $aPassword)
     {
-        if (false === $this->password()->equals($anOldPassword)) {
-            throw new UserPasswordInvalidException();
-        }
-        $this->password = $aNewPassword;
+        $this->password = $aPassword;
         $this->rememberPasswordToken = null;
     }
 
@@ -227,7 +222,7 @@ class User
      */
     public function isEnabled()
     {
-        return null === $this->confirmationToken;
+        return null === $this->confirmationToken || null === $this->confirmationToken->token();
     }
 
     /**
