@@ -88,7 +88,7 @@ class UserSpec extends ObjectBehavior
 
         $this->rememberPassword();
         $this->rememberPasswordToken()->shouldReturnAnInstanceOf(UserToken::class);
-        $this->changePassword($this->password(), $newPassword);
+        $this->changePassword($newPassword);
         $this->rememberPasswordToken()->shouldReturn(null);
         $this->password()->shouldReturn($newPassword);
     }

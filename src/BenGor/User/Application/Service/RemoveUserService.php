@@ -61,10 +61,8 @@ final class RemoveUserService implements ApplicationService
         $id = $request->id();
         $plainPassword = $request->password();
 
-        $password = UserPassword::fromPlain($plainPassword, $this->encoder);
         $user = $this->repository->userOfId(new UserId($id));
-
-        if (false === $user->password()->equals($password)) {
+        if (false === $user->password()->equals($plainPassword, $this->encoder)) {
             throw new UserPasswordInvalidException();
         }
 

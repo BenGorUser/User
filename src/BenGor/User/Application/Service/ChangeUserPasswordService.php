@@ -12,6 +12,7 @@
 
 namespace BenGor\User\Application\Service;
 
+use BenGor\User\Domain\Model\Exception\UserPasswordInvalidException;
 use BenGor\User\Domain\Model\UserId;
 use BenGor\User\Domain\Model\UserPassword;
 use BenGor\User\Domain\Model\UserPasswordEncoder;
@@ -62,10 +63,10 @@ final class ChangeUserPasswordService implements ApplicationService
         $oldPlainPassword = $request->oldPlainPassword();
 
         $user = $this->repository->userOfId(new UserId($id));
-        $oldPassword = UserPassword::fromPlain($oldPlainPassword, $this->encoder, $user->password()->salt());
-        $newPassword = UserPassword::fromPlain($newPlainPassword, $this->encoder);
-
-        $user->changePassword($oldPassword, $newPassword);
+        if (false === $user->password()->equals($oldPlainPassword, $this->encoder)) {
+            throw new UserPasswordInvalidException();
+        }
+        $user->changePassword(UserPassword::fromPlain($newPlainPassword, $this->encoder));
 
         $this->repository->persist($user);
     }
