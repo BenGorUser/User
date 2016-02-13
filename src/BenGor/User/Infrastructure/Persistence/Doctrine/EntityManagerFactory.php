@@ -10,7 +10,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Lw\Infrastructure\Persistence\Doctrine;
+namespace BenGor\User\Infrastructure\Persistence\Doctrine;
 
 use BenGor\User\Infrastructure\Persistence\Doctrine\Types\UserRolesType;
 use Doctrine\DBAL\Types\Type;
