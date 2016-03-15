@@ -171,7 +171,7 @@ SQL
             'SELECT COUNT(*) FROM user WHERE id = :id', [':id' => $aUser->id()->id()]
         )->fetchColumn();
 
-        return $count === 1;
+        return (int)$count === 1;
     }
 
     /**
@@ -188,6 +188,7 @@ SQL
             email,
             last_login,
             password,
+            salt,
             remember_password_token,
             roles,
             updated_on
@@ -198,6 +199,7 @@ SQL
             :email,
             :lastLogin,
             :password,
+            :salt,
             :rememberPasswordToken,
             :roles,
             :updatedOn
@@ -207,9 +209,10 @@ SQL
             'token'                 => $aUser->confirmationToken()->token(),
             'createdOn'             => $aUser->createdOn()->format(self::DATE_FORMAT),
             'email'                 => $aUser->email()->email(),
-            'lastLogin'             => $aUser->lastLogin()->format(self::DATE_FORMAT),
+            'lastLogin'             => $aUser->lastLogin() ? $aUser->lastLogin()->format(self::DATE_FORMAT) : null,
             'password'              => $aUser->password()->encodedPassword(),
-            'rememberPasswordToken' => $aUser->rememberPasswordToken()->token(),
+            'salt'                  => $aUser->password()->salt(),
+            'rememberPasswordToken' => $aUser->rememberPasswordToken() ? $aUser->rememberPasswordToken()->token() : null,
             'roles'                 => $this->rolesToString($aUser->roles()),
             'updatedOn'             => $aUser->updatedOn()->format(self::DATE_FORMAT),
         ]);
@@ -226,18 +229,18 @@ SQL
             confirmation_token = :confirmationToken,
             last_login = :lastLogin,
             password = :password,
-            remember_password_token = :rememberPasswordToken
+            remember_password_token = :rememberPasswordToken,
             roles = :roles,
-            updated_on = :updatedOn,
+            updated_on = :updatedOn
             WHERE id = :id';
         $this->execute($sql, [
             'id'                    => $aUser->id()->id(),
-            'confirmationToken'     => $aUser->confirmationToken()->token(),
-            'lastLogin'             => $aUser->lastLogin(),
+            'confirmationToken'     => $aUser->confirmationToken() ? $aUser->confirmationToken()->token() : null,
+            'lastLogin'             => $aUser->lastLogin() ? $aUser->lastLogin()->format(self::DATE_FORMAT) : null,
             'password'              => $aUser->password()->encodedPassword(),
-            'rememberPasswordToken' => $aUser->rememberPasswordToken()->token(),
+            'rememberPasswordToken' => $aUser->rememberPasswordToken() ? $aUser->rememberPasswordToken()->token() : null,
             'roles'                 => $this->rolesToString($aUser->roles()),
-            'updatedOn'             => $aUser->updatedOn(),
+            'updatedOn'             => $aUser->updatedOn()->format(self::DATE_FORMAT),
         ]);
     }
 
@@ -281,7 +284,7 @@ SQL
             new UserId($row['id']),
             new UserEmail($row['email']),
             UserPassword::fromEncoded($row['password'], $row['salt']),
-            $this->rolesToArray($row['user_roles']),
+            $this->rolesToArray($row['roles']),
             new \DateTimeImmutable($row['created_on']),
             new \DateTimeImmutable($row['updated_on']),
             $lastLogin,
