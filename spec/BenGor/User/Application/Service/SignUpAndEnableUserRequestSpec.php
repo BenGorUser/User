@@ -12,24 +12,24 @@
 
 namespace spec\BenGor\User\Application\Service;
 
-use BenGor\User\Application\Service\ActivateUserAccountRequest;
+use BenGor\User\Application\Service\SignUpAndEnableUserRequest;
 use PhpSpec\ObjectBehavior;
 
 /**
- * Spec file of activate user account request class.
+ * Spec file of sign up user and enable request class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-class ActivateUserAccountRequestSpec extends ObjectBehavior
+class SignUpAndEnableUserRequestSpec extends ObjectBehavior
 {
     function it_creates_request()
     {
-        $confirmationToken = 'asojasiudasjuidsajiu';
+        $this->beConstructedWith('user@user.net', 'plainPassword', ['ROLE_USER', 'ROLE_ADMIN']);
+        $this->shouldHaveType(SignUpAndEnableUserRequest::class);
 
-        $this->beConstructedWith($confirmationToken);
-        $this->shouldHaveType(ActivateUserAccountRequest::class);
-
-        $this->confirmationToken()->shouldBe($confirmationToken);
+        $this->email()->shouldReturn('user@user.net');
+        $this->password()->shouldReturn('plainPassword');
+        $this->roles()->shouldReturn(['ROLE_USER', 'ROLE_ADMIN']);
     }
 }

@@ -10,6 +10,17 @@
  * file that was distributed with this source code.
  */
 
+$header = <<<'EOF'
+This file is part of the BenGorUser library.
+
+(c) Beñat Espiña <benatespina@gmail.com>
+(c) Gorka Laucirica <gorka.lauzirika@gmail.com>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+EOF;
+
+Symfony\CS\Fixer\Contrib\HeaderCommentFixer::setHeader($header);
 
 $finder = Symfony\CS\Finder\DefaultFinder::create()
     ->in(__DIR__ . '/src')
@@ -25,6 +36,7 @@ return Symfony\CS\Config\Config::create()
         '-concat_without_spaces',
         'align_double_arrow',
         'concat_with_spaces',
+        'header_comment',
         'multiline_spaces_before_semicolon',
         'newline_after_open_tag',
         'ordered_use',
@@ -33,5 +45,5 @@ return Symfony\CS\Config\Config::create()
         'short_array_syntax',
         'short_echo_tag',
         'strict',
-        'strict_param'
+        'strict_param',
     ]);

@@ -18,12 +18,12 @@ use BenGor\User\Domain\Model\UserToken;
 use Ddd\Application\Service\ApplicationService;
 
 /**
- * Activate user account service class.
+ * Enable user service class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-final class ActivateUserAccountService implements ApplicationService
+final class EnableUserService implements ApplicationService
 {
     /**
      * The user repository.

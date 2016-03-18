@@ -12,8 +12,8 @@
 
 namespace spec\BenGor\User\Application\Service;
 
-use BenGor\User\Application\Service\ActivateUserAccountRequest;
-use BenGor\User\Application\Service\ActivateUserAccountService;
+use BenGor\User\Application\Service\EnableUserRequest;
+use BenGor\User\Application\Service\EnableUserService;
 use BenGor\User\Domain\Model\Exception\UserTokenNotFoundException;
 use BenGor\User\Domain\Model\User;
 use BenGor\User\Domain\Model\UserRepository;
@@ -23,7 +23,7 @@ use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
 /**
- * Spec file of activate user account service class.
+ * Spec file of enable user service class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
@@ -37,7 +37,7 @@ class ActivateUserAccountServiceSpec extends ObjectBehavior
 
     function it_is_initializable()
     {
-        $this->shouldHaveType(ActivateUserAccountService::class);
+        $this->shouldHaveType(EnableUserService::class);
     }
 
     function it_implements_application_service()
@@ -47,7 +47,7 @@ class ActivateUserAccountServiceSpec extends ObjectBehavior
 
     function it_activates_user(UserRepository $repository, User $user)
     {
-        $request = new ActivateUserAccountRequest('dsfjadjfkdasjkfdajskf');
+        $request = new EnableUserRequest('dsfjadjfkdasjkfdajskf');
 
         $user->enableAccount()->shouldBeCalled();
         $repository->userOfConfirmationToken(Argument::type(UserToken::class))->shouldBeCalled()->willReturn($user);
@@ -58,7 +58,7 @@ class ActivateUserAccountServiceSpec extends ObjectBehavior
 
     function it_doesnt_activate_user_with_wrong_token(UserRepository $repository, User $user)
     {
-        $request = new ActivateUserAccountRequest('dsfjadjfkdasjkfdajskf');
+        $request = new EnableUserRequest('dsfjadjfkdasjkfdajskf');
 
         $user->enableAccount()->shouldNotBeCalled();
         $repository->userOfConfirmationToken(Argument::type(UserToken::class))->shouldBeCalled()->willReturn(null);

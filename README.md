@@ -24,7 +24,7 @@ this library offers a well tested and documented codebase with many common use c
 PHP >= 5.5
 
 ##Installation
-The easiest way to install this component is using [Composer][7]
+The easiest way to install this component is using [Composer][6]
 ```bash
 $ composer require bengor/user
 ```
@@ -43,10 +43,9 @@ $ vendor/bin/phpspec run -fpretty
 ```
 
 ##Contributing
-This library follows PHP coding standards, so pull requests need to execute the Fabien Potencier's [PHP-CS-Fixer][5]
-and Marc Morera's [PHP-Formatter][6]. Furthermore, if the PR creates some not-PHP file remember that you have to put
-the license header manually. In order to simplify we provide a Composer script that wraps all the commands related with
-this process.
+This library follows PHP coding standards, so pull requests need to execute the Fabien Potencier's [PHP-CS-Fixer][5].
+Furthermore, if the PR creates some not-PHP file remember that you have to put the license header manually. In order
+to simplify we provide a Composer script that wraps all the commands related with this process.
 ```bash
 $ composer run-script cs
 ```
@@ -73,5 +72,4 @@ This library is created by:
 [3]: http://symfony.com/doc/current/contributing/code/patches.html#check-list
 [4]: http://symfony.com/doc/current/contributing/code/patches.html#make-a-pull-request
 [5]: http://cs.sensiolabs.org/
-[6]: https://github.com/mmoreram/php-formatter
-[7]: http://getcomposer.org
+[6]: http://getcomposer.org

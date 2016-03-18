@@ -13,12 +13,12 @@
 namespace BenGor\User\Application\Service;
 
 /**
- * Activate user account request class.
+ * Enable user request class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-final class ActivateUserAccountRequest
+final class EnableUserRequest
 {
     /**
      * The confirmation token.
