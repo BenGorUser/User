@@ -1,4 +1,6 @@
-#Use cases
+# Use cases
+
+## Sign up and enable
 
 ##Sign up
 

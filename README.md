@@ -11,6 +11,7 @@
 BenGorUser is **lightweight, flexible and easy to use** user management library. Using **Domain-Driven Design**
 this library offers a well tested and documented codebase with many common use cases already implemented, such as:
  
+ * User registration
  * User registration with confirmation email
  * Remember password
  * Log in / log out
