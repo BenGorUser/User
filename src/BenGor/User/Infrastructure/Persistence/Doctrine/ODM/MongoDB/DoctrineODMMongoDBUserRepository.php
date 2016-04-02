@@ -10,22 +10,22 @@
  * file that was distributed with this source code.
  */
 
-namespace BenGor\User\Infrastructure\Persistence\Doctrine;
+namespace BenGor\User\Infrastructure\Persistence\Doctrine\ODM\MongoDB;
 
 use BenGor\User\Domain\Model\User;
 use BenGor\User\Domain\Model\UserEmail;
 use BenGor\User\Domain\Model\UserId;
 use BenGor\User\Domain\Model\UserRepository;
 use BenGor\User\Domain\Model\UserToken;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\ODM\MongoDB\DocumentRepository;
 
 /**
- * Doctrine user repository class.
+ * Doctrine ODM MongoDB user repository class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-final class DoctrineUserRepository extends EntityRepository implements UserRepository
+final class DoctrineODMMongoDBUserRepository extends DocumentRepository implements UserRepository
 {
     /**
      * {@inheritdoc}
@@ -64,7 +64,7 @@ final class DoctrineUserRepository extends EntityRepository implements UserRepos
      */
     public function persist(User $aUser)
     {
-        $this->getEntityManager()->persist($aUser);
+        $this->getDocumentManager()->persist($aUser);
     }
 
     /**
@@ -72,7 +72,7 @@ final class DoctrineUserRepository extends EntityRepository implements UserRepos
      */
     public function remove(User $aUser)
     {
-        $this->getEntityManager()->remove($aUser);
+        $this->getDocumentManager()->remove($aUser);
     }
 
     /**
@@ -80,12 +80,12 @@ final class DoctrineUserRepository extends EntityRepository implements UserRepos
      */
     public function size()
     {
-        $queryBuilder = $this->createQueryBuilder('u');
+        $queryBuilder = $this->createQueryBuilder();
 
         return $queryBuilder
-            ->select($queryBuilder->expr()->count('u.id.id'))
+            ->count()
             ->getQuery()
-            ->getSingleScalarResult();
+            ->execute();
     }
 
     /**

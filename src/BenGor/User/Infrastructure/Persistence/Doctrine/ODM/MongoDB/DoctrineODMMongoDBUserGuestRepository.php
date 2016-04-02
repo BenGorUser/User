@@ -10,28 +10,28 @@
  * file that was distributed with this source code.
  */
 
-namespace BenGor\User\Infrastructure\Persistence\Doctrine;
+namespace BenGor\User\Infrastructure\Persistence\Doctrine\ODM\MongoDB;
 
 use BenGor\User\Domain\Model\UserEmail;
 use BenGor\User\Domain\Model\UserGuest;
 use BenGor\User\Domain\Model\UserGuestId;
 use BenGor\User\Domain\Model\UserGuestRepository;
 use BenGor\User\Domain\Model\UserToken;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\ODM\MongoDB\DocumentRepository;
 
 /**
- * Doctrine user guest repository class.
+ * Doctrine ODM MongoDB user guest repository class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  */
-final class DoctrineUserGuestRepository extends EntityRepository implements UserGuestRepository
+final class DoctrineODMMongoDBUserGuestRepository extends DocumentRepository implements UserGuestRepository
 {
     /**
      * {@inheritdoc}
      */
     public function userGuestOfId(UserGuestId $anId)
     {
-        return $this->findOneBy(['id.id' => $anId->id()]);
+        return $this->find($anId->id());
     }
 
     /**
@@ -55,7 +55,7 @@ final class DoctrineUserGuestRepository extends EntityRepository implements User
      */
     public function persist(UserGuest $aUserGuest)
     {
-        $this->getEntityManager()->persist($aUserGuest);
+        $this->getDocumentManager()->persist($aUserGuest);
     }
 
     /**
@@ -63,7 +63,7 @@ final class DoctrineUserGuestRepository extends EntityRepository implements User
      */
     public function remove(UserGuest $aUserGuest)
     {
-        $this->getEntityManager()->remove($aUserGuest);
+        $this->getDocumentManager()->remove($aUserGuest);
     }
 
     /**
@@ -71,12 +71,12 @@ final class DoctrineUserGuestRepository extends EntityRepository implements User
      */
     public function size()
     {
-        $queryBuilder = $this->createQueryBuilder('ug');
+        $queryBuilder = $this->createQueryBuilder();
 
         return $queryBuilder
-            ->select($queryBuilder->expr()->count('ug.id.id'))
+            ->count()
             ->getQuery()
-            ->getSingleScalarResult();
+            ->execute();
     }
 
     /**
