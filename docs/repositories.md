@@ -6,16 +6,14 @@ adapters have been implemented for a plug and play usage.
 All this repositories implement `BenGor\User\Domain\Model\UserRepository` interface. In case you have
 some specific requirement you can implement your own adapter.
 
-##Doctrine repository usage
-
+## Doctrine repository usage
+#### ORM
 TODO
-
+#### ODM - MongoDB
+TODO
 ##InMemory repository usage
-
 TODO
-
 ##Sql repository usage
-
 TODO
 
 ##Non official repositories

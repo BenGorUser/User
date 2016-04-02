@@ -8,12 +8,13 @@
 
 BenGor\User\Domain\Model\User:
     type: entity
-    repositoryClass: BenGor\User\Infrastructure\Persistence\Doctrine\DoctrineUserRepository
+    repositoryClass: BenGor\User\Infrastructure\Persistence\Doctrine\ORM\DoctrineORMUserRepository
     table: user
+    id:
+        userId:
+            column: id
+            type: user_id
     embedded:
-        id:
-            class: BenGor\User\Domain\Model\UserId
-            columnPrefix: false
         confirmationToken:
             class: BenGor\User\Domain\Model\UserToken
             columnPrefix: confirmation_

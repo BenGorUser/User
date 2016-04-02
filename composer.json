@@ -34,6 +34,7 @@
     },
     "suggest": {
         "doctrine/orm": "Required to persist users using Doctrine repository",
+        "doctrine/mongodb-odm": "Required to persist users using Doctrine MongoDB ODM repository",
         "mandrill/mandrill": "Required to send emails using Mandrill adapter",
         "swiftmailer/swiftmailer": "Required to send emails using Swiftmailer adapter",
         "symfony/security-core": "Required to encode user passwords using Symfony adapter",

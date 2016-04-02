@@ -1,0 +1,38 @@
+# This file is part of the BenGorUser library.
+#
+# (c) Beñat Espiña <benatespina@gmail.com>
+# (c) Gorka Laucirica <gorka.lauzirika@gmail.com>
+#
+# For the full copyright and license information, please view the LICENSE
+# file that was distributed with this source code.
+
+BenGor\User\Domain\Model\User:
+    type: document
+    repositoryClass: BenGor\User\Infrastructure\Persistence\Doctrine\ODM\MongoDB\DoctrineODMMongoDBUserRepository
+    collection: user
+    fields:
+        id:
+            id: true
+            type: user_id
+        confirmationToken:
+            name: confirmation_token
+            type: user_token
+        email:
+            type: user_email
+        password:
+            type: user_password
+        rememberPasswordToken:
+            name: remember_password_token
+            type: user_token
+        createdOn:
+            name: created_on
+            type: date
+        lastLogin:
+            name: last_login
+            type: date
+        roles:
+            name: roles
+            type: user_roles
+        updatedOn:
+            name: updated_on
+            type: date
