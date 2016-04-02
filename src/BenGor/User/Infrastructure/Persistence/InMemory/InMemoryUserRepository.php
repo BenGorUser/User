@@ -90,21 +90,6 @@ final class InMemoryUserRepository implements UserRepository
     /**
      * {@inheritdoc}
      */
-    public function query($specification)
-    {
-        return array_values(
-            array_filter(
-                $this->users,
-                function (User $aUser) use ($specification) {
-                    return $specification->specifies($aUser);
-                }
-            )
-        );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function persist(User $aUser)
     {
         $this->users[$aUser->id()->id()] = $aUser;

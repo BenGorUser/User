@@ -32,7 +32,7 @@ class UserGuest
     /**
      * Created on.
      *
-     * @var \DateTimeImmutable
+     * @var \DateTimeInterface
      */
     protected $createdOn;
 
@@ -53,11 +53,11 @@ class UserGuest
     /**
      * Constructor.
      *
-     * @param UserGuestId        $anId       The id
-     * @param UserEmail          $anEmail    The email
-     * @param \DateTimeImmutable $aCreatedOn The created on
+     * @param UserGuestId             $anId       The id
+     * @param UserEmail               $anEmail    The email
+     * @param \DateTimeInterface|null $aCreatedOn The created on
      */
-    public function __construct(UserGuestId $anId, UserEmail $anEmail, \DateTimeImmutable $aCreatedOn = null)
+    public function __construct(UserGuestId $anId, UserEmail $anEmail, \DateTimeInterface $aCreatedOn = null)
     {
         $this->id = $anId;
         $this->email = $anEmail;
@@ -78,7 +78,7 @@ class UserGuest
     /**
      * Gets the created on.
      *
-     * @return \DateTimeImmutable
+     * @return \DateTimeInterface
      */
     public function createdOn()
     {

@@ -62,14 +62,6 @@ final class DoctrineUserRepository extends EntityRepository implements UserRepos
     /**
      * {@inheritdoc}
      */
-    public function query($specification)
-    {
-        // TODO: Implement query() method.
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function persist(User $aUser)
     {
         $this->getEntityManager()->persist($aUser);

@@ -1,23 +1,27 @@
 # Use cases
 
-## Sign up and enable
+## Sign up
+### Default
+#### With confirmation
+#### By invitation
+#### By invitation and with confirmation
 
-##Sign up
+## Invite
 
-##Invite user
+## Enable
 
-##Activate user
+##Log in
 
-##Log in user
+## Log out
 
-##Log out user
+## Request Remember password
 
-##Remember password
+## Change password
+#### Default
+#### By request remember password
 
-##Change password
+## Remove user
 
-##Remove user
+## Grant role
 
-##Grant role
-
-##Revoke role
+## Revoke role

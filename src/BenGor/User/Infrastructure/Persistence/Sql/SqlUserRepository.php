@@ -98,14 +98,6 @@ final class SqlUserRepository implements UserRepository
     /**
      * {@inheritdoc}
      */
-    public function query($specification)
-    {
-        // TODO: Implement query() method.
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function persist(User $aUser)
     {
         ($this->exist($aUser)) ? $this->update($aUser) : $this->insert($aUser);
@@ -206,7 +198,7 @@ SQL
         )';
         $this->execute($sql, [
             'id'                    => $aUser->id()->id(),
-            'token'                 => $aUser->confirmationToken()->token(),
+            'token'                 => $aUser->confirmationToken(),
             'createdOn'             => $aUser->createdOn()->format(self::DATE_FORMAT),
             'email'                 => $aUser->email()->email(),
             'lastLogin'             => $aUser->lastLogin() ? $aUser->lastLogin()->format(self::DATE_FORMAT) : null,

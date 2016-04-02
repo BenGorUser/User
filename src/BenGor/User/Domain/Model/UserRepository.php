@@ -57,15 +57,6 @@ interface UserRepository
     public function userOfRememberPasswordToken(UserToken $aRememberPasswordToken);
 
     /**
-     * Finds users with the given specification.
-     *
-     * @param object $specification The specification
-     *
-     * @return User[]
-     */
-    public function query($specification);
-
-    /**
      * Persists the given user.
      *
      * @param User $aUser The user

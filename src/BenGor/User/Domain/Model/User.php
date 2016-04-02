@@ -49,7 +49,7 @@ class User
     /**
      * Created on.
      *
-     * @var \DateTimeImmutable
+     * @var \DateTimeInterface
      */
     protected $createdOn;
 
@@ -63,7 +63,7 @@ class User
     /**
      * The last login.
      *
-     * @var \DateTimeImmutable|null
+     * @var \DateTimeInterface|null
      */
     protected $lastLogin;
 
@@ -91,7 +91,7 @@ class User
     /**
      * Updated on.
      *
-     * @var \DateTimeImmutable
+     * @var \DateTimeInterface
      */
     protected $updatedOn;
 
@@ -102,9 +102,9 @@ class User
      * @param UserEmail               $anEmail                The email
      * @param UserPassword            $aPassword              The encoded password
      * @param array                   $userRoles              Array which contains the roles
-     * @param \DateTimeImmutable|null $aCreatedOn             The created on
-     * @param \DateTimeImmutable|null $anUpdatedOn            The updated on
-     * @param \DateTimeImmutable|null $aLastLogin             The last login
+     * @param \DateTimeInterface|null $aCreatedOn             The created on
+     * @param \DateTimeInterface|null $anUpdatedOn            The updated on
+     * @param \DateTimeInterface|null $aLastLogin             The last login
      * @param UserToken|null          $aConfirmationToken     The confirmation token
      * @param UserToken|null          $aRememberPasswordToken The remember me token
      */
@@ -113,9 +113,9 @@ class User
         UserEmail $anEmail,
         UserPassword $aPassword,
         array $userRoles,
-        \DateTimeImmutable $aCreatedOn = null,
-        \DateTimeImmutable $anUpdatedOn = null,
-        \DateTimeImmutable $aLastLogin = null,
+        \DateTimeInterface $aCreatedOn = null,
+        \DateTimeInterface $anUpdatedOn = null,
+        \DateTimeInterface $aLastLogin = null,
         UserToken $aConfirmationToken = null,
         UserToken $aRememberPasswordToken = null
     ) {
@@ -170,7 +170,7 @@ class User
     /**
      * Gets the created on.
      *
-     * @return \DateTimeImmutable
+     * @return \DateTimeInterface
      */
     public function createdOn()
     {
@@ -258,7 +258,7 @@ class User
     /**
      * Gets the last login.
      *
-     * @return \DateTimeImmutable
+     * @return \DateTimeInterface
      */
     public function lastLogin()
     {
@@ -346,7 +346,7 @@ class User
     /**
      * Gets the updated on.
      *
-     * @return \DateTimeImmutable
+     * @return \DateTimeInterface
      */
     public function updatedOn()
     {
