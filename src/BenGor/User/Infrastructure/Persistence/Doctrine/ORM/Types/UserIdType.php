@@ -10,29 +10,25 @@
  * file that was distributed with this source code.
  */
 
-namespace BenGor\User\Infrastructure\Persistence\Doctrine\Types;
+namespace BenGor\User\Infrastructure\Persistence\Doctrine\ORM\Types;
 
-use BenGor\User\Domain\Model\UserRole;
+use BenGor\User\Domain\Model\UserId;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Types\JsonArrayType;
+use Doctrine\DBAL\Types\GuidType;
 
 /**
- * Doctrine user role collection custom type class.
+ * Doctrine ORM user id custom type class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  */
-final class UserRolesType extends JsonArrayType
+class UserIdType extends GuidType
 {
     /**
      * {@inheritdoc}
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-        $roles = array_map(function (UserRole $role) {
-            return $role->role();
-        }, $value);
-
-        return json_encode($roles);
+        return $value->id();
     }
 
     /**
@@ -40,11 +36,7 @@ final class UserRolesType extends JsonArrayType
      */
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
-        $userRoles = array_map(function ($role) {
-            return new UserRole($role);
-        }, json_decode($value));
-
-        return $userRoles;
+        return new UserId($value);
     }
 
     /**
@@ -52,6 +44,6 @@ final class UserRolesType extends JsonArrayType
      */
     public function getName()
     {
-        return 'user_roles';
+        return 'user_id';
     }
 }

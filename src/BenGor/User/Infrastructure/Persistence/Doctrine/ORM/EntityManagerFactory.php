@@ -10,31 +10,30 @@
  * file that was distributed with this source code.
  */
 
-namespace BenGor\User\Infrastructure\Persistence\Doctrine;
+namespace BenGor\User\Infrastructure\Persistence\Doctrine\ORM;
 
-use BenGor\User\Infrastructure\Persistence\Doctrine\Types\UserRolesType;
+use BenGor\User\Infrastructure\Persistence\Doctrine\ObjectManagerFactory;
+use BenGor\User\Infrastructure\Persistence\Doctrine\ORM\Types\UserGuestIdType;
+use BenGor\User\Infrastructure\Persistence\Doctrine\ORM\Types\UserIdType;
+use BenGor\User\Infrastructure\Persistence\Doctrine\ORM\Types\UserRolesType;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Setup;
 
 /**
- * Doctrine entity manager factory class.
+ * Doctrine ORM entity manager factory class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  */
-class EntityManagerFactory
+class EntityManagerFactory implements ObjectManagerFactory
 {
     /**
-     * Decorates the doctrine entity manager
-     * with library's mappings and custom types.
-     *
-     * @param mixed $aConnection Connection parameters as db driver
-     * @param bool  $isDevMode   Enables the dev mode, by default is enabled
-     *
-     * @return EntityManager
+     * {@inheritdoc}
      */
     public function build($aConnection, $isDevMode = true)
     {
+        Type::addType('user_id', UserIdType::class);
+        Type::addType('user_guest_id', UserGuestIdType::class);
         Type::addType('user_roles', UserRolesType::class);
 
         return EntityManager::create(

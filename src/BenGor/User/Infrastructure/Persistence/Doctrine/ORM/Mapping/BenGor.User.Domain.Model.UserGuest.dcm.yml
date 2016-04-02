@@ -8,12 +8,13 @@
 
 BenGor\User\Domain\Model\UserGuest:
     type: entity
-    repositoryClass: BenGor\User\Infrastructure\Persistence\Doctrine\DoctrineUserGuestRepository
+    repositoryClass: BenGor\User\Infrastructure\Persistence\Doctrine\ORM\DoctrineORMUserGuestRepository
     table: user_guest
+    id:
+        userGuestId:
+            column: id
+            type: user_guest_id
     embedded:
-        id:
-            class: BenGor\User\Domain\Model\UserGuestId
-            columnPrefix: false
         email:
             class: BenGor\User\Domain\Model\UserEmail
             columnPrefix: false
