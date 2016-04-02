@@ -1,0 +1,103 @@
+<?php
+
+/*
+ * This file is part of the BenGorUser library.
+ *
+ * (c) Beñat Espiña <benatespina@gmail.com>
+ * (c) Gorka Laucirica <gorka.lauzirika@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace BenGor\User\Application\Service\LogIn;
+
+use BenGor\User\Application\DataTransformer\UserDataTransformer;
+use BenGor\User\Domain\Model\Exception\UserDoesNotExistException;
+use BenGor\User\Domain\Model\Exception\UserInactiveException;
+use BenGor\User\Domain\Model\Exception\UserPasswordInvalidException;
+use BenGor\User\Domain\Model\UserEmail;
+use BenGor\User\Domain\Model\UserPasswordEncoder;
+use BenGor\User\Domain\Model\UserRepository;
+
+/**
+ * User login service class.
+ *
+ * @author Beñat Espiña <benatespina@gmail.com>
+ * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
+ */
+class LogInUserService
+{
+    /**
+     * The user repository.
+     *
+     * @var UserRepository
+     */
+    private $repository;
+
+    /**
+     * The user password encoder.
+     *
+     * @var UserPasswordEncoder
+     */
+    private $encoder;
+
+    /**
+     * The user data transformer.
+     *
+     * @var UserDataTransformer
+     */
+    private $dataTransformer;
+
+    /**
+     * Constructor.
+     *
+     * @param UserRepository      $aRepository      The user repository
+     * @param UserPasswordEncoder $anEncoder        The password encoder
+     * @param UserDataTransformer $aDataTransformer The user data transformer
+     */
+    public function __construct(
+        UserRepository $aRepository,
+        UserPasswordEncoder $anEncoder,
+        UserDataTransformer $aDataTransformer
+    ) {
+        $this->repository = $aRepository;
+        $this->encoder = $anEncoder;
+        $this->dataTransformer = $aDataTransformer;
+    }
+
+    /**
+     * Executes application service.
+     *
+     * @param LogInUserRequest $request The request
+     *
+     * @throws UserDoesNotExistException    when the user does not exist
+     * @throws UserInactiveException        when the user is not enabled
+     * @throws UserPasswordInvalidException when the user password is invalid
+     *
+     * @return mixed
+     */
+    public function execute(LogInUserRequest $request)
+    {
+        $email = $request->email();
+        $plainPassword = $request->password();
+
+        $user = $this->repository->userOfEmail(new UserEmail($email));
+        if (null === $user) {
+            throw new UserDoesNotExistException();
+        }
+        if (false === $user->isEnabled()) {
+            throw new UserInactiveException();
+        }
+        if (false === $user->password()->equals($plainPassword, $this->encoder)) {
+            throw new UserPasswordInvalidException();
+        }
+
+        $user->login();
+
+        $this->repository->persist($user);
+        $this->dataTransformer->write($user);
+
+        return $this->dataTransformer->read();
+    }
+}
