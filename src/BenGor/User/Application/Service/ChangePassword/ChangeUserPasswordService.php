@@ -41,7 +41,7 @@ class ChangeUserPasswordService
     /**
      * The service specification.
      *
-     * @var SpecificationChangeUserPassword
+     * @var ChangeUserPasswordSpecification
      */
     private $specification;
 
@@ -50,12 +50,12 @@ class ChangeUserPasswordService
      *
      * @param UserRepository                  $aRepository    The user repository
      * @param UserPasswordEncoder             $anEncoder      The password encoder
-     * @param SpecificationChangeUserPassword $aSpecification The service specification
+     * @param ChangeUserPasswordSpecification $aSpecification The service specification
      */
     public function __construct(
         UserRepository $aRepository,
         UserPasswordEncoder $anEncoder,
-        SpecificationChangeUserPassword $aSpecification
+        ChangeUserPasswordSpecification $aSpecification
     ) {
         $this->repository = $aRepository;
         $this->encoder = $anEncoder;

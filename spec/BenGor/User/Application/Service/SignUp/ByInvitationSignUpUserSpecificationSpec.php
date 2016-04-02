@@ -12,8 +12,9 @@
 
 namespace spec\BenGor\User\Application\Service\SignUp;
 
+use BenGor\User\Application\Service\SignUp\ByInvitationSignUpUserSpecification;
 use BenGor\User\Application\Service\SignUp\SignUpUserRequest;
-use BenGor\User\Application\Service\SignUp\SpecificationByInvitationWithConfirmationSignUpUser;
+use BenGor\User\Application\Service\SignUp\SignUpUserSpecification;
 use BenGor\User\Domain\Model\Exception\UserGuestDoesNotExistException;
 use BenGor\User\Domain\Model\User;
 use BenGor\User\Domain\Model\UserEmail;
@@ -23,12 +24,12 @@ use BenGor\User\Domain\Model\UserToken;
 use PhpSpec\ObjectBehavior;
 
 /**
- * Spec file of specification by invitation with confirmation sign up user class.
+ * Spec file of by invitation sign up user specification class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-class SpecificationByInvitationWithConfirmationSignUpUserSpec extends ObjectBehavior
+class ByInvitationSignUpUserSpecificationSpec extends ObjectBehavior
 {
     function let(UserGuestRepository $repository)
     {
@@ -37,7 +38,12 @@ class SpecificationByInvitationWithConfirmationSignUpUserSpec extends ObjectBeha
 
     function it_is_initializable()
     {
-        $this->shouldHaveType(SpecificationByInvitationWithConfirmationSignUpUser::class);
+        $this->shouldHaveType(ByInvitationSignUpUserSpecification::class);
+    }
+
+    function it_implements_sign_up_user_specification()
+    {
+        $this->shouldImplement(SignUpUserSpecification::class);
     }
 
     function it_gets_email(
@@ -69,6 +75,8 @@ class SpecificationByInvitationWithConfirmationSignUpUserSpec extends ObjectBeha
 
     function it_pre_persists(User $user)
     {
+        $user->enableAccount()->shouldBeCalled();
+
         $this->prePersist($user)->shouldReturn($user);
     }
 }

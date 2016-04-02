@@ -15,7 +15,7 @@ namespace spec\BenGor\User\Application\Service\SignUp;
 use BenGor\User\Application\DataTransformer\UserDataTransformer;
 use BenGor\User\Application\Service\SignUp\SignUpUserRequest;
 use BenGor\User\Application\Service\SignUp\SignUpUserService;
-use BenGor\User\Application\Service\SignUp\SpecificationSignUpUser;
+use BenGor\User\Application\Service\SignUp\SignUpUserSpecification;
 use BenGor\User\Domain\Model\Exception\UserAlreadyExistException;
 use BenGor\User\Domain\Model\User;
 use BenGor\User\Domain\Model\UserEmail;
@@ -40,7 +40,7 @@ class SignUpUserServiceSpec extends ObjectBehavior
         UserRepository $repository,
         UserFactory $factory,
         UserDataTransformer $dataTransformer,
-        SpecificationSignUpUser $specification
+        SignUpUserSpecification $specification
     ) {
         $this->beConstructedWith(
             $repository,
@@ -60,7 +60,7 @@ class SignUpUserServiceSpec extends ObjectBehavior
         SignUpUserRequest $request,
         UserRepository $repository,
         UserFactory $factory,
-        SpecificationSignUpUser $specification,
+        SignUpUserSpecification $specification,
         UserDataTransformer $dataTransformer,
         User $user,
         \DateTimeImmutable $createdOn,
@@ -102,7 +102,7 @@ class SignUpUserServiceSpec extends ObjectBehavior
     function it_does_not_sign_up_if_user_exists(
         SignUpUserRequest $request,
         UserRepository $repository,
-        SpecificationSignUpUser $specification,
+        SignUpUserSpecification $specification,
         User $user
     ) {
         $email = new UserEmail('user@user.com');

@@ -10,15 +10,15 @@
  * file that was distributed with this source code.
  */
 
-namespace BenGor\User\Application\Service\RequestRememberPasswordToken;
+namespace BenGor\User\Application\Service\RequestRememberPassword;
 
 /**
- * Request remember password token request class.
+ * Request remember password request class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-class RequestRememberPasswordTokenRequest
+class RequestRememberPasswordRequest
 {
     /**
      * The user email.

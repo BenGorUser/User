@@ -10,10 +10,10 @@
  * file that was distributed with this source code.
  */
 
-namespace spec\BenGor\User\Application\Service\RequestRememberPasswordToken;
+namespace spec\BenGor\User\Application\Service\RequestRememberPassword;
 
-use BenGor\User\Application\Service\RequestRememberPasswordToken\RequestRememberPasswordTokenRequest;
-use BenGor\User\Application\Service\RequestRememberPasswordToken\RequestRememberPasswordTokenService;
+use BenGor\User\Application\Service\RequestRememberPassword\RequestRememberPasswordRequest;
+use BenGor\User\Application\Service\RequestRememberPassword\RequestRememberPasswordService;
 use BenGor\User\Domain\Model\Exception\UserDoesNotExistException;
 use BenGor\User\Domain\Model\User;
 use BenGor\User\Domain\Model\UserEmail;
@@ -27,7 +27,7 @@ use PhpSpec\ObjectBehavior;
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-class RequestRememberPasswordTokenServiceSpec extends ObjectBehavior
+class RequestRememberPasswordServiceSpec extends ObjectBehavior
 {
     function let(UserRepository $repository)
     {
@@ -37,11 +37,11 @@ class RequestRememberPasswordTokenServiceSpec extends ObjectBehavior
 
     function it_is_initializable()
     {
-        $this->shouldHaveType(RequestRememberPasswordTokenService::class);
+        $this->shouldHaveType(RequestRememberPasswordService::class);
     }
 
-    function it_requests_change_password(
-        RequestRememberPasswordTokenRequest $request,
+    function it_requests_remember_password(
+        RequestRememberPasswordRequest $request,
         UserRepository $repository,
         User $user
     ) {
@@ -54,8 +54,8 @@ class RequestRememberPasswordTokenServiceSpec extends ObjectBehavior
         $this->execute($request);
     }
 
-    function it_does_not_request_change_password_because_user_does_not_exist(
-        RequestRememberPasswordTokenRequest $request,
+    function it_does_not_request_remember_password_because_user_does_not_exist(
+        RequestRememberPasswordRequest $request,
         UserRepository $repository
     ) {
         $request->email()->shouldBeCalled()->willReturn('user@user.com');

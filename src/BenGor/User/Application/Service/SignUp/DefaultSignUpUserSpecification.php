@@ -16,11 +16,11 @@ use BenGor\User\Domain\Model\User;
 use BenGor\User\Domain\Model\UserEmail;
 
 /**
- * With confirmation specification of sign up user service.
+ * Default specification of sign up user service.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  */
-class SpecificationWithConfirmationSignUpUser implements SpecificationSignUpUser
+class DefaultSignUpUserSpecification implements SignUpUserSpecification
 {
     /**
      * {@inheritdoc}
@@ -35,6 +35,8 @@ class SpecificationWithConfirmationSignUpUser implements SpecificationSignUpUser
      */
     public function prePersist(User $aUser)
     {
+        $aUser->enableAccount();
+
         return $aUser;
     }
 }

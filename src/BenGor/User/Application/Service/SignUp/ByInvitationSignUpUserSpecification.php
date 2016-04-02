@@ -18,11 +18,11 @@ use BenGor\User\Domain\Model\UserGuestRepository;
 use BenGor\User\Domain\Model\UserToken;
 
 /**
- * By invitation and with confirmation specification of sign up user service.
+ * By invitation specification of sign up user service.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  */
-class SpecificationByInvitationWithConfirmationSignUpUser implements SpecificationSignUpUser
+class ByInvitationSignUpUserSpecification implements SignUpUserSpecification
 {
     /**
      * The user guest repository.
@@ -65,6 +65,8 @@ class SpecificationByInvitationWithConfirmationSignUpUser implements Specificati
      */
     public function prePersist(User $aUser)
     {
+        $aUser->enableAccount();
+
         return $aUser;
     }
 }

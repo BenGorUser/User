@@ -12,23 +12,29 @@
 
 namespace spec\BenGor\User\Application\Service\SignUp;
 
+use BenGor\User\Application\Service\SignUp\DefaultSignUpUserSpecification;
 use BenGor\User\Application\Service\SignUp\SignUpUserRequest;
-use BenGor\User\Application\Service\SignUp\SpecificationWithConfirmationSignUpUser;
+use BenGor\User\Application\Service\SignUp\SignUpUserSpecification;
 use BenGor\User\Domain\Model\User;
 use BenGor\User\Domain\Model\UserEmail;
 use PhpSpec\ObjectBehavior;
 
 /**
- * Spec file of specification with confirmation sign up user class.
+ * Spec file of default sign up user specification class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-class SpecificationWithConfirmationSignUpUserSpec extends ObjectBehavior
+class DefaultSignUpUserSpecificationSpec extends ObjectBehavior
 {
     function it_is_initializable()
     {
-        $this->shouldHaveType(SpecificationWithConfirmationSignUpUser::class);
+        $this->shouldHaveType(DefaultSignUpUserSpecification::class);
+    }
+
+    function it_implements_sign_up_user_specification()
+    {
+        $this->shouldImplement(SignUpUserSpecification::class);
     }
 
     function it_gets_email(SignUpUserRequest $request)
@@ -40,6 +46,8 @@ class SpecificationWithConfirmationSignUpUserSpec extends ObjectBehavior
 
     function it_pre_persists(User $user)
     {
+        $user->enableAccount()->shouldBeCalled();
+
         $this->prePersist($user)->shouldReturn($user);
     }
 }

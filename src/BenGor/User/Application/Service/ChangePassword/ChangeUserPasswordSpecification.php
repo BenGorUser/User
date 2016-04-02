@@ -19,7 +19,7 @@ use BenGor\User\Domain\Model\User;
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  */
-interface SpecificationChangeUserPassword
+interface ChangeUserPasswordSpecification
 {
     /**
      * Obtains the domain user from request data.

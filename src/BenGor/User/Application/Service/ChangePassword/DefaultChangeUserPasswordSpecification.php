@@ -13,16 +13,18 @@
 namespace BenGor\User\Application\Service\ChangePassword;
 
 use BenGor\User\Domain\Model\Exception\UserDoesNotExistException;
+use BenGor\User\Domain\Model\Exception\UserPasswordInvalidException;
 use BenGor\User\Domain\Model\User;
+use BenGor\User\Domain\Model\UserId;
+use BenGor\User\Domain\Model\UserPasswordEncoder;
 use BenGor\User\Domain\Model\UserRepository;
-use BenGor\User\Domain\Model\UserToken;
 
 /**
- * Using remember password token specification of change user password service.
+ * Specification default change user password service.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  */
-class SpecificationUsingRememberPasswordTokenChangeUserPassword implements SpecificationChangeUserPassword
+class DefaultChangeUserPasswordSpecification implements ChangeUserPasswordSpecification
 {
     /**
      * The user repository.
@@ -32,13 +34,22 @@ class SpecificationUsingRememberPasswordTokenChangeUserPassword implements Speci
     private $repository;
 
     /**
+     * The user password encoder.
+     *
+     * @var UserPasswordEncoder
+     */
+    private $encoder;
+
+    /**
      * Constructor.
      *
-     * @param UserRepository $aRepository The user repository
+     * @param UserRepository      $aRepository The user repository
+     * @param UserPasswordEncoder $anEncoder   The password encoder
      */
-    public function __construct(UserRepository $aRepository)
+    public function __construct(UserRepository $aRepository, UserPasswordEncoder $anEncoder)
     {
         $this->repository = $aRepository;
+        $this->encoder = $anEncoder;
     }
 
     /**
@@ -46,9 +57,12 @@ class SpecificationUsingRememberPasswordTokenChangeUserPassword implements Speci
      */
     public function user(ChangeUserPasswordRequest $request)
     {
-        $user = $this->repository->userOfRememberPasswordToken(new UserToken($request->rememberPasswordToken()));
+        $user = $this->repository->userOfId(new UserId($request->id()));
         if (null === $user) {
             throw new UserDoesNotExistException();
+        }
+        if (false === $user->password()->equals($request->oldPlainPassword(), $this->encoder)) {
+            throw new UserPasswordInvalidException();
         }
 
         return $user;

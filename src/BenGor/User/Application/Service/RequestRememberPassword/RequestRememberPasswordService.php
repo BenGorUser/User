@@ -10,19 +10,19 @@
  * file that was distributed with this source code.
  */
 
-namespace BenGor\User\Application\Service\RequestRememberPasswordToken;
+namespace BenGor\User\Application\Service\RequestRememberPassword;
 
 use BenGor\User\Domain\Model\Exception\UserDoesNotExistException;
 use BenGor\User\Domain\Model\UserEmail;
 use BenGor\User\Domain\Model\UserRepository;
 
 /**
- * Request remember password token service class.
+ * Request remember password service class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-class RequestRememberPasswordTokenService
+class RequestRememberPasswordService
 {
     /**
      * The user repository.
@@ -44,11 +44,11 @@ class RequestRememberPasswordTokenService
     /**
      * Executes application service.
      *
-     * @param RequestRememberPasswordTokenRequest $request The request
+     * @param RequestRememberPasswordRequest $request The request
      *
      * @throws UserDoesNotExistException when the user does not exist
      */
-    public function execute(RequestRememberPasswordTokenRequest $request)
+    public function execute(RequestRememberPasswordRequest $request)
     {
         $email = $request->email();
 

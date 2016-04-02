@@ -13,8 +13,8 @@
 namespace spec\BenGor\User\Application\Service\ChangePassword;
 
 use BenGor\User\Application\Service\ChangePassword\ChangeUserPasswordRequest;
-use BenGor\User\Application\Service\ChangePassword\SpecificationChangeUserPassword;
-use BenGor\User\Application\Service\ChangePassword\SpecificationDefaultChangeUserPassword;
+use BenGor\User\Application\Service\ChangePassword\ChangeUserPasswordSpecification;
+use BenGor\User\Application\Service\ChangePassword\DefaultChangeUserPasswordSpecification;
 use BenGor\User\Domain\Model\Exception\UserDoesNotExistException;
 use BenGor\User\Domain\Model\Exception\UserPasswordInvalidException;
 use BenGor\User\Domain\Model\User;
@@ -26,11 +26,11 @@ use BenGor\User\Infrastructure\Security\Test\DummyUserPasswordEncoder;
 use PhpSpec\ObjectBehavior;
 
 /**
- * Spec file of specification default change user password class.
+ * Spec file of default change user password specification class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  */
-class SpecificationDefaultChangeUserPasswordSpec extends ObjectBehavior
+class DefaultChangeUserPasswordSpecificationSpec extends ObjectBehavior
 {
     function let(UserRepository $repository, UserPasswordEncoder $encoder)
     {
@@ -39,12 +39,12 @@ class SpecificationDefaultChangeUserPasswordSpec extends ObjectBehavior
 
     function it_is_initializable()
     {
-        $this->shouldHaveType(SpecificationDefaultChangeUserPassword::class);
+        $this->shouldHaveType(DefaultChangeUserPasswordSpecification::class);
     }
 
     function it_implements_specification_change_user_password()
     {
-        $this->shouldImplement(SpecificationChangeUserPassword::class);
+        $this->shouldImplement(ChangeUserPasswordSpecification::class);
     }
 
     function it_does_not_return_user_because_user_does_not_exist(

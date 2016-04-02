@@ -10,23 +10,23 @@
  * file that was distributed with this source code.
  */
 
-namespace spec\BenGor\User\Application\Service\RequestRememberPasswordToken;
+namespace spec\BenGor\User\Application\Service\RequestRememberPassword;
 
-use BenGor\User\Application\Service\RequestRememberPasswordToken\RequestRememberPasswordTokenRequest;
+use BenGor\User\Application\Service\RequestRememberPassword\RequestRememberPasswordRequest;
 use PhpSpec\ObjectBehavior;
 
 /**
- * Spec file of request remember password token request class.
+ * Spec file of request remember password request class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-class RequestRememberPasswordTokenRequestSpec extends ObjectBehavior
+class RequestRememberPasswordRequestSpec extends ObjectBehavior
 {
     function it_creates_request()
     {
         $this->beConstructedWith('test@test.com');
-        $this->shouldHaveType(RequestRememberPasswordTokenRequest::class);
+        $this->shouldHaveType(RequestRememberPasswordRequest::class);
 
         $this->email()->shouldBe('test@test.com');
     }

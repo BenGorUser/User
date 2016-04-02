@@ -12,9 +12,9 @@
 
 namespace spec\BenGor\User\Application\Service\ChangePassword;
 
+use BenGor\User\Application\Service\ChangePassword\ByRequestRememberPasswordChangeUserPasswordSpecification;
 use BenGor\User\Application\Service\ChangePassword\ChangeUserPasswordRequest;
-use BenGor\User\Application\Service\ChangePassword\SpecificationChangeUserPassword;
-use BenGor\User\Application\Service\ChangePassword\SpecificationUsingRememberPasswordTokenChangeUserPassword;
+use BenGor\User\Application\Service\ChangePassword\ChangeUserPasswordSpecification;
 use BenGor\User\Domain\Model\Exception\UserDoesNotExistException;
 use BenGor\User\Domain\Model\User;
 use BenGor\User\Domain\Model\UserRepository;
@@ -22,11 +22,11 @@ use BenGor\User\Domain\Model\UserToken;
 use PhpSpec\ObjectBehavior;
 
 /**
- * Spec file of specification using remember password token change user password class.
+ * Spec file of by request remember password change user password specification class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  */
-class SpecificationUsingRememberPasswordTokenChangeUserPasswordSpec extends ObjectBehavior
+class ByRequestRememberPasswordChangeUserPasswordSpecificationSpec extends ObjectBehavior
 {
     function let(UserRepository $repository)
     {
@@ -35,12 +35,12 @@ class SpecificationUsingRememberPasswordTokenChangeUserPasswordSpec extends Obje
 
     function it_is_initializable()
     {
-        $this->shouldHaveType(SpecificationUsingRememberPasswordTokenChangeUserPassword::class);
+        $this->shouldHaveType(ByRequestRememberPasswordChangeUserPasswordSpecification::class);
     }
 
     function it_implements_specification_change_user_password()
     {
-        $this->shouldImplement(SpecificationChangeUserPassword::class);
+        $this->shouldImplement(ChangeUserPasswordSpecification::class);
     }
 
     function it_does_not_return_user_because_user_does_not_exist(

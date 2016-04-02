@@ -60,7 +60,7 @@ class SignUpUserService
     /**
      * The service specification.
      *
-     * @var SpecificationSignUpUser
+     * @var SignUpUserSpecification
      */
     private $specification;
 
@@ -71,14 +71,14 @@ class SignUpUserService
      * @param UserPasswordEncoder     $anEncoder        The password encoder
      * @param UserFactory             $aFactory         The user factory
      * @param UserDataTransformer     $aDataTransformer The user data transformer
-     * @param SpecificationSignUpUser $aSpecification   The service specification
+     * @param SignUpUserSpecification $aSpecification   The service specification
      */
     public function __construct(
         UserRepository $aRepository,
         UserPasswordEncoder $anEncoder,
         UserFactory $aFactory,
         UserDataTransformer $aDataTransformer,
-        SpecificationSignUpUser $aSpecification
+        SignUpUserSpecification $aSpecification
     ) {
         $this->repository = $aRepository;
         $this->encoder = $anEncoder;

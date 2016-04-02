@@ -16,28 +16,25 @@ use BenGor\User\Domain\Model\User;
 use BenGor\User\Domain\Model\UserEmail;
 
 /**
- * Sign up user service specification.
+ * With confirmation specification of sign up user service.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  */
-interface SpecificationSignUpUser
+class WithConfirmationSignUpUserSpecification implements SignUpUserSpecification
 {
     /**
-     * Obtains the domain user email from request.
-     *
-     * @param SignUpUserRequest $request The request
-     *
-     * @return UserEmail
+     * {@inheritdoc}
      */
-    public function email(SignUpUserRequest $request);
+    public function email(SignUpUserRequest $request)
+    {
+        return new UserEmail($request->email());
+    }
 
     /**
-     * Extension point to put some logic that need
-     * to be execute before persist statement.
-     *
-     * @param User $aUser The user
-     *
-     * @return User
+     * {@inheritdoc}
      */
-    public function prePersist(User $aUser);
+    public function prePersist(User $aUser)
+    {
+        return $aUser;
+    }
 }

@@ -14,7 +14,7 @@ namespace spec\BenGor\User\Application\Service\ChangePassword;
 
 use BenGor\User\Application\Service\ChangePassword\ChangeUserPasswordRequest;
 use BenGor\User\Application\Service\ChangePassword\ChangeUserPasswordService;
-use BenGor\User\Application\Service\ChangePassword\SpecificationChangeUserPassword;
+use BenGor\User\Application\Service\ChangePassword\ChangeUserPasswordSpecification;
 use BenGor\User\Domain\Model\User;
 use BenGor\User\Domain\Model\UserPassword;
 use BenGor\User\Domain\Model\UserPasswordEncoder;
@@ -32,7 +32,7 @@ class ChangeUserPasswordServiceSpec extends ObjectBehavior
 {
     function let(
         UserRepository $repository,
-        SpecificationChangeUserPassword $specification,
+        ChangeUserPasswordSpecification $specification,
         UserPasswordEncoder $encoder
     ) {
         $this->beConstructedWith($repository, $encoder, $specification);
@@ -45,7 +45,7 @@ class ChangeUserPasswordServiceSpec extends ObjectBehavior
 
     function it_changes_password(
         ChangeUserPasswordRequest $request,
-        SpecificationChangeUserPassword $specification,
+        ChangeUserPasswordSpecification $specification,
         UserRepository $repository,
         User $user
     ) {
