@@ -11,7 +11,7 @@ BenGor\User\Domain\Model\User:
     repositoryClass: BenGor\User\Infrastructure\Persistence\Doctrine\ORM\DoctrineORMUserRepository
     table: user
     id:
-        userId:
+        id:
             column: id
             type: user_id
     embedded:

@@ -11,7 +11,7 @@ BenGor\User\Domain\Model\UserGuest:
     repositoryClass: BenGor\User\Infrastructure\Persistence\Doctrine\ORM\DoctrineORMUserGuestRepository
     table: user_guest
     id:
-        userGuestId:
+        id:
             column: id
             type: user_guest_id
     embedded:
