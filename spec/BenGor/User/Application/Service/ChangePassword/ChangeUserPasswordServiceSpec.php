@@ -19,6 +19,7 @@ use BenGor\User\Domain\Model\User;
 use BenGor\User\Domain\Model\UserPassword;
 use BenGor\User\Domain\Model\UserPasswordEncoder;
 use BenGor\User\Domain\Model\UserRepository;
+use Ddd\Application\Service\ApplicationService;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
@@ -41,6 +42,11 @@ class ChangeUserPasswordServiceSpec extends ObjectBehavior
     function it_is_initializable()
     {
         $this->shouldHaveType(ChangeUserPasswordService::class);
+    }
+
+    function it_implements_application_service()
+    {
+        $this->shouldImplement(ApplicationService::class);
     }
 
     function it_changes_password(

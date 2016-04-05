@@ -19,6 +19,7 @@ use BenGor\User\Domain\Model\User;
 use BenGor\User\Domain\Model\UserEmail;
 use BenGor\User\Domain\Model\UserRepository;
 use BenGor\User\Infrastructure\Security\Test\DummyUserPasswordEncoder;
+use Ddd\Application\Service\ApplicationService;
 use PhpSpec\ObjectBehavior;
 
 /**
@@ -38,6 +39,11 @@ class RequestRememberPasswordServiceSpec extends ObjectBehavior
     function it_is_initializable()
     {
         $this->shouldHaveType(RequestRememberPasswordService::class);
+    }
+
+    function it_implements_application_service()
+    {
+        $this->shouldImplement(ApplicationService::class);
     }
 
     function it_requests_remember_password(

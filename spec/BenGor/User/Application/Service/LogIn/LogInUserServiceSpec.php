@@ -23,6 +23,7 @@ use BenGor\User\Domain\Model\UserEmail;
 use BenGor\User\Domain\Model\UserPassword;
 use BenGor\User\Domain\Model\UserRepository;
 use BenGor\User\Infrastructure\Security\Test\DummyUserPasswordEncoder;
+use Ddd\Application\Service\ApplicationService;
 use PhpSpec\ObjectBehavior;
 
 /**
@@ -45,6 +46,11 @@ class LogInUserServiceSpec extends ObjectBehavior
     function it_is_initializable()
     {
         $this->shouldHaveType(LogInUserService::class);
+    }
+
+    function it_implements_application_service()
+    {
+        $this->shouldImplement(ApplicationService::class);
     }
 
     function it_logs_the_user_in(

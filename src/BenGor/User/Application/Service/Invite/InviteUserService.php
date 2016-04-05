@@ -17,6 +17,7 @@ use BenGor\User\Domain\Model\UserEmail;
 use BenGor\User\Domain\Model\UserGuestFactory;
 use BenGor\User\Domain\Model\UserGuestRepository;
 use BenGor\User\Domain\Model\UserRepository;
+use Ddd\Application\Service\ApplicationService;
 
 /**
  * Invite user service class.
@@ -24,7 +25,7 @@ use BenGor\User\Domain\Model\UserRepository;
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-class InviteUserService
+class InviteUserService implements ApplicationService
 {
     /**
      * The user guest factory.
@@ -71,7 +72,7 @@ class InviteUserService
      *
      * @throws UserAlreadyExistException when the user already exists
      */
-    public function execute(InviteUserRequest $request)
+    public function execute($request = null)
     {
         $email = $request->email();
         $email = new UserEmail($email);

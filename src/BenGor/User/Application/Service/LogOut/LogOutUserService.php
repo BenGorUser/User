@@ -16,6 +16,7 @@ use BenGor\User\Domain\Model\Exception\UserDoesNotExistException;
 use BenGor\User\Domain\Model\Exception\UserInactiveException;
 use BenGor\User\Domain\Model\UserId;
 use BenGor\User\Domain\Model\UserRepository;
+use Ddd\Application\Service\ApplicationService;
 
 /**
  * User logout service class.
@@ -23,7 +24,7 @@ use BenGor\User\Domain\Model\UserRepository;
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-class LogOutUserService
+class LogOutUserService implements ApplicationService
 {
     /**
      * The user repository.
@@ -50,7 +51,7 @@ class LogOutUserService
      * @throws UserDoesNotExistException when the user does not exist
      * @throws UserInactiveException     when the user is not enabled
      */
-    public function execute(LogOutUserRequest $request)
+    public function execute($request = null)
     {
         $userId = $request->id();
 

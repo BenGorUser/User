@@ -20,6 +20,7 @@ use BenGor\User\Domain\Model\UserPassword;
 use BenGor\User\Domain\Model\UserPasswordEncoder;
 use BenGor\User\Domain\Model\UserRepository;
 use BenGor\User\Domain\Model\UserRole;
+use Ddd\Application\Service\ApplicationService;
 
 /**
  * Sign up user user service class.
@@ -27,7 +28,7 @@ use BenGor\User\Domain\Model\UserRole;
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-class SignUpUserService
+class SignUpUserService implements ApplicationService
 {
     /**
      * The user data transformer.
@@ -96,7 +97,7 @@ class SignUpUserService
      *
      * @return mixed
      */
-    public function execute(SignUpUserRequest $request)
+    public function execute($request = null)
     {
         $email = $this->specification->email($request);
 

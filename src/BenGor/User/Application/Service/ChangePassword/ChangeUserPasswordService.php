@@ -15,6 +15,7 @@ namespace BenGor\User\Application\Service\ChangePassword;
 use BenGor\User\Domain\Model\UserPassword;
 use BenGor\User\Domain\Model\UserPasswordEncoder;
 use BenGor\User\Domain\Model\UserRepository;
+use Ddd\Application\Service\ApplicationService;
 
 /**
  * Change user password service class.
@@ -22,7 +23,7 @@ use BenGor\User\Domain\Model\UserRepository;
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-class ChangeUserPasswordService
+class ChangeUserPasswordService implements ApplicationService
 {
     /**
      * The user password encoder.
@@ -67,7 +68,7 @@ class ChangeUserPasswordService
      *
      * @param ChangeUserPasswordRequest $request The request
      */
-    public function execute(ChangeUserPasswordRequest $request)
+    public function execute($request = null)
     {
         $user = $this->specification->user($request);
         $user->changePassword(UserPassword::fromPlain($request->newPlainPassword(), $this->encoder));

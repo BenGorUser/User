@@ -25,6 +25,7 @@ use BenGor\User\Domain\Model\UserPassword;
 use BenGor\User\Domain\Model\UserRepository;
 use BenGor\User\Domain\Model\UserRole;
 use BenGor\User\Infrastructure\Security\Test\DummyUserPasswordEncoder;
+use Ddd\Application\Service\ApplicationService;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
@@ -54,6 +55,11 @@ class SignUpUserServiceSpec extends ObjectBehavior
     function it_is_initializable()
     {
         $this->shouldHaveType(SignUpUserService::class);
+    }
+
+    function it_implements_application_service()
+    {
+        $this->shouldImplement(ApplicationService::class);
     }
 
     function it_signs_the_user_up(

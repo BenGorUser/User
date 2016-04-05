@@ -19,6 +19,7 @@ use BenGor\User\Domain\Model\User;
 use BenGor\User\Domain\Model\UserId;
 use BenGor\User\Domain\Model\UserRepository;
 use BenGor\User\Domain\Model\UserRole;
+use Ddd\Application\Service\ApplicationService;
 use PhpSpec\ObjectBehavior;
 
 /**
@@ -36,6 +37,11 @@ class RevokeUserRoleServiceSpec extends ObjectBehavior
     function it_is_initializable()
     {
         $this->shouldHaveType(RevokeUserRoleService::class);
+    }
+
+    function it_implements_application_service()
+    {
+        $this->shouldImplement(ApplicationService::class);
     }
 
     function it_revokes_the_user_role(

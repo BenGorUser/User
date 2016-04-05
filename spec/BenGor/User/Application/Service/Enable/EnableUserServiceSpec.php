@@ -18,6 +18,7 @@ use BenGor\User\Domain\Model\Exception\UserTokenNotFoundException;
 use BenGor\User\Domain\Model\User;
 use BenGor\User\Domain\Model\UserRepository;
 use BenGor\User\Domain\Model\UserToken;
+use Ddd\Application\Service\ApplicationService;
 use PhpSpec\ObjectBehavior;
 
 /**
@@ -36,6 +37,11 @@ class EnableUserServiceSpec extends ObjectBehavior
     function it_is_initializable()
     {
         $this->shouldHaveType(EnableUserService::class);
+    }
+
+    function it_implements_application_service()
+    {
+        $this->shouldImplement(ApplicationService::class);
     }
 
     function it_activates_user(UserRepository $repository, User $user, EnableUserRequest $request)

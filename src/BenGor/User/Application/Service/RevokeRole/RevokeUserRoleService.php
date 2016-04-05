@@ -16,13 +16,14 @@ use BenGor\User\Domain\Model\Exception\UserDoesNotExistException;
 use BenGor\User\Domain\Model\UserId;
 use BenGor\User\Domain\Model\UserRepository;
 use BenGor\User\Domain\Model\UserRole;
+use Ddd\Application\Service\ApplicationService;
 
 /**
  * Revoke user role service class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  */
-class RevokeUserRoleService
+class RevokeUserRoleService implements ApplicationService
 {
     /**
      * The user repository.
@@ -48,7 +49,7 @@ class RevokeUserRoleService
      *
      * @throws UserDoesNotExistException when the user does not exist
      */
-    public function execute(RevokeUserRoleRequest $request)
+    public function execute($request = null)
     {
         $id = $request->id();
         $role = $request->role();

@@ -19,6 +19,7 @@ use BenGor\User\Domain\Model\Exception\UserPasswordInvalidException;
 use BenGor\User\Domain\Model\UserEmail;
 use BenGor\User\Domain\Model\UserPasswordEncoder;
 use BenGor\User\Domain\Model\UserRepository;
+use Ddd\Application\Service\ApplicationService;
 
 /**
  * User login service class.
@@ -26,7 +27,7 @@ use BenGor\User\Domain\Model\UserRepository;
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-class LogInUserService
+class LogInUserService implements ApplicationService
 {
     /**
      * The user repository.
@@ -77,7 +78,7 @@ class LogInUserService
      *
      * @return mixed
      */
-    public function execute(LogInUserRequest $request)
+    public function execute($request = null)
     {
         $email = $request->email();
         $plainPassword = $request->password();

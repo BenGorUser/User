@@ -20,6 +20,7 @@ use BenGor\User\Domain\Model\UserId;
 use BenGor\User\Domain\Model\UserPassword;
 use BenGor\User\Domain\Model\UserRepository;
 use BenGor\User\Infrastructure\Security\Test\DummyUserPasswordEncoder;
+use Ddd\Application\Service\ApplicationService;
 use PhpSpec\ObjectBehavior;
 
 /**
@@ -39,6 +40,11 @@ class RemoveUserServiceSpec extends ObjectBehavior
     function it_is_initializable()
     {
         $this->shouldHaveType(RemoveUserService::class);
+    }
+
+    function it_implements_application_service()
+    {
+        $this->shouldImplement(ApplicationService::class);
     }
 
     function it_does_not_remove_user_password_do_not_match(

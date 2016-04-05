@@ -15,6 +15,7 @@ namespace BenGor\User\Application\Service\RequestRememberPassword;
 use BenGor\User\Domain\Model\Exception\UserDoesNotExistException;
 use BenGor\User\Domain\Model\UserEmail;
 use BenGor\User\Domain\Model\UserRepository;
+use Ddd\Application\Service\ApplicationService;
 
 /**
  * Request remember password service class.
@@ -22,7 +23,7 @@ use BenGor\User\Domain\Model\UserRepository;
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-class RequestRememberPasswordService
+class RequestRememberPasswordService implements ApplicationService
 {
     /**
      * The user repository.
@@ -48,7 +49,7 @@ class RequestRememberPasswordService
      *
      * @throws UserDoesNotExistException when the user does not exist
      */
-    public function execute(RequestRememberPasswordRequest $request)
+    public function execute($request = null)
     {
         $email = $request->email();
 

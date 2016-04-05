@@ -19,6 +19,7 @@ use BenGor\User\Domain\Model\Exception\UserInactiveException;
 use BenGor\User\Domain\Model\User;
 use BenGor\User\Domain\Model\UserId;
 use BenGor\User\Domain\Model\UserRepository;
+use Ddd\Application\Service\ApplicationService;
 use PhpSpec\ObjectBehavior;
 
 /**
@@ -37,6 +38,11 @@ class LogOutUserServiceSpec extends ObjectBehavior
     function it_is_initializable()
     {
         $this->shouldHaveType(LogOutUserService::class);
+    }
+
+    function it_implements_application_service()
+    {
+        $this->shouldImplement(ApplicationService::class);
     }
 
     function it_logs_the_user_out(UserRepository $repository, User $user, LogOutUserRequest $request)

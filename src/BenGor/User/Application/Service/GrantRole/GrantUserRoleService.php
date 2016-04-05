@@ -16,13 +16,14 @@ use BenGor\User\Domain\Model\Exception\UserDoesNotExistException;
 use BenGor\User\Domain\Model\UserId;
 use BenGor\User\Domain\Model\UserRepository;
 use BenGor\User\Domain\Model\UserRole;
+use Ddd\Application\Service\ApplicationService;
 
 /**
  * Grant user role service class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  */
-class GrantUserRoleService
+class GrantUserRoleService implements ApplicationService
 {
     /**
      * The user repository.
@@ -48,7 +49,7 @@ class GrantUserRoleService
      *
      * @throws UserDoesNotExistException when user does not exist
      */
-    public function execute(GrantUserRoleRequest $request)
+    public function execute($request = null)
     {
         $id = $request->id();
         $role = $request->role();

@@ -15,6 +15,7 @@ namespace BenGor\User\Application\Service\Enable;
 use BenGor\User\Domain\Model\Exception\UserTokenNotFoundException;
 use BenGor\User\Domain\Model\UserRepository;
 use BenGor\User\Domain\Model\UserToken;
+use Ddd\Application\Service\ApplicationService;
 
 /**
  * Enable user service class.
@@ -22,7 +23,7 @@ use BenGor\User\Domain\Model\UserToken;
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-class EnableUserService
+class EnableUserService implements ApplicationService
 {
     /**
      * The user repository.
@@ -48,7 +49,7 @@ class EnableUserService
      *
      * @throws UserTokenNotFoundException when the user token does not exist
      */
-    public function execute(EnableUserRequest $request)
+    public function execute($request = null)
     {
         $confirmationToken = $request->confirmationToken();
 

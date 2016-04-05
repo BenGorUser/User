@@ -16,6 +16,7 @@ use BenGor\User\Domain\Model\Exception\UserPasswordInvalidException;
 use BenGor\User\Domain\Model\UserId;
 use BenGor\User\Domain\Model\UserPasswordEncoder;
 use BenGor\User\Domain\Model\UserRepository;
+use Ddd\Application\Service\ApplicationService;
 
 /**
  * Remove user service class.
@@ -23,7 +24,7 @@ use BenGor\User\Domain\Model\UserRepository;
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-class RemoveUserService
+class RemoveUserService implements ApplicationService
 {
     /**
      * The user repository.
@@ -58,7 +59,7 @@ class RemoveUserService
      *
      * @throws UserPasswordInvalidException when the user password is invalid
      */
-    public function execute(RemoveUserRequest $request)
+    public function execute($request = null)
     {
         $id = $request->id();
         $plainPassword = $request->password();

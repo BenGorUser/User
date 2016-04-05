@@ -22,6 +22,7 @@ use BenGor\User\Domain\Model\UserGuestFactory;
 use BenGor\User\Domain\Model\UserGuestId;
 use BenGor\User\Domain\Model\UserGuestRepository;
 use BenGor\User\Domain\Model\UserRepository;
+use Ddd\Application\Service\ApplicationService;
 use PhpSpec\ObjectBehavior;
 
 /**
@@ -39,6 +40,11 @@ class InviteUserServiceSpec extends ObjectBehavior
     function it_is_initializable()
     {
         $this->shouldHaveType(InviteUserService::class);
+    }
+
+    function it_implements_application_service()
+    {
+        $this->shouldImplement(ApplicationService::class);
     }
 
     function it_invites_user(
