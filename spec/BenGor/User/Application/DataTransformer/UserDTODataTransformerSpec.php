@@ -15,11 +15,15 @@ namespace spec\BenGor\User\Application\DataTransformer;
 use BenGor\User\Application\DataTransformer\UserDataTransformer;
 use BenGor\User\Application\DataTransformer\UserDtoDataTransformer;
 use BenGor\User\Domain\Model\User;
+use BenGor\User\Domain\Model\UserEmail;
+use BenGor\User\Domain\Model\UserId;
+use BenGor\User\Domain\Model\UserPassword;
 use BenGor\User\Domain\Model\UserRole;
+use BenGor\User\Domain\Model\UserToken;
 use PhpSpec\ObjectBehavior;
 
 /**
- * Spec file of user DTO data transformer class.
+ * Spec file of UserDTODataTransformer class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
@@ -48,13 +52,15 @@ class UserDTODataTransformerSpec extends ObjectBehavior
 
         $user->roles()->shouldBeCalled()->willReturn([new UserRole('ROLE_USER')]);
 
-        $user->id()->shouldBeCalled()->willReturn('user-id');
-        $user->confirmationToken()->shouldBeCalled()->willReturn('confirmation-token');
+        $password = UserPassword::fromEncoded('encoded-password', 'user-password-salt');
+
+        $user->id()->shouldBeCalled()->willReturn(new UserId('user-id'));
+        $user->confirmationToken()->shouldBeCalled()->willReturn(new UserToken('confirmation-token'));
         $user->createdOn()->shouldBeCalled()->willReturn($createdOn);
-        $user->email()->shouldBeCalled()->willReturn('user@user.com');
+        $user->email()->shouldBeCalled()->willReturn(new UserEmail('user@user.com'));
         $user->lastLogin()->shouldBeCalled()->willReturn($lastLogin);
-        $user->password()->shouldBeCalled()->willReturn('encoded-password');
-        $user->rememberPasswordToken()->shouldBeCalled()->willReturn('remember-password-token');
+        $user->password()->shouldBeCalled()->willReturn($password);
+        $user->rememberPasswordToken()->shouldBeCalled()->willReturn(new UserToken('remember-password-token'));
         $user->updatedOn()->shouldBeCalled()->willReturn($updatedOn);
 
         $this->read()->shouldReturn([
@@ -63,7 +69,8 @@ class UserDTODataTransformerSpec extends ObjectBehavior
             'created_on'              => $createdOn,
             'email'                   => 'user@user.com',
             'last_login'              => $lastLogin,
-            'password'                => 'encoded-password',
+            'encoded_password'        => 'encoded-password',
+            'salt'                    => 'user-password-salt',
             'remember_password_token' => 'remember-password-token',
             'roles'                   => ['ROLE_USER'],
             'updated_on'              => $updatedOn,
