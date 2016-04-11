@@ -52,13 +52,13 @@ class UserDTODataTransformer implements UserDataTransformer
 
         return [
             'id'                      => $this->user->id()->id(),
-            'confirmation_token'      => $this->user->confirmationToken()->token(),
+            'confirmation_token'      => $this->user->confirmationToken(),
             'created_on'              => $this->user->createdOn(),
             'email'                   => $this->user->email()->email(),
             'last_login'              => $this->user->lastLogin(),
             'encoded_password'        => $this->user->password()->encodedPassword(),
             'salt'                    => $this->user->password()->salt(),
-            'remember_password_token' => $this->user->rememberPasswordToken()->token(),
+            'remember_password_token' => $this->user->rememberPasswordToken(),
             'roles'                   => $roles,
             'updated_on'              => $this->user->updatedOn(),
         ];

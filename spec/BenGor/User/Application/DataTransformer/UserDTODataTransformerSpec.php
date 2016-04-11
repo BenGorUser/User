@@ -19,7 +19,6 @@ use BenGor\User\Domain\Model\UserEmail;
 use BenGor\User\Domain\Model\UserId;
 use BenGor\User\Domain\Model\UserPassword;
 use BenGor\User\Domain\Model\UserRole;
-use BenGor\User\Domain\Model\UserToken;
 use PhpSpec\ObjectBehavior;
 
 /**
@@ -55,12 +54,12 @@ class UserDTODataTransformerSpec extends ObjectBehavior
         $password = UserPassword::fromEncoded('encoded-password', 'user-password-salt');
 
         $user->id()->shouldBeCalled()->willReturn(new UserId('user-id'));
-        $user->confirmationToken()->shouldBeCalled()->willReturn(new UserToken('confirmation-token'));
+        $user->confirmationToken()->shouldBeCalled()->willReturn('confirmation-token');
         $user->createdOn()->shouldBeCalled()->willReturn($createdOn);
         $user->email()->shouldBeCalled()->willReturn(new UserEmail('user@user.com'));
         $user->lastLogin()->shouldBeCalled()->willReturn($lastLogin);
         $user->password()->shouldBeCalled()->willReturn($password);
-        $user->rememberPasswordToken()->shouldBeCalled()->willReturn(new UserToken('remember-password-token'));
+        $user->rememberPasswordToken()->shouldBeCalled()->willReturn('remember-password-token');
         $user->updatedOn()->shouldBeCalled()->willReturn($updatedOn);
 
         $this->read()->shouldReturn([
