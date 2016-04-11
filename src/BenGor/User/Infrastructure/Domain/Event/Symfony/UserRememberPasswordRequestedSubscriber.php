@@ -26,6 +26,13 @@ use Symfony\Component\Routing\Router;
 final class UserRememberPasswordRequestedSubscriber implements DomainEventSubscriber
 {
     /**
+     * The fully qualified user class name.
+     *
+     * @var string|null
+     */
+    private $fqcn;
+
+    /**
      * The mailable factory.
      *
      * @var UserMailableFactory
@@ -60,17 +67,26 @@ final class UserRememberPasswordRequestedSubscriber implements DomainEventSubscr
      * @param UserMailableFactory $aMailableFactory The mailable factory
      * @param Router              $aRouter          The Symfony router
      * @param string              $aRoute           The route name
+     * @param string|null         $fqcn             The fully qualified user class name
      */
-    public function __construct(UserMailer $aMailer, UserMailableFactory $aMailableFactory, Router $aRouter, $aRoute)
-    {
+    public function __construct(
+        UserMailer $aMailer,
+        UserMailableFactory $aMailableFactory,
+        Router $aRouter,
+        $aRoute,
+        $fqcn = null
+    ) {
         $this->mailer = $aMailer;
         $this->mailableFactory = $aMailableFactory;
         $this->router = $aRouter;
         $this->route = $aRoute;
+        $this->fqcn = $fqcn;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @param UserRememberPasswordRequested $aDomainEvent The domain event
      */
     public function handle($aDomainEvent)
     {
@@ -85,9 +101,15 @@ final class UserRememberPasswordRequestedSubscriber implements DomainEventSubscr
 
     /**
      * @inheritdoc}
+     *
+     * @param UserRememberPasswordRequested $aDomainEvent The domain event
      */
     public function isSubscribedTo($aDomainEvent)
     {
+        if (null !== $this->fqcn && $this->fqcn !== get_class($aDomainEvent->user())) {
+            return false;
+        }
+
         return $aDomainEvent instanceof UserRememberPasswordRequested;
     }
 }

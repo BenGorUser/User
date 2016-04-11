@@ -27,6 +27,13 @@ use Symfony\Component\Routing\Router;
 final class UserRegisteredMailerSubscriber implements DomainEventSubscriber
 {
     /**
+     * The fully qualified user class name.
+     *
+     * @var string|null
+     */
+    private $fqcn;
+
+    /**
      * The mailable factory.
      *
      * @var UserMailableFactory
@@ -61,17 +68,26 @@ final class UserRegisteredMailerSubscriber implements DomainEventSubscriber
      * @param UserMailableFactory $aMailableFactory The mailable factory
      * @param Router              $aRouter          The Symfony router
      * @param string              $aRoute           The route name
+     * @param string|null         $fqcn             The fully qualified user class name
      */
-    public function __construct(UserMailer $aMailer, UserMailableFactory $aMailableFactory, Router $aRouter, $aRoute)
-    {
+    public function __construct(
+        UserMailer $aMailer,
+        UserMailableFactory $aMailableFactory,
+        Router $aRouter,
+        $aRoute,
+        $fqcn = null
+    ) {
         $this->mailer = $aMailer;
         $this->mailableFactory = $aMailableFactory;
         $this->router = $aRouter;
         $this->route = $aRoute;
+        $this->fqcn = $fqcn;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @param UserRegistered $aDomainEvent The domain event
      */
     public function handle($aDomainEvent)
     {
@@ -86,9 +102,15 @@ final class UserRegisteredMailerSubscriber implements DomainEventSubscriber
 
     /**
      * {@inheritdoc}
+     *
+     * @param UserRegistered $aDomainEvent The domain event
      */
     public function isSubscribedTo($aDomainEvent)
     {
+        if (null !== $this->fqcn && $this->fqcn !== get_class($aDomainEvent->user())) {
+            return false;
+        }
+
         return $aDomainEvent instanceof UserRegistered;
     }
 }
