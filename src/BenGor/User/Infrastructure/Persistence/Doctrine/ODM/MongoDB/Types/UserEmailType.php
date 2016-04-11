@@ -37,4 +37,20 @@ class UserEmailType extends StringType
     {
         return new UserEmail($value);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function closureToMongo()
+    {
+        return '$return = $value->email();';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function closureToPHP()
+    {
+        return '$return = new \BenGor\User\Domain\Model\UserEmail($value);';
+    }
 }

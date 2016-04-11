@@ -27,7 +27,7 @@ class UserPasswordType extends Type
      */
     public function convertToDatabaseValue($value)
     {
-        return json_encode($value->encodedPassword(), $value->salt());
+        return json_encode([$value->encodedPassword(), $value->salt()]);
     }
 
     /**
@@ -38,5 +38,22 @@ class UserPasswordType extends Type
         list($encodedPassword, $salt) = json_decode($value);
 
         return UserPassword::fromEncoded($encodedPassword, $salt);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function closureToMongo()
+    {
+        return '$return = json_encode([$value->encodedPassword(), $value->salt()]);';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function closureToPHP()
+    {
+        return 'list($encodedPassword, $salt) = json_decode($value);' .
+        '$return = \BenGor\User\Domain\Model\UserPassword::fromEncoded($encodedPassword, $salt);';
     }
 }

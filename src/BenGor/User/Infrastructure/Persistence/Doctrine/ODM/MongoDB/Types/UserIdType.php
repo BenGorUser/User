@@ -27,7 +27,18 @@ class UserIdType extends IdType
      */
     public function convertToDatabaseValue($value)
     {
-        return $value->id();
+        if ($value === null) {
+            return;
+        }
+        if (!$value instanceof \MongoId) {
+            try {
+                $value = new \MongoId($value->id());
+            } catch (\MongoException $e) {
+                $value = new \MongoId();
+            }
+        }
+
+        return $value;
     }
 
     /**
@@ -35,6 +46,24 @@ class UserIdType extends IdType
      */
     public function convertToPHPValue($value)
     {
-        return new UserId($value);
+        return $value instanceof \MongoId ? new UserId((string) $value) : new UserId($value);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function closureToMongo()
+    {
+        return '$return = new MongoId($value->id());';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function closureToPHP()
+    {
+        return '$return = $value instanceof \MongoId ' .
+        '? new \BenGor\User\Domain\Model\UserId((string)$value) ' .
+        ': new \BenGor\User\Domain\Model\UserId($value);';
     }
 }

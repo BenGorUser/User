@@ -27,7 +27,18 @@ class UserGuestIdType extends IdType
      */
     public function convertToDatabaseValue($value)
     {
-        return $value->id();
+        if ($value === null) {
+            return;
+        }
+        if (!$value instanceof \MongoId) {
+            try {
+                $value = new \MongoId($value->id());
+            } catch (\MongoException $e) {
+                $value = new \MongoId();
+            }
+        }
+
+        return $value;
     }
 
     /**
@@ -35,6 +46,24 @@ class UserGuestIdType extends IdType
      */
     public function convertToPHPValue($value)
     {
-        return new UserGuestId($value);
+        return $value instanceof \MongoId ? new UserGuestId((string) $value) : new UserGuestId($value);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function closureToMongo()
+    {
+        return '$return = new MongoId($value->id());';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function closureToPHP()
+    {
+        return '$return = $value instanceof \MongoId ' .
+        '? new \BenGor\User\Domain\Model\UserGuestId((string)$value) ' .
+        ': new \BenGor\User\Domain\Model\UserGuestId($value);';
     }
 }

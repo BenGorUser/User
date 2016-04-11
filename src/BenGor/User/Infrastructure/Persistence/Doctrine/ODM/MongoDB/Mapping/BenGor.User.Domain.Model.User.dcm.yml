@@ -13,6 +13,7 @@ BenGor\User\Domain\Model\User:
     fields:
         id:
             id: true
+            strategy: none
             type: user_id
         confirmationToken:
             name: confirmation_token

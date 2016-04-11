@@ -37,4 +37,20 @@ class UserTokenType extends StringType
     {
         return new UserToken($value);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function closureToMongo()
+    {
+        return '$return = $value->token();';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function closureToPHP()
+    {
+        return '$return = new \BenGor\User\Domain\Model\UserToken($value);';
+    }
 }

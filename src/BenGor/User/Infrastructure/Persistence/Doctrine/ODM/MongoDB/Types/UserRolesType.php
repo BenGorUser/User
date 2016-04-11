@@ -20,7 +20,7 @@ use Doctrine\ODM\MongoDB\Types\Type;
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  */
-final class UserRolesType extends Type
+class UserRolesType extends Type
 {
     /**
      * {@inheritdoc}
@@ -44,5 +44,23 @@ final class UserRolesType extends Type
         }, json_decode($value));
 
         return $userRoles;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function closureToMongo()
+    {
+        return '$roles = array_map(function (UserRole $role) {return $role->role();}, $value);' .
+        '$return = json_encode($roles);';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function closureToPHP()
+    {
+        return '$userRoles = array_map(function ($role) {return new \BenGor\User\Domain\Model\UserRole($role);},' .
+        'json_decode($value));$return = $userRoles;';
     }
 }
