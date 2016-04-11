@@ -10,5 +10,5 @@ BenGor\User\Domain\Model\UserToken:
     type: embeddable
     fields:
         token:
-            type: string
             length: 36
+            type: string

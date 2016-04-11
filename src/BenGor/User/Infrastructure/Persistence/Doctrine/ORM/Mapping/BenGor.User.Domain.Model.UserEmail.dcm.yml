@@ -11,5 +11,5 @@ BenGor\User\Domain\Model\UserEmail:
     fields:
         email:
             column: email
+            length: 60
             type: string
-            length: 30

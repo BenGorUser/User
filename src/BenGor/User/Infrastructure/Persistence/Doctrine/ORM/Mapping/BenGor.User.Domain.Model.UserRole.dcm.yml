@@ -10,5 +10,5 @@ BenGor\User\Domain\Model\UserRole:
     type: embeddable
     fields:
         role:
-            type: string
             length: 50
+            type: string
