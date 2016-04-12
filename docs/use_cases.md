@@ -1,7 +1,7 @@
 # Use cases
 
 ## Sign up
-### Default
+#### Default
 #### With confirmation
 #### By invitation
 #### By invitation and with confirmation
@@ -10,7 +10,7 @@
 
 ## Enable
 
-##Log in
+## Log in
 
 ## Log out
 

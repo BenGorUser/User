@@ -10,27 +10,28 @@
  * file that was distributed with this source code.
  */
 
-namespace BenGor\User\Infrastructure\Domain\Event\Symfony;
+namespace BenGor\User\Domain\Event;
 
-use BenGor\User\Domain\Model\Event\UserRememberPasswordRequested;
+use BenGor\User\Domain\Model\Event\UserRegistered;
 use BenGor\User\Domain\Model\UserMailableFactory;
 use BenGor\User\Domain\Model\UserMailer;
+use BenGor\User\Domain\Model\UserUrlGenerator;
 use Ddd\Domain\DomainEventSubscriber;
-use Symfony\Component\Routing\Router;
 
 /**
- * User remember password requested subscriber class.
+ * User registered mailer subscriber class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
+ * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-final class UserRememberPasswordRequestedSubscriber implements DomainEventSubscriber
+class UserRegisteredMailerSubscriber implements DomainEventSubscriber
 {
     /**
      * The fully qualified user class name.
      *
      * @var string|null
      */
-    private $fqcn;
+    private $userClass;
 
     /**
      * The mailable factory.
@@ -54,44 +55,46 @@ final class UserRememberPasswordRequestedSubscriber implements DomainEventSubscr
     private $route;
 
     /**
-     * The Symfony router component.
+     * The url generator.
      *
-     * @var Router
+     * @var UserUrlGenerator
      */
-    private $router;
+    private $urlGenerator;
 
     /**
      * Constructor.
      *
      * @param UserMailer          $aMailer          The mailer
      * @param UserMailableFactory $aMailableFactory The mailable factory
-     * @param Router              $aRouter          The Symfony router
+     * @param UserUrlGenerator    $anUrlGenerator   The url generator
      * @param string              $aRoute           The route name
-     * @param string|null         $fqcn             The fully qualified user class name
+     * @param string|null         $aUserClass       The fully qualified user class name
      */
     public function __construct(
         UserMailer $aMailer,
         UserMailableFactory $aMailableFactory,
-        Router $aRouter,
+        UserUrlGenerator $anUrlGenerator,
         $aRoute,
-        $fqcn = null
+        $aUserClass = null
     ) {
         $this->mailer = $aMailer;
         $this->mailableFactory = $aMailableFactory;
-        $this->router = $aRouter;
+        $this->urlGenerator = $anUrlGenerator;
         $this->route = $aRoute;
-        $this->fqcn = $fqcn;
+        $this->userClass = $aUserClass;
     }
 
     /**
      * {@inheritdoc}
      *
-     * @param UserRememberPasswordRequested $aDomainEvent The domain event
+     * @param UserRegistered $aDomainEvent The domain event
      */
     public function handle($aDomainEvent)
     {
         $user = $aDomainEvent->user();
-        $url = $this->router->generate($this->route, ['rememberPasswordToken' => $user->rememberPasswordToken()]);
+        $url = $this->urlGenerator->generate($this->route, [
+            'confirmation-token' => $user->confirmationToken()->token(),
+        ]);
         $mail = $this->mailableFactory->build($user->email(), [
             'user' => $user, 'url' => $url,
         ]);
@@ -100,16 +103,16 @@ final class UserRememberPasswordRequestedSubscriber implements DomainEventSubscr
     }
 
     /**
-     * @inheritdoc}
+     * {@inheritdoc}
      *
-     * @param UserRememberPasswordRequested $aDomainEvent The domain event
+     * @param UserRegistered $aDomainEvent The domain event
      */
     public function isSubscribedTo($aDomainEvent)
     {
-        if (null !== $this->fqcn && $this->fqcn !== get_class($aDomainEvent->user())) {
+        if (null !== $this->userClass && $this->userClass !== get_class($aDomainEvent->user())) {
             return false;
         }
 
-        return $aDomainEvent instanceof UserRememberPasswordRequested;
+        return $aDomainEvent instanceof UserRegistered;
     }
 }

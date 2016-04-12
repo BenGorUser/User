@@ -22,7 +22,7 @@ $encoder = new YourUserPasswordEncoder();
 This library has a number of use cases that are ready to use. Everything has been abstracted to be as easy as calling 
 a service containing the use case you need. Just create an instance of the service you want 
 to use and call `execute()` with your request. All services have the own related request, for example 
-`ActivateUserAccountService` has its own `ActivateUserAccountRequest` and so on.
+`EnableUserService` has its own `EnableUserRequest` and so on.
 
 > All application services and related requests are located under `src/Application/Service` folder
 
