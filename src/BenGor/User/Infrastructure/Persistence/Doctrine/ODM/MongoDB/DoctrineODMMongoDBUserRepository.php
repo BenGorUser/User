@@ -40,7 +40,7 @@ final class DoctrineODMMongoDBUserRepository extends DocumentRepository implemen
      */
     public function userOfEmail(UserEmail $anEmail)
     {
-        return $this->findOneBy(['email.email' => $anEmail->email()]);
+        return $this->findOneBy(['email' => $anEmail->email()]);
     }
 
     /**
@@ -48,7 +48,7 @@ final class DoctrineODMMongoDBUserRepository extends DocumentRepository implemen
      */
     public function userOfConfirmationToken(UserToken $aConfirmationToken)
     {
-        return $this->findOneBy(['confirmationToken.token' => $aConfirmationToken->token()]);
+        return $this->findOneBy(['confirmationToken' => $aConfirmationToken->token()]);
     }
 
     /**
@@ -56,7 +56,7 @@ final class DoctrineODMMongoDBUserRepository extends DocumentRepository implemen
      */
     public function userOfRememberPasswordToken(UserToken $aRememberPasswordToken)
     {
-        return $this->findOneBy(['rememberPasswordToken.token' => $aRememberPasswordToken->token()]);
+        return $this->findOneBy(['rememberPasswordToken' => $aRememberPasswordToken->token()]);
     }
 
     /**
