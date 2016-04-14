@@ -32,7 +32,9 @@ class UserIdType extends IdType
         }
         if (!$value instanceof \MongoId) {
             try {
-                $value = new \MongoId($value->id());
+                $value = $value instanceof UserId
+                    ? new \MongoId($value->id())
+                    : new \MongoId($value);
             } catch (\MongoException $e) {
                 $value = new \MongoId();
             }
@@ -46,7 +48,7 @@ class UserIdType extends IdType
      */
     public function convertToPHPValue($value)
     {
-        return $value instanceof \MongoId ? new UserId((string) $value) : new UserId($value);
+        return $value instanceof \MongoId ? new UserId((string)$value) : new UserId($value);
     }
 
     /**
@@ -54,7 +56,7 @@ class UserIdType extends IdType
      */
     public function closureToMongo()
     {
-        return '$return = new MongoId($value->id());';
+        return '$return = $value instanceof UserId ? new MongoId($value->id()) : new \MongoId($value);';
     }
 
     /**
