@@ -14,10 +14,7 @@ namespace BenGor\User\Application\Service\LogIn;
 
 use BenGor\User\Application\DataTransformer\UserDataTransformer;
 use BenGor\User\Domain\Model\Exception\UserDoesNotExistException;
-use BenGor\User\Domain\Model\Exception\UserInactiveException;
-use BenGor\User\Domain\Model\Exception\UserPasswordInvalidException;
 use BenGor\User\Domain\Model\UserEmail;
-use BenGor\User\Domain\Model\UserPassword;
 use BenGor\User\Domain\Model\UserPasswordEncoder;
 use BenGor\User\Domain\Model\UserRepository;
 use Ddd\Application\Service\ApplicationService;
@@ -73,9 +70,7 @@ class LogInUserService implements ApplicationService
      *
      * @param LogInUserRequest $request The request
      *
-     * @throws UserDoesNotExistException    when the user does not exist
-     * @throws UserInactiveException        when the user is not enabled
-     * @throws UserPasswordInvalidException when the user password is invalid
+     * @throws UserDoesNotExistException when the user does not exist
      *
      * @return mixed
      */
