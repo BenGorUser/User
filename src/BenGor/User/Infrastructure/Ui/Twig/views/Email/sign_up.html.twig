@@ -1,19 +1,11 @@
 {% block subject %}
-    You're successfully register!
+    {{ 'ui.twig.views.email.sign_up.subject' | trans }}
 {% endblock %}
 
 {% block body_html %}
-    <h1>
-        Hi, <strong>{{ user.email }}</strong>.
-    </h1>
-    <p>
-        You are registered successfully.<br/>
-        In order to confirm your email account please, you need to follow this <a href="{{ url }}" target="_blank">link</a>.
-    </p>
+    {{ 'ui.twig.views.email.sign_up.body_html' | trans({'%email%': user.email, '%url%': url}) | raw }}
 {% endblock %}
 
 {% block body_text %}
-    Hi, {{ user.email }}.
-    You are registered successfully.
-    In order to confirm your email account please, you need to follow this link: {{ url }}.
+    {{ 'ui.twig.views.email.sign_up.body_text' | trans({'%email%': user.email, '%url%': url}) }}
 {% endblock %}

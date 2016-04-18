@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" target-language="eu" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="ui.twig.views.email.invite.subject">
+                <source>ui.twig.views.email.invite.subject</source>
+                <target>Erregistratze gonbidapena</target>
+            </trans-unit>
+            <trans-unit id="ui.twig.views.email.invite.body_html">
+                <source>ui.twig.views.email.invite.body_html</source>
+                <target><![CDATA[<h1>Kaixo, <strong>%email%</strong>.</h1><p>Gonbidapena onartzekotan, mesedez, jarraitu hurrengo <a href="%url%" target="_blank">link</a>-a.</p>]]></target>
+            </trans-unit>
+            <trans-unit id="ui.twig.views.email.invite.body_text">
+                <source>ui.twig.views.email.invite.body_text</source>
+                <target>Kaixo, %user.email%. Gonbidapena onartzekotan, mesedez, jarraitu hurrengo: %url% -a.</target>
+            </trans-unit>
+
+            <trans-unit id="ui.twig.views.email.request_remember_password.subject">
+                <source>ui.twig.views.email.request_remember_password.subject</source>
+                <target>Pasahitz gogorapena</target>
+            </trans-unit>
+            <trans-unit id="ui.twig.views.email.request_remember_password.body_html">
+                <source>ui.twig.views.email.request_remember_password.body_html</source>
+                <target><![CDATA[<h1>Kaixo, <strong>%email%</strong>.</h1><p>Pasahitz gogorapena jaso duzu; prozesua bukatu nahi izatekotan, mesedez jarraitu hurrengo <a href="%url%" target="_blank">link</a>-a.</p>]]></target>
+            </trans-unit>
+            <trans-unit id="ui.twig.views.email.request_remember_password.body_text">
+                <source>ui.twig.views.email.request_remember_password.body_text</source>
+                <target>Kaixo, %email%. Pasahitz gogorapena jaso duzu; prozesua bukatu nahi izatekotan, mesedez jarraitu hurrengo linka: %url%.</target>
+            </trans-unit>
+
+            <trans-unit id="ui.twig.views.email.sign_up.subject">
+                <source>ui.twig.views.email.sign_up.subject</source>
+                <target>Era egokian erregistratu zara</target>
+            </trans-unit>
+            <trans-unit id="ui.twig.views.email.sign_up.body_html">
+                <source>ui.twig.views.email.sign_up.body_html</source>
+                <target><![CDATA[<h1>Kaixo, <strong>%email%</strong>.</h1><p>Era egokian erregistratu zara.<br/>Kontua aktibatzeko, mesedez, jarraitu hurrengo <a href="%url%" target="_blank">link</a>.-a</p>]]></target>
+            </trans-unit>
+            <trans-unit id="ui.twig.views.email.sign_up.body_text">
+                <source>ui.twig.views.email.sign_up.body_text</source>
+                <target>Kaixo, %email%. Era egokian erregistratu zara. Kontua aktibatzeko, mesedez, jarraitu hurrengo linka: %url%.</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

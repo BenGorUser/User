@@ -1,17 +1,11 @@
 {% block subject %}
-    This an invitation for the registration
+    {{ 'ui.twig.views.email.invite.subject' | trans }}
 {% endblock %}
 
 {% block body_html %}
-    <h1>
-        Hi, <strong>{{ user.email }}</strong>.
-    </h1>
-    <p>
-        In order to accept this invitation please, you need to follow this <a href="{{ url }}" target="_blank">link</a>.
-    </p>
+    {{ 'ui.twig.views.email.invite.body_html' | trans({'%email%': user.email, '%url%': url}) | raw }}
 {% endblock %}
 
 {% block body_text %}
-    Hi, {{ user.email }}.
-    In order to accept this invitation please, you need to follow this link: {{ url }}.
+    {{ 'ui.twig.views.email.invite.body_html' | trans({'%email%': user.email, '%url%': url}) }}
 {% endblock %}

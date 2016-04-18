@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" target-language="en" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="ui.twig.views.email.invite.subject">
+                <source>ui.twig.views.email.invite.subject</source>
+                <target>This an invitation for the registration</target>
+            </trans-unit>
+            <trans-unit id="ui.twig.views.email.invite.body_html">
+                <source>ui.twig.views.email.invite.body_html</source>
+                <target><![CDATA[<h1>Hi, <strong>%email%</strong>.</h1><p>In order to accept this invitation please, you need to follow this <a href="%url%" target="_blank">link</a>.</p>]]></target>
+            </trans-unit>
+            <trans-unit id="ui.twig.views.email.invite.body_text">
+                <source>ui.twig.views.email.invite.body_text</source>
+                <target>Hi, %user.email%. In order to accept this invitation please, you need to follow this link: %url%.</target>
+            </trans-unit>
+
+            <trans-unit id="ui.twig.views.email.request_remember_password.subject">
+                <source>ui.twig.views.email.request_remember_password.subject</source>
+                <target>This is a remember password request</target>
+            </trans-unit>
+            <trans-unit id="ui.twig.views.email.request_remember_password.body_html">
+                <source>ui.twig.views.email.request_remember_password.body_html</source>
+                <target><![CDATA[<h1>Hi, <strong>%email%</strong>.</h1><p>You just have requested password remember so, in order to finish the process successfully you need to follow this <a href="%url%" target="_blank">link</a>.</p>]]></target>
+            </trans-unit>
+            <trans-unit id="ui.twig.views.email.request_remember_password.body_text">
+                <source>ui.twig.views.email.request_remember_password.body_text</source>
+                <target>Hi, %email%. You just have requested password remember so, in order to finish the process successfully you need to follow this link: %url%.</target>
+            </trans-unit>
+
+            <trans-unit id="ui.twig.views.email.sign_up.subject">
+                <source>ui.twig.views.email.sign_up.subject</source>
+                <target>You're successfully register!</target>
+            </trans-unit>
+            <trans-unit id="ui.twig.views.email.sign_up.body_html">
+                <source>ui.twig.views.email.sign_up.body_html</source>
+                <target><![CDATA[<h1>Hi, <strong>%email%</strong>.</h1><p>You are registered successfully.<br/>In order to confirm your email account please, you need to follow this <a href="%url%" target="_blank">link</a>.</p>]]></target>
+            </trans-unit>
+            <trans-unit id="ui.twig.views.email.sign_up.body_text">
+                <source>ui.twig.views.email.sign_up.body_text</source>
+                <target>Hi, %email%. You are registered successfully. In order to confirm your email account please, you need to follow this link: %url%.</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>
