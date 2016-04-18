@@ -291,9 +291,15 @@ class User
 
     /**
      * Updated the user state after logout.
+     *
+     * @throws UserInactiveException when the user is not enabled
      */
     public function logout()
     {
+        if (false === $this->isEnabled()) {
+            throw new UserInactiveException();
+        }
+
         DomainEventPublisher::instance()->publish(new UserLoggedOut($this));
     }
 

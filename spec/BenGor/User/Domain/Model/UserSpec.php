@@ -96,6 +96,17 @@ class UserSpec extends ObjectBehavior
         $this->shouldThrow(UserPasswordInvalidException::class)->duringLogin('plainPassword', $encoder);
     }
 
+    function it_does_not_log_out_if_user_not_enabled()
+    {
+        $this->shouldThrow(UserInactiveException::class)->duringLogout();
+    }
+
+    function it_log_out()
+    {
+        $this->enableAccount();
+        $this->logout();
+    }
+
     function it_remembers_password()
     {
         $this->rememberPasswordToken()->shouldReturn(null);

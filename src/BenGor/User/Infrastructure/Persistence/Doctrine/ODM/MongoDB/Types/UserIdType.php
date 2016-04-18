@@ -48,7 +48,7 @@ class UserIdType extends IdType
      */
     public function convertToPHPValue($value)
     {
-        return $value instanceof \MongoId ? new UserId((string)$value) : new UserId($value);
+        return $value instanceof \MongoId ? new UserId((string) $value) : new UserId($value);
     }
 
     /**
