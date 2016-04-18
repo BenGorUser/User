@@ -17,6 +17,7 @@ use BenGor\User\Domain\Model\Exception\UserDoesNotExistException;
 use BenGor\User\Domain\Model\Exception\UserInactiveException;
 use BenGor\User\Domain\Model\Exception\UserPasswordInvalidException;
 use BenGor\User\Domain\Model\UserEmail;
+use BenGor\User\Domain\Model\UserPassword;
 use BenGor\User\Domain\Model\UserPasswordEncoder;
 use BenGor\User\Domain\Model\UserRepository;
 use Ddd\Application\Service\ApplicationService;
@@ -87,14 +88,8 @@ class LogInUserService implements ApplicationService
         if (null === $user) {
             throw new UserDoesNotExistException();
         }
-        if (false === $user->isEnabled()) {
-            throw new UserInactiveException();
-        }
-        if (false === $user->password()->equals($plainPassword, $this->encoder)) {
-            throw new UserPasswordInvalidException();
-        }
 
-        $user->login();
+        $user->login($plainPassword, $this->encoder);
 
         $this->repository->persist($user);
         $this->dataTransformer->write($user);
