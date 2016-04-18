@@ -12,6 +12,8 @@
 
 namespace spec\BenGor\User\Domain\Model;
 
+use BenGor\User\Domain\Model\Exception\UserInactiveException;
+use BenGor\User\Domain\Model\Exception\UserPasswordInvalidException;
 use BenGor\User\Domain\Model\Exception\UserRoleAlreadyGrantedException;
 use BenGor\User\Domain\Model\Exception\UserRoleAlreadyRevokedException;
 use BenGor\User\Domain\Model\Exception\UserRoleInvalidException;
@@ -69,9 +71,29 @@ class UserSpec extends ObjectBehavior
 
     function it_logs_in_user()
     {
+        $encoder = new DummyUserPasswordEncoder('encodedPassword');
+        $this->enableAccount();
+
         $this->lastLogin()->shouldReturn(null);
-        $this->login();
+
+        $this->login('plainPassword', $encoder);
+
         $this->lastLogin()->shouldReturnAnInstanceOf(DateTimeImmutable::class);
+    }
+
+    function it_does_not_log_if_user_not_enabled()
+    {
+        $encoder = new DummyUserPasswordEncoder('encodedPassword');
+
+        $this->shouldThrow(UserInactiveException::class)->duringLogin('plainPassword', $encoder);
+    }
+
+    function it_does_not_log_if_user_invalid_password()
+    {
+        $encoder = new DummyUserPasswordEncoder('otherEncodedPassword', false);
+        $this->enableAccount();
+
+        $this->shouldThrow(UserPasswordInvalidException::class)->duringLogin('plainPassword', $encoder);
     }
 
     function it_remembers_password()

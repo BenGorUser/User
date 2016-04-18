@@ -19,6 +19,8 @@ use BenGor\User\Domain\Model\Event\UserRegistered;
 use BenGor\User\Domain\Model\Event\UserRememberPasswordRequested;
 use BenGor\User\Domain\Model\Event\UserRoleGranted;
 use BenGor\User\Domain\Model\Event\UserRoleRevoked;
+use BenGor\User\Domain\Model\Exception\UserInactiveException;
+use BenGor\User\Domain\Model\Exception\UserPasswordInvalidException;
 use BenGor\User\Domain\Model\Exception\UserRoleAlreadyGrantedException;
 use BenGor\User\Domain\Model\Exception\UserRoleAlreadyRevokedException;
 use BenGor\User\Domain\Model\Exception\UserRoleInvalidException;
@@ -266,10 +268,22 @@ class User
     }
 
     /**
-     * Updated the user state after login.
+     * Validates user login for the given password.
+     *
+     * @param string              $aPlainPassword Plain password used to log in
+     * @param UserPasswordEncoder $anEncoder      The encoder used to encode the password
+     *
+     * @throws UserInactiveException        when the user is not enabled
+     * @throws UserPasswordInvalidException when the user password is invalid
      */
-    public function login()
+    public function login($aPlainPassword, UserPasswordEncoder $anEncoder)
     {
+        if (false === $this->isEnabled()) {
+            throw new UserInactiveException();
+        }
+        if (false === $this->password()->equals($aPlainPassword, $anEncoder)) {
+            throw new UserPasswordInvalidException();
+        }
         $this->lastLogin = new \DateTimeImmutable();
 
         DomainEventPublisher::instance()->publish(new UserLoggedIn($this));
