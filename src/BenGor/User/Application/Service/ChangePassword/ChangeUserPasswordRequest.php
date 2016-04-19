@@ -21,6 +21,13 @@ namespace BenGor\User\Application\Service\ChangePassword;
 class ChangeUserPasswordRequest
 {
     /**
+     * The user email.
+     *
+     * @var string
+     */
+    private $email;
+
+    /**
      * The user id.
      *
      * @var string
@@ -63,6 +70,19 @@ class ChangeUserPasswordRequest
     }
 
     /**
+     * Named constructor from user email and without old password.
+     *
+     * @param string $anEmail        The user email
+     * @param string $aPlainPassword The new plain password
+     *
+     * @return self
+     */
+    public static function fromEmail($anEmail, $aPlainPassword)
+    {
+        return new self($aPlainPassword, null, null, null, $anEmail);
+    }
+
+    /**
      * Named constructor from remember password token.
      *
      * @param string $aNewPlainPassword      The new plain password
@@ -82,17 +102,30 @@ class ChangeUserPasswordRequest
      * @param string      $anOldPlainPassword     The old plain password
      * @param string      $anId                   The user id
      * @param string|null $aRememberPasswordToken The remember password token
+     * @param string|null $anEmail                The user email
      */
     private function __construct(
         $aNewPlainPassword,
         $anOldPlainPassword = null,
         $anId = null,
-        $aRememberPasswordToken = null
+        $aRememberPasswordToken = null,
+        $anEmail = null
     ) {
+        $this->email = $anEmail;
         $this->id = $anId;
         $this->newPlainPassword = $aNewPlainPassword;
         $this->oldPlainPassword = $anOldPlainPassword;
         $this->rememberPasswordToken = $aRememberPasswordToken;
+    }
+
+    /**
+     * Gets the user email.
+     *
+     * @return string
+     */
+    public function email()
+    {
+        return $this->email;
     }
 
     /**

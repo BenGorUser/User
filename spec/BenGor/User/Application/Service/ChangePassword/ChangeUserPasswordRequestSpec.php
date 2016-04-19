@@ -28,10 +28,23 @@ class ChangeUserPasswordRequestSpec extends ObjectBehavior
         $this->beConstructedFrom('id', 'newPassword', 'oldPassword');
         $this->shouldHaveType(ChangeUserPasswordRequest::class);
 
+        $this->email()->shouldReturn(null);
         $this->id()->shouldReturn('id');
         $this->newPlainPassword()->shouldReturn('newPassword');
         $this->oldPlainPassword()->shouldReturn('oldPassword');
         $this->rememberPasswordToken()->shouldReturn(null);
+    }
+
+    function it_creates_request_from_email()
+    {
+        $this->beConstructedFromEmail('bengor@user.com', 'newPassword');
+        $this->shouldHaveType(ChangeUserPasswordRequest::class);
+
+        $this->email()->shouldReturn('bengor@user.com');
+        $this->newPlainPassword()->shouldReturn('newPassword');
+        $this->rememberPasswordToken()->shouldReturn(null);
+        $this->id()->shouldReturn(null);
+        $this->oldPlainPassword()->shouldReturn(null);
     }
 
     function it_creates_request_from_remember_password_token()
@@ -39,6 +52,7 @@ class ChangeUserPasswordRequestSpec extends ObjectBehavior
         $this->beConstructedFromRememberPasswordToken('newPassword', 'remember-password-token');
         $this->shouldHaveType(ChangeUserPasswordRequest::class);
 
+        $this->email()->shouldReturn(null);
         $this->newPlainPassword()->shouldReturn('newPassword');
         $this->rememberPasswordToken()->shouldReturn('remember-password-token');
         $this->id()->shouldReturn(null);
