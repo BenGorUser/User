@@ -25,9 +25,8 @@ class RemoveUserRequestSpec extends ObjectBehavior
 {
     function it_creates_request()
     {
-        $this->beConstructedWith('a-plain-string-id', 'a-plain-user-password');
+        $this->beConstructedWith('a-plain-string-id');
         $this->shouldHaveType(RemoveUserRequest::class);
         $this->id()->shouldReturn('a-plain-string-id');
-        $this->password()->shouldReturn('a-plain-user-password');
     }
 }

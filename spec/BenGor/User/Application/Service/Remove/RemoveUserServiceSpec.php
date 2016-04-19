@@ -14,12 +14,10 @@ namespace spec\BenGor\User\Application\Service\Remove;
 
 use BenGor\User\Application\Service\Remove\RemoveUserRequest;
 use BenGor\User\Application\Service\Remove\RemoveUserService;
-use BenGor\User\Domain\Model\Exception\UserPasswordInvalidException;
+use BenGor\User\Domain\Model\Exception\UserDoesNotExistException;
 use BenGor\User\Domain\Model\User;
 use BenGor\User\Domain\Model\UserId;
-use BenGor\User\Domain\Model\UserPassword;
 use BenGor\User\Domain\Model\UserRepository;
-use BenGor\User\Infrastructure\Security\Test\DummyUserPasswordEncoder;
 use Ddd\Application\Service\ApplicationService;
 use PhpSpec\ObjectBehavior;
 
@@ -33,8 +31,7 @@ class RemoveUserServiceSpec extends ObjectBehavior
 {
     function let(UserRepository $repository)
     {
-        $encoder = new DummyUserPasswordEncoder('encoded-password');
-        $this->beConstructedWith($repository, $encoder);
+        $this->beConstructedWith($repository);
     }
 
     function it_is_initializable()
@@ -47,36 +44,19 @@ class RemoveUserServiceSpec extends ObjectBehavior
         $this->shouldImplement(ApplicationService::class);
     }
 
-    function it_does_not_remove_user_password_do_not_match(
-        RemoveUserRequest $request,
-        UserRepository $repository,
-        User $user
-    ) {
-        $encoder = new DummyUserPasswordEncoder('encoded-password', false);
-        $this->beConstructedWith($repository, $encoder);
+    function it_does_not_remove_because_user_does_no_exist(RemoveUserRequest $request, UserRepository $repository)
+    {
+        $request->id()->shouldBeCalled()->willReturn('non-exist-user-id');
+        $repository->userOfId(new UserId('non-exist-user-id'))->shouldBeCalled()->willReturn(null);
 
-        $request->id()->shouldBeCalled()->willReturn('user-id');
-        $request->password()->shouldBeCalled()->willReturn('plain-password');
-        $password = UserPassword::fromPlain('wrongPassword', $encoder);
-
-        $repository->userOfId(new UserId('user-id'))->shouldBeCalled()->willReturn($user);
-        $user->password()->shouldBeCalled()->willReturn($password);
-
-        $this->shouldThrow(UserPasswordInvalidException::class)->duringExecute($request);
+        $this->shouldThrow(UserDoesNotExistException::class)->duringExecute($request);
     }
 
-    function it_removes_user(
-        RemoveUserRequest $request,
-        UserRepository $repository,
-        User $user
-    ) {
-        $encoder = new DummyUserPasswordEncoder('encoded-password');
+    function it_removes_user(RemoveUserRequest $request, UserRepository $repository, User $user)
+    {
         $request->id()->shouldBeCalled()->willReturn('user-id');
-        $request->password()->shouldBeCalled()->willReturn('plain-password');
-        $password = UserPassword::fromPlain('plain-password', $encoder);
 
         $repository->userOfId(new UserId('user-id'))->shouldBeCalled()->willReturn($user);
-        $user->password()->shouldBeCalled()->willReturn($password);
         $repository->remove($user)->shouldBeCalled();
 
         $this->execute($request);

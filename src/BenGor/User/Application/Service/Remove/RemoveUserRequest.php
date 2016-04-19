@@ -28,22 +28,13 @@ class RemoveUserRequest
     private $id;
 
     /**
-     * The plain password.
-     *
-     * @var string
-     */
-    private $plainPassword;
-
-    /**
      * Constructor.
      *
-     * @param string $anId           The user id
-     * @param string $aPlainPassword The user password
+     * @param string $anId The user id
      */
-    public function __construct($anId, $aPlainPassword)
+    public function __construct($anId)
     {
         $this->id = $anId;
-        $this->plainPassword = $aPlainPassword;
     }
 
     /**
@@ -54,15 +45,5 @@ class RemoveUserRequest
     public function id()
     {
         return $this->id;
-    }
-
-    /**
-     * Gets the user plain password.
-     *
-     * @return string
-     */
-    public function password()
-    {
-        return $this->plainPassword;
     }
 }
