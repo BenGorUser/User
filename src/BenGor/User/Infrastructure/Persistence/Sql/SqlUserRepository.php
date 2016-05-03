@@ -163,7 +163,7 @@ SQL
             'SELECT COUNT(*) FROM user WHERE id = :id', [':id' => $aUser->id()->id()]
         )->fetchColumn();
 
-        return (int) $count === 1;
+        return (int)$count === 1;
     }
 
     /**
@@ -262,6 +262,8 @@ SQL
      */
     private function buildUser($row)
     {
+        $createdOn = new \DateTimeImmutable($row['created_on']);
+        $updatedOn = new \DateTimeImmutable($row['updated_on']);
         $lastLogin = null === $row['last_login']
             ? null
             : new \DateTimeImmutable($row['last_login']);
@@ -272,17 +274,20 @@ SQL
             ? null
             : new UserToken($row['remember_password_token']);
 
-        return new User(
+        $user = new User(
             new UserId($row['id']),
             new UserEmail($row['email']),
             UserPassword::fromEncoded($row['password'], $row['salt']),
-            $this->rolesToArray($row['roles']),
-            new \DateTimeImmutable($row['created_on']),
-            new \DateTimeImmutable($row['updated_on']),
-            $lastLogin,
-            $confirmationToken,
-            $rememberPasswordToken
+            $this->rolesToArray($row['roles'])
         );
+
+        $user = $this->set($user, 'createdOn', $createdOn);
+        $user = $this->set($user, 'updatedOn', $updatedOn);
+        $user = $this->set($user, 'lastLogin', $lastLogin);
+        $user = $this->set($user, 'confirmationToken', $confirmationToken);
+        $user = $this->set($user, 'rememberPasswordToken', $rememberPasswordToken);
+
+        return $user;
     }
 
     /**
@@ -313,5 +318,25 @@ SQL
         return array_map(function ($userRole) {
             return new UserRole($userRole);
         }, json_decode($userRoles));
+    }
+
+    /**
+     * Populates by Reflection the domain object with the given SQL plain values.
+     *
+     * @param User   $user          The user domain object
+     * @param string $propertyName  The property name
+     * @param mixed  $propertyValue The property value
+     *
+     * @return User
+     */
+    private function set(User $user, $propertyName, $propertyValue)
+    {
+        $reflectionUser = new \ReflectionClass($user);
+
+        $reflectionCreatedOn = $reflectionUser->getProperty($propertyName);
+        $reflectionCreatedOn->setAccessible(true);
+        $reflectionCreatedOn->setValue($user, $propertyValue);
+
+        return $user;
     }
 }

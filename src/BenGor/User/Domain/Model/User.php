@@ -100,35 +100,19 @@ class User
     /**
      * Constructor.
      *
-     * @param UserId                  $anId                   The id
-     * @param UserEmail               $anEmail                The email
-     * @param UserPassword            $aPassword              The encoded password
-     * @param array                   $userRoles              Array which contains the roles
-     * @param \DateTimeInterface|null $aCreatedOn             The created on
-     * @param \DateTimeInterface|null $anUpdatedOn            The updated on
-     * @param \DateTimeInterface|null $aLastLogin             The last login
-     * @param UserToken|null          $aConfirmationToken     The confirmation token
-     * @param UserToken|null          $aRememberPasswordToken The remember me token
+     * @param UserId       $anId      The id
+     * @param UserEmail    $anEmail   The email
+     * @param UserPassword $aPassword The encoded password
+     * @param array        $userRoles Array which contains the roles
      */
-    public function __construct(
-        UserId $anId,
-        UserEmail $anEmail,
-        UserPassword $aPassword,
-        array $userRoles,
-        \DateTimeInterface $aCreatedOn = null,
-        \DateTimeInterface $anUpdatedOn = null,
-        \DateTimeInterface $aLastLogin = null,
-        UserToken $aConfirmationToken = null,
-        UserToken $aRememberPasswordToken = null
-    ) {
+    public function __construct(UserId $anId, UserEmail $anEmail, UserPassword $aPassword, array $userRoles)
+    {
         $this->id = $anId;
         $this->email = $anEmail;
         $this->password = $aPassword;
-        $this->confirmationToken = $aConfirmationToken ?: new UserToken();
-        $this->createdOn = $aCreatedOn ?: new \DateTimeImmutable();
-        $this->updatedOn = $anUpdatedOn ?: new \DateTimeImmutable();
-        $this->lastLogin = $aLastLogin ?: null;
-        $this->rememberPasswordToken = $aRememberPasswordToken;
+        $this->confirmationToken = new UserToken();
+        $this->createdOn = new \DateTimeImmutable();
+        $this->updatedOn = new \DateTimeImmutable();
 
         $this->roles = [];
         foreach ($userRoles as $userRole) {

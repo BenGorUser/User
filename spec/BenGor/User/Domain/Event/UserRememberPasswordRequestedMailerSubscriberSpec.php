@@ -55,19 +55,15 @@ class UserRememberPasswordRequestedMailerSubscriberSpec extends ObjectBehavior
 
     function it_handles(UserUrlGenerator $urlGenerator, UserMailableFactory $mailableFactory)
     {
-        $domainEvent = new UserRememberPasswordRequested(
-            new User(
-                new UserId(),
-                new UserEmail('bengor@user.com'),
-                UserPassword::fromEncoded('endoced-password', 'salt'),
-                [new UserRole('ROLE_USER')],
-                null,
-                null,
-                null,
-                null,
-                new UserToken()
-            )
+        $user = new User(
+            new UserId(),
+            new UserEmail('bengor@user.com'),
+            UserPassword::fromEncoded('endoced-password', 'salt'),
+            [new UserRole('ROLE_USER')]
         );
+        $user->rememberPassword();
+
+        $domainEvent = new UserRememberPasswordRequested($user);
         $mailable = new UserMailable(
             new UserEmail('benatespina@gmail.com'),
             new UserEmail('bengor@user.com'),
