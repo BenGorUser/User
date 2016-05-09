@@ -13,12 +13,12 @@
 namespace BenGorUser\User\Infrastructure\Application\Service;
 
 /**
- * Command bus class.
+ * User command bus class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-interface CommandBus
+interface UserCommandBus
 {
     /**
      * Executes the given command and optionally returns a value.
