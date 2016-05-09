@@ -17,6 +17,7 @@ use BenGorUser\User\Domain\Model\UserGuest;
 use BenGorUser\User\Domain\Model\UserGuestId;
 use BenGorUser\User\Domain\Model\UserGuestRepository;
 use BenGorUser\User\Domain\Model\UserToken;
+use BenGorUser\User\Infrastructure\Domain\Model\UserEventBus;
 
 /**
  * In memory user guest repository class.
@@ -33,11 +34,21 @@ final class InMemoryUserGuestRepository implements UserGuestRepository
     private $guestUsers;
 
     /**
-     * Constructor.
+     * The user event bus.
+     *
+     * @var UserEventBus
      */
-    public function __construct()
+    private $eventBus;
+
+    /**
+     * Constructor.
+     *
+     * @param UserEventBus $anEventBus The user event bus
+     */
+    public function __construct(UserEventBus $anEventBus)
     {
         $this->guestUsers = [];
+        $this->eventBus = $anEventBus;
     }
 
     /**
@@ -80,6 +91,10 @@ final class InMemoryUserGuestRepository implements UserGuestRepository
     public function persist(UserGuest $aUserGuest)
     {
         $this->guestUsers[$aUserGuest->id()->id()] = $aUserGuest;
+
+        foreach ($aUserGuest->events() as $event) {
+            $this->eventBus->handle($event);
+        }
     }
 
     /**
@@ -88,6 +103,10 @@ final class InMemoryUserGuestRepository implements UserGuestRepository
     public function remove(UserGuest $aUserGuest)
     {
         unset($this->guestUsers[$aUserGuest->id()->id()]);
+
+        foreach ($aUserGuest->events() as $event) {
+            $this->eventBus->handle($event);
+        }
     }
 
     /**

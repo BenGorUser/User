@@ -17,6 +17,7 @@ use BenGorUser\User\Domain\Model\UserEmail;
 use BenGorUser\User\Domain\Model\UserId;
 use BenGorUser\User\Domain\Model\UserRepository;
 use BenGorUser\User\Domain\Model\UserToken;
+use BenGorUser\User\Infrastructure\Domain\Model\UserEventBus;
 
 /**
  * In memory user repository class.
@@ -34,11 +35,21 @@ final class InMemoryUserRepository implements UserRepository
     private $users;
 
     /**
-     * Constructor.
+     * The user event bus.
+     *
+     * @var UserEventBus
      */
-    public function __construct()
+    private $eventBus;
+
+    /**
+     * Constructor.
+     *
+     * @param UserEventBus $anEventBus The user event bus
+     */
+    public function __construct(UserEventBus $anEventBus)
     {
         $this->users = [];
+        $this->eventBus = $anEventBus;
     }
 
     /**
@@ -93,6 +104,10 @@ final class InMemoryUserRepository implements UserRepository
     public function persist(User $aUser)
     {
         $this->users[$aUser->id()->id()] = $aUser;
+
+        foreach ($aUser->events() as $event) {
+            $this->eventBus->handle($event);
+        }
     }
 
     /**
@@ -101,6 +116,10 @@ final class InMemoryUserRepository implements UserRepository
     public function remove(User $aUser)
     {
         unset($this->users[$aUser->id()->id()]);
+
+        foreach ($aUser->events() as $event) {
+            $this->eventBus->handle($event);
+        }
     }
 
     /**
