@@ -10,7 +10,7 @@
  * file that was distributed with this source code.
  */
 
-namespace BenGorUser\User\Infrastructure\Security\Test;
+namespace BenGorUser\User\Infrastructure\Security;
 
 use BenGorUser\User\Domain\Model\UserPassword;
 use BenGorUser\User\Domain\Model\UserPasswordEncoder;

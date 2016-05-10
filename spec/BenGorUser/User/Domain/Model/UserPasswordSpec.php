@@ -14,7 +14,7 @@ namespace spec\BenGorUser\User\Domain\Model;
 
 use BenGorUser\User\Domain\Model\UserPassword;
 use BenGorUser\User\Domain\Model\UserPasswordEncoder;
-use BenGorUser\User\Infrastructure\Security\Test\DummyUserPasswordEncoder;
+use BenGorUser\User\Infrastructure\Security\DummyUserPasswordEncoder;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 

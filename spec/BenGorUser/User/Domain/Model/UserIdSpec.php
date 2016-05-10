@@ -12,6 +12,7 @@
 
 namespace spec\BenGorUser\User\Domain\Model;
 
+use BenGorUser\User\Domain\Model\Exception\UserIdInvalidException;
 use BenGorUser\User\Domain\Model\UserId;
 use PhpSpec\ObjectBehavior;
 
@@ -31,6 +32,13 @@ class UserIdSpec extends ObjectBehavior
     function it_constructs_with_null_id()
     {
         $this->id()->shouldNotBe(null);
+    }
+
+    function it_constructs_with_non_scalar_id()
+    {
+        $this->beConstructedWith(['testId']);
+
+        $this->shouldThrow(UserIdInvalidException::class)->duringInstantiation(['testId']);
     }
 
     function it_constructs_with_string_id()

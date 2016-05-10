@@ -23,7 +23,7 @@ use BenGorUser\User\Domain\Model\UserId;
 use BenGorUser\User\Domain\Model\UserPassword;
 use BenGorUser\User\Domain\Model\UserRole;
 use BenGorUser\User\Domain\Model\UserToken;
-use BenGorUser\User\Infrastructure\Security\Test\DummyUserPasswordEncoder;
+use BenGorUser\User\Infrastructure\Security\DummyUserPasswordEncoder;
 use DateTimeImmutable;
 use PhpSpec\ObjectBehavior;
 

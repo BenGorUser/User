@@ -10,28 +10,29 @@
  * file that was distributed with this source code.
  */
 
-namespace BenGorUser\User\Infrastructure\Persistence\InMemory;
+namespace BenGorUser\User\Infrastructure\Persistence;
 
+use BenGorUser\User\Domain\Model\User;
 use BenGorUser\User\Domain\Model\UserEmail;
-use BenGorUser\User\Domain\Model\UserGuest;
-use BenGorUser\User\Domain\Model\UserGuestId;
-use BenGorUser\User\Domain\Model\UserGuestRepository;
+use BenGorUser\User\Domain\Model\UserId;
+use BenGorUser\User\Domain\Model\UserRepository;
 use BenGorUser\User\Domain\Model\UserToken;
 use BenGorUser\User\Infrastructure\Domain\Model\UserEventBus;
 
 /**
- * In memory user guest repository class.
+ * In memory user repository class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
+ * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-final class InMemoryUserGuestRepository implements UserGuestRepository
+final class InMemoryUserRepository implements UserRepository
 {
     /**
-     * Array which contains the guest users.
+     * Array which contains the users.
      *
      * @var array
      */
-    private $guestUsers;
+    private $users;
 
     /**
      * The user event bus.
@@ -47,26 +48,26 @@ final class InMemoryUserGuestRepository implements UserGuestRepository
      */
     public function __construct(UserEventBus $anEventBus)
     {
-        $this->guestUsers = [];
+        $this->users = [];
         $this->eventBus = $anEventBus;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function userGuestOfId(UserGuestId $anId)
+    public function userOfId(UserId $anId)
     {
-        if (isset($this->guestUsers[$anId->id()])) {
-            return $this->guestUsers[$anId->id()];
+        if (isset($this->users[$anId->id()])) {
+            return $this->users[$anId->id()];
         }
     }
 
     /**
      * {@inheritdoc}
      */
-    public function userGuestOfEmail(UserEmail $anEmail)
+    public function userOfEmail(UserEmail $anEmail)
     {
-        foreach ($this->guestUsers as $user) {
+        foreach ($this->users as $user) {
             if (true === $user->email()->equals($anEmail)) {
                 return $user;
             }
@@ -76,10 +77,10 @@ final class InMemoryUserGuestRepository implements UserGuestRepository
     /**
      * {@inheritdoc}
      */
-    public function userGuestOfInvitationToken(UserToken $anInvitationToken)
+    public function userOfConfirmationToken(UserToken $aConfirmationToken)
     {
-        foreach ($this->guestUsers as $user) {
-            if (true === $user->invitationToken()->equals($anInvitationToken)) {
+        foreach ($this->users as $user) {
+            if (true === $user->confirmationToken()->equals($aConfirmationToken)) {
                 return $user;
             }
         }
@@ -88,11 +89,23 @@ final class InMemoryUserGuestRepository implements UserGuestRepository
     /**
      * {@inheritdoc}
      */
-    public function persist(UserGuest $aUserGuest)
+    public function userOfRememberPasswordToken(UserToken $aRememberPasswordToken)
     {
-        $this->guestUsers[$aUserGuest->id()->id()] = $aUserGuest;
+        foreach ($this->users as $user) {
+            if (true === $user->rememberPasswordToken()->equals($aRememberPasswordToken)) {
+                return $user;
+            }
+        }
+    }
 
-        foreach ($aUserGuest->events() as $event) {
+    /**
+     * {@inheritdoc}
+     */
+    public function persist(User $aUser)
+    {
+        $this->users[$aUser->id()->id()] = $aUser;
+
+        foreach ($aUser->events() as $event) {
             $this->eventBus->handle($event);
         }
     }
@@ -100,11 +113,11 @@ final class InMemoryUserGuestRepository implements UserGuestRepository
     /**
      * {@inheritdoc}
      */
-    public function remove(UserGuest $aUserGuest)
+    public function remove(User $aUser)
     {
-        unset($this->guestUsers[$aUserGuest->id()->id()]);
+        unset($this->users[$aUser->id()->id()]);
 
-        foreach ($aUserGuest->events() as $event) {
+        foreach ($aUser->events() as $event) {
             $this->eventBus->handle($event);
         }
     }
@@ -114,7 +127,7 @@ final class InMemoryUserGuestRepository implements UserGuestRepository
      */
     public function size()
     {
-        return count($this->guestUsers);
+        return count($this->users);
     }
 
     /**
@@ -122,6 +135,6 @@ final class InMemoryUserGuestRepository implements UserGuestRepository
      */
     public function nextIdentity()
     {
-        return new UserGuestId();
+        return new UserId();
     }
 }

@@ -10,7 +10,7 @@
  * file that was distributed with this source code.
  */
 
-namespace BenGorUser\User\Infrastructure\Persistence\Sql;
+namespace BenGorUser\User\Infrastructure\Persistence;
 
 use BenGorUser\User\Domain\Model\User;
 use BenGorUser\User\Domain\Model\UserEmail;

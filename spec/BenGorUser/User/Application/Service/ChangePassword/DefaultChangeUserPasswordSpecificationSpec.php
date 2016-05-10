@@ -22,7 +22,7 @@ use BenGorUser\User\Domain\Model\UserId;
 use BenGorUser\User\Domain\Model\UserPassword;
 use BenGorUser\User\Domain\Model\UserPasswordEncoder;
 use BenGorUser\User\Domain\Model\UserRepository;
-use BenGorUser\User\Infrastructure\Security\Test\DummyUserPasswordEncoder;
+use BenGorUser\User\Infrastructure\Security\DummyUserPasswordEncoder;
 use PhpSpec\ObjectBehavior;
 
 /**

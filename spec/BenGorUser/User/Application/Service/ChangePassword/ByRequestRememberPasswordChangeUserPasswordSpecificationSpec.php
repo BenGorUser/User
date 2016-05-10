@@ -12,7 +12,7 @@
 
 namespace spec\BenGorUser\User\Application\Service\ChangePassword;
 
-use BenGorUser\User\Application\Service\ChangePassword\ByCommandRememberPasswordChangeUserPasswordSpecification;
+use BenGorUser\User\Application\Service\ChangePassword\ByRequestRememberPasswordChangeUserPasswordSpecification;
 use BenGorUser\User\Application\Service\ChangePassword\ChangeUserPasswordCommand;
 use BenGorUser\User\Application\Service\ChangePassword\ChangeUserPasswordSpecification;
 use BenGorUser\User\Domain\Model\Exception\UserDoesNotExistException;
@@ -35,7 +35,7 @@ class ByRequestRememberPasswordChangeUserPasswordSpecificationSpec extends Objec
 
     function it_is_initializable()
     {
-        $this->shouldHaveType(ByCommandRememberPasswordChangeUserPasswordSpecification::class);
+        $this->shouldHaveType(ByRequestRememberPasswordChangeUserPasswordSpecification::class);
     }
 
     function it_implements_specification_change_user_password()

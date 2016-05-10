@@ -12,6 +12,7 @@
 
 namespace BenGorUser\User\Domain\Model;
 
+use BenGorUser\User\Domain\Model\Exception\UserIdInvalidException;
 use Ramsey\Uuid\Uuid;
 
 /**
@@ -33,9 +34,14 @@ final class UserId
      * Constructor.
      *
      * @param string|int|null $anId The id in a primitive type
+     *
+     * @throws UserIdInvalidException when the id is not valid
      */
     public function __construct($anId = null)
     {
+        if ($anId !== null && !is_scalar($anId)) {
+            throw new UserIdInvalidException();
+        }
         $this->id = null === $anId ? Uuid::uuid4()->toString() : $anId;
     }
 
