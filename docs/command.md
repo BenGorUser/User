@@ -1,4 +1,4 @@
-# Use cases
+# Commands
 
 ## Sign up
 #### Default

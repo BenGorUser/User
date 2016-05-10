@@ -5,7 +5,7 @@ extendable to allow custom use cases. Also multiple value object have been creat
  
 ##User
  
-Common user extend it to add custom properties and use cases.
+Common user, extend it to add custom properties and use cases.
 
 ##UserGuest
 

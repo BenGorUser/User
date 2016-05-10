@@ -18,28 +18,37 @@ $encoder = new YourUserPasswordEncoder();
 
 > You may want to read more about [repositories](repositories.md) and [encoders](encoders.md)
 
-## Using services
-This library has a number of use cases that are ready to use. Everything has been abstracted to be as easy as calling 
-a service containing the use case you need. Just create an instance of the service you want 
-to use and call `execute()` with your request. All services have the own related request, for example 
-`EnableUserService` has its own `EnableUserRequest` and so on.
+## Running commands
 
-> All application services and related requests are located under `src/Application/Service` folder
+BenGorUser relies in a command bus to run use cases against the domain. This library exposes an interface and there are
+already some bridges implemented for some of the most used command buses in the PHP community.
 
-In order to sign up a user for example just do the following:
+To make it work just select the command bus the that fits you better:
+
+* [SimpleBusBridge][1]: `composer require bengoruser/simple-bus-bridge` 
+* [TacticianBridge][2]: `composer require bengoruser/tactician-bridge`
+    
+> You can write your own bridge for your favorite command bus, check [command_bus](command_bus.md) to learn more.
+    
+Once you have installed the bridge just create an instance of the command bus that will be later used to handle commands.
+
+> Check [SimpleBusBridge getting started docs][3] or [TacticianBridge getting started docs][3] to know how to create a
+command bus instance
+
+To run a command just do the following:
 
 ```php
-// Example of $repository and $encoder instantiation above 
-
-$service = new SignUpUserService($repository, $encoder);
-$service->execute(new SignUpUserRequest($email, $plainPassword));
+$commandBus->handle(new LogInUserCommand('test@bengoruser.con', '123456'));
 ```
 
-> Plenty of use cases are available and more detailed info is available at [use cases](use_cases.md) documentation
+> Plenty of commands are available and more detailed info is available at [command](command.md) documentation
 file
 
 ##Subscribing to events
-**Important:** In order to receive registration confirmation mail and remember password mail you need to subscribe to
+
+**Important:** DomainEventPubliser was removed in v0.6.0, new docs to come. 
+
+In order to receive registration confirmation mail and remember password mail you need to subscribe to
 the [domain events](events.md) triggered by the model. `DomainEventPublisher` triggers the subscribers based on domain 
 events. To subscribe to those events just do the following:
 
@@ -50,3 +59,8 @@ DomainEventPublisher::instance()->subscribe(
 ```
  
 > Some subscribers have been already implemented. For more info read about [events and subscribers](events.md)
+
+[1]: https://github.com/BenGorUser/SimpleBusBridge
+[2]: https://github.com/BenGorUser/TacticianBridge
+[3]: https://github.com/BenGorUser/SimpleBusBridge
+[4]: https://github.com/BenGorUser/TacticianBridge
