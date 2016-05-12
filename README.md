@@ -2,11 +2,11 @@
 > Lightweight user PHP library developed using Domain-Driven Design
 
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/8e36cc04-117a-4448-9cf7-1bedadfbbc59/mini.png)](https://insight.sensiolabs.com/projects/8e36cc04-117a-4448-9cf7-1bedadfbbc59)
-[![Build Status](https://travis-ci.org/BenGor/User.svg?branch=master)](https://travis-ci.org/BenGor/User)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/BenGor/User/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/BenGor/User/?branch=master)
-[![Total Downloads](https://poser.pugx.org/bengor/user/downloads)](https://packagist.org/packages/bengor/user)
-[![Latest Stable Version](https://poser.pugx.org/bengor/user/v/stable.svg)](https://packagist.org/packages/bengor/user)
-[![Latest Unstable Version](https://poser.pugx.org/bengor/user/v/unstable.svg)](https://packagist.org/packages/bengor/user)
+[![Build Status](https://travis-ci.org/BenGorUser/User.svg?branch=master)](https://travis-ci.org/BenGorUser/User)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/BenGorUser/User/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/BenGorUser/User/?branch=master)
+[![Total Downloads](https://poser.pugx.org/bengor-user/user/downloads)](https://packagist.org/packages/bengor-user/user)
+[![Latest Stable Version](https://poser.pugx.org/bengor-user/user/v/stable.svg)](https://packagist.org/packages/bengor-user/user)
+[![Latest Unstable Version](https://poser.pugx.org/bengor-user/user/v/unstable.svg)](https://packagist.org/packages/bengor-user/user)
 
 BenGorUser is **lightweight, flexible and easy to use** user management library. Using **Domain-Driven Design**
 this library offers a well tested and documented codebase with many common use cases already implemented, such as:
@@ -27,7 +27,7 @@ PHP >= 5.5
 ##Installation
 The easiest way to install this component is using [Composer][6]
 ```bash
-$ composer require bengor/user
+$ composer require bengor-user/user
 ```
 
 ##Documentation
@@ -66,7 +66,7 @@ This library is created by:
 **@gorkalaucirica** - [gorka.lauzirika@gmail.com](mailto:gorka.lauzirika@gmail.com)
 
 ##Licensing Options
-[![License](https://poser.pugx.org/bengor/user/license.svg)](https://github.com/BenGor/User/blob/master/LICENSE)
+[![License](https://poser.pugx.org/bengor-user/user/license.svg)](https://github.com/BenGorUser/User/blob/master/LICENSE)
 
 [1]: http://www.phpspec.net/
 [2]: http://symfony.com/doc/current/contributing/code/index.html

@@ -1,5 +1,5 @@
 {
-    "name": "bengor/user",
+    "name": "bengor-user/user",
     "description": "Lightweight user library developed using Domain-Driven Design",
     "keywords": ["user", "component", "ddd"],
     "license": "MIT",
