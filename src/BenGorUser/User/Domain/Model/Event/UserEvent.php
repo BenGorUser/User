@@ -12,8 +12,6 @@
 
 namespace BenGorUser\User\Domain\Model\Event;
 
-use BenGorUser\User\Domain\Model\User;
-
 /**
  * User event base domain event class.
  *
