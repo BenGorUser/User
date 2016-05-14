@@ -12,21 +12,21 @@
 
 namespace spec\BenGorUser\User\Application\Service\SignUp;
 
-use BenGorUser\User\Application\Service\SignUp\SignUpUserCommand;
+use BenGorUser\User\Application\Service\SignUp\WithConfirmationSignUpUserCommand;
 use PhpSpec\ObjectBehavior;
 
 /**
- * Spec file of SignUpUserCommand class.
+ * Spec file of WithConfirmationSignUpUserCommand class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-class SignUpUserCommandSpec extends ObjectBehavior
+class WithConfirmationSignUpUserCommandSpec extends ObjectBehavior
 {
     function it_creates_a_command()
     {
         $this->beConstructedWith('user@user.net', 'plainPassword', ['ROLE_USER', 'ROLE_ADMIN']);
-        $this->shouldHaveType(SignUpUserCommand::class);
+        $this->shouldHaveType(WithConfirmationSignUpUserCommand::class);
 
         $this->email()->shouldReturn('user@user.net');
         $this->password()->shouldReturn('plainPassword');

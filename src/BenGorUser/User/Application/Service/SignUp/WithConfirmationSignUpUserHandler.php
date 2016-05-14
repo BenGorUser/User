@@ -22,12 +22,12 @@ use BenGorUser\User\Domain\Model\UserRepository;
 use BenGorUser\User\Domain\Model\UserRole;
 
 /**
- * Sign up user user command handler class.
+ * With confirmation sign up user user command handler class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-class SignUpUserHandler
+class WithConfirmationSignUpUserHandler
 {
     /**
      * The user data transformer.
@@ -80,13 +80,13 @@ class SignUpUserHandler
     /**
      * Handles the given command.
      *
-     * @param SignUpUserCommand $aCommand The command
+     * @param WithConfirmationSignUpUserCommand $aCommand The command
      *
      * @throws UserAlreadyExistException when the user alreay exists
      *
      * @return mixed
      */
-    public function __invoke(SignUpUserCommand $aCommand)
+    public function __invoke(WithConfirmationSignUpUserCommand $aCommand)
     {
         $email = new UserEmail($aCommand->email());
 
@@ -104,7 +104,6 @@ class SignUpUserHandler
             UserPassword::fromPlain($aCommand->password(), $this->encoder),
             $userRoles
         );
-        $user->enableAccount();
 
         $this->repository->persist($user);
         $this->dataTransformer->write($user);

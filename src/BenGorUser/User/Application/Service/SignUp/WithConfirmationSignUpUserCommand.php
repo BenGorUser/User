@@ -13,12 +13,12 @@
 namespace BenGorUser\User\Application\Service\SignUp;
 
 /**
- * Sign up user command class.
+ * With confirmation sign up user command class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-class SignUpUserCommand
+class WithConfirmationSignUpUserCommand
 {
     /**
      * The user email.

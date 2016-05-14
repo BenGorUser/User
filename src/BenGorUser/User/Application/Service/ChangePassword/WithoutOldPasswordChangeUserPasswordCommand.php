@@ -13,19 +13,19 @@
 namespace BenGorUser\User\Application\Service\ChangePassword;
 
 /**
- * Change user password command class.
+ * Without old password change user password command class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-class ChangeUserPasswordCommand
+class WithoutOldPasswordChangeUserPasswordCommand
 {
     /**
-     * The user id.
+     * The user email.
      *
      * @var string
      */
-    private $id;
+    private $email;
 
     /**
      * The new plain password.
@@ -35,34 +35,25 @@ class ChangeUserPasswordCommand
     private $newPlainPassword;
 
     /**
-     * The old plain password.
-     *
-     * @var string
-     */
-    private $oldPlainPassword;
-
-    /**
      * Constructor.
      *
-     * @param string $anId               The user id
-     * @param string $aNewPlainPassword  The new plain password
-     * @param string $anOldPlainPassword The old plain password
+     * @param string $anEmail           The user email
+     * @param string $aNewPlainPassword The new plain password
      */
-    public function __construct($anId, $aNewPlainPassword, $anOldPlainPassword)
+    public function __construct($anEmail, $aNewPlainPassword)
     {
-        $this->id = $anId;
+        $this->email = $anEmail;
         $this->newPlainPassword = $aNewPlainPassword;
-        $this->oldPlainPassword = $anOldPlainPassword;
     }
 
     /**
-     * Gets the user id.
+     * Gets the user email.
      *
      * @return string
      */
-    public function id()
+    public function email()
     {
-        return $this->id;
+        return $this->email;
     }
 
     /**
@@ -73,15 +64,5 @@ class ChangeUserPasswordCommand
     public function newPlainPassword()
     {
         return $this->newPlainPassword;
-    }
-
-    /**
-     * Gets the old plain password.
-     *
-     * @return string
-     */
-    public function oldPlainPassword()
-    {
-        return $this->oldPlainPassword;
     }
 }

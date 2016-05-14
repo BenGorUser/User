@@ -12,24 +12,23 @@
 
 namespace spec\BenGorUser\User\Application\Service\ChangePassword;
 
-use BenGorUser\User\Application\Service\ChangePassword\ChangeUserPasswordCommand;
+use BenGorUser\User\Application\Service\ChangePassword\WithoutOldPasswordChangeUserPasswordCommand;
 use PhpSpec\ObjectBehavior;
 
 /**
- * Spec file of ChangeUserPasswordCommand class.
+ * Spec file of WithoutOldPasswordChangeUserPasswordCommand class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-class ChangeUserPasswordCommandSpec extends ObjectBehavior
+class WithoutOldPasswordChangeUserPasswordCommandSpec extends ObjectBehavior
 {
     function it_creates_a_command()
     {
-        $this->beConstructedWith('id', 'newPassword', 'oldPassword');
-        $this->shouldHaveType(ChangeUserPasswordCommand::class);
+        $this->beConstructedWith('bengor@user.com', 'newPassword');
+        $this->shouldHaveType(WithoutOldPasswordChangeUserPasswordCommand::class);
 
-        $this->id()->shouldReturn('id');
+        $this->email()->shouldReturn('bengor@user.com');
         $this->newPlainPassword()->shouldReturn('newPassword');
-        $this->oldPlainPassword()->shouldReturn('oldPassword');
     }
 }

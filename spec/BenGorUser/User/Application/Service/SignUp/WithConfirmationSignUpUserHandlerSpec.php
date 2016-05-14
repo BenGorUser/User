@@ -13,8 +13,8 @@
 namespace spec\BenGorUser\User\Application\Service\SignUp;
 
 use BenGorUser\User\Application\DataTransformer\UserDataTransformer;
-use BenGorUser\User\Application\Service\SignUp\SignUpUserCommand;
-use BenGorUser\User\Application\Service\SignUp\SignUpUserHandler;
+use BenGorUser\User\Application\Service\SignUp\WithConfirmationSignUpUserCommand;
+use BenGorUser\User\Application\Service\SignUp\WithConfirmationSignUpUserHandler;
 use BenGorUser\User\Domain\Model\Exception\UserAlreadyExistException;
 use BenGorUser\User\Domain\Model\User;
 use BenGorUser\User\Domain\Model\UserEmail;
@@ -28,12 +28,12 @@ use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
 /**
- * Spec file of SignUpUserHandler class.
+ * Spec file of WithConfirmationSignUpUserHandler class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-class SignUpUserHandlerSpec extends ObjectBehavior
+class WithConfirmationSignUpUserHandlerSpec extends ObjectBehavior
 {
     function let(UserRepository $repository, UserFactory $factory, UserDataTransformer $dataTransformer)
     {
@@ -47,11 +47,11 @@ class SignUpUserHandlerSpec extends ObjectBehavior
 
     function it_is_initializable()
     {
-        $this->shouldHaveType(SignUpUserHandler::class);
+        $this->shouldHaveType(WithConfirmationSignUpUserHandler::class);
     }
 
     function it_signs_the_user_up(
-        SignUpUserCommand $command,
+        WithConfirmationSignUpUserCommand $command,
         UserRepository $repository,
         UserFactory $factory,
         UserDataTransformer $dataTransformer,
@@ -75,7 +75,6 @@ class SignUpUserHandlerSpec extends ObjectBehavior
         $factory->register(
             $id, $email, Argument::type(UserPassword::class), $roles
         )->shouldBeCalled()->willReturn($user);
-        $user->enableAccount()->shouldBeCalled();
         $repository->persist($user)->shouldBeCalled();
         $dataTransformer->write($user)->shouldBeCalled();
         $dataTransformer->read()->shouldBeCalled()->willReturn([
@@ -94,7 +93,7 @@ class SignUpUserHandlerSpec extends ObjectBehavior
     }
 
     function it_does_not_sign_up_if_user_exists(
-        SignUpUserCommand $command,
+        WithConfirmationSignUpUserCommand $command,
         UserRepository $repository,
         User $user
     ) {

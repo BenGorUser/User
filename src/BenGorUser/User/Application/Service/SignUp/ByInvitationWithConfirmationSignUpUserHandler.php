@@ -13,21 +13,22 @@
 namespace BenGorUser\User\Application\Service\SignUp;
 
 use BenGorUser\User\Application\DataTransformer\UserDataTransformer;
-use BenGorUser\User\Domain\Model\Exception\UserAlreadyExistException;
-use BenGorUser\User\Domain\Model\UserEmail;
+use BenGorUser\User\Domain\Model\Exception\UserGuestDoesNotExistException;
 use BenGorUser\User\Domain\Model\UserFactory;
+use BenGorUser\User\Domain\Model\UserGuestRepository;
 use BenGorUser\User\Domain\Model\UserPassword;
 use BenGorUser\User\Domain\Model\UserPasswordEncoder;
 use BenGorUser\User\Domain\Model\UserRepository;
 use BenGorUser\User\Domain\Model\UserRole;
+use BenGorUser\User\Domain\Model\UserToken;
 
 /**
- * Sign up user user command handler class.
+ * By invitation with confirmation sign up user user command handler class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-class SignUpUserHandler
+class ByInvitationWithConfirmationSignUpUserHandler
 {
     /**
      * The user data transformer.
@@ -55,58 +56,70 @@ class SignUpUserHandler
      *
      * @var UserRepository
      */
-    private $repository;
+    private $userRepository;
+
+    /**
+     * The user guest repository.
+     *
+     * @var UserGuestRepository
+     */
+    private $userGuestRepository;
 
     /**
      * Constructor.
      *
-     * @param UserRepository      $aRepository      The user repository
-     * @param UserPasswordEncoder $anEncoder        The password encoder
-     * @param UserFactory         $aFactory         The user factory
-     * @param UserDataTransformer $aDataTransformer The user data transformer
+     * @param UserRepository      $aUserRepository      The user repository
+     * @param UserPasswordEncoder $anEncoder            The password encoder
+     * @param UserFactory         $aFactory             The user factory
+     * @param UserDataTransformer $aDataTransformer     The user data transformer
+     * @param UserGuestRepository $aUserGuestRepository The user guest repository
      */
     public function __construct(
-        UserRepository $aRepository,
+        UserRepository $aUserRepository,
         UserPasswordEncoder $anEncoder,
         UserFactory $aFactory,
-        UserDataTransformer $aDataTransformer
+        UserDataTransformer $aDataTransformer,
+        UserGuestRepository $aUserGuestRepository
     ) {
-        $this->repository = $aRepository;
+        $this->userRepository = $aUserRepository;
         $this->encoder = $anEncoder;
         $this->factory = $aFactory;
         $this->dataTransformer = $aDataTransformer;
+        $this->userGuestRepository = $aUserGuestRepository;
     }
 
     /**
      * Handles the given command.
      *
-     * @param SignUpUserCommand $aCommand The command
+     * @param ByInvitationWithConfirmationSignUpUserCommand $aCommand The command
      *
-     * @throws UserAlreadyExistException when the user alreay exists
+     * @throws UserGuestDoesNotExistException when the user guest does not exist
      *
      * @return mixed
      */
-    public function __invoke(SignUpUserCommand $aCommand)
+    public function __invoke(ByInvitationWithConfirmationSignUpUserCommand $aCommand)
     {
-        $email = new UserEmail($aCommand->email());
-
-        if (null !== $this->repository->userOfEmail($email)) {
-            throw new UserAlreadyExistException();
+        $userGuest = $this->userGuestRepository->userGuestOfInvitationToken(
+            new UserToken($aCommand->invitationToken())
+        );
+        if (null === $userGuest) {
+            throw new UserGuestDoesNotExistException();
         }
+        $email = $userGuest->email();
+        $this->userGuestRepository->remove($userGuest);
 
         $userRoles = array_map(function ($role) {
             return new UserRole($role);
         }, $aCommand->roles());
 
         $user = $this->factory->register(
-            $this->repository->nextIdentity(),
+            $this->userRepository->nextIdentity(),
             $email,
             UserPassword::fromPlain($aCommand->password(), $this->encoder),
             $userRoles
         );
-        $user->enableAccount();
 
-        $this->repository->persist($user);
+        $this->userRepository->persist($user);
         $this->dataTransformer->write($user);
 
         return $this->dataTransformer->read();

@@ -12,24 +12,23 @@
 
 namespace spec\BenGorUser\User\Application\Service\ChangePassword;
 
-use BenGorUser\User\Application\Service\ChangePassword\ChangeUserPasswordCommand;
+use BenGorUser\User\Application\Service\ChangePassword\ByRequestRememberPasswordChangeUserPasswordCommand;
 use PhpSpec\ObjectBehavior;
 
 /**
- * Spec file of ChangeUserPasswordCommand class.
+ * Spec file of ByRequestRememberPasswordChangeUserPasswordCommand class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-class ChangeUserPasswordCommandSpec extends ObjectBehavior
+class ByRequestRememberPasswordChangeUserPasswordCommandSpec extends ObjectBehavior
 {
     function it_creates_a_command()
     {
-        $this->beConstructedWith('id', 'newPassword', 'oldPassword');
-        $this->shouldHaveType(ChangeUserPasswordCommand::class);
+        $this->beConstructedWith('newPassword', 'remember-password-token');
+        $this->shouldHaveType(ByRequestRememberPasswordChangeUserPasswordCommand::class);
 
-        $this->id()->shouldReturn('id');
         $this->newPlainPassword()->shouldReturn('newPassword');
-        $this->oldPlainPassword()->shouldReturn('oldPassword');
+        $this->rememberPasswordToken()->shouldReturn('remember-password-token');
     }
 }

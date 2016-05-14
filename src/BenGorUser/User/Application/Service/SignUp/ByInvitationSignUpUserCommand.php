@@ -13,19 +13,19 @@
 namespace BenGorUser\User\Application\Service\SignUp;
 
 /**
- * Sign up user command class.
+ * By invitation sign up user command class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-class SignUpUserCommand
+class ByInvitationSignUpUserCommand
 {
     /**
-     * The user email.
+     * The invitation token.
      *
      * @var string
      */
-    private $email;
+    private $invitationToken;
 
     /**
      * The plain password.
@@ -44,25 +44,25 @@ class SignUpUserCommand
     /**
      * Constructor.
      *
-     * @param string $anEmail        The email
-     * @param string $aPlainPassword The plain password
-     * @param array  $roles          Array which contains the roles
+     * @param string $anInvitationToken The invitation token
+     * @param string $aPlainPassword    The plain password
+     * @param array  $roles             Array which contains the roles
      */
-    public function __construct($anEmail, $aPlainPassword, array $roles)
+    public function __construct($anInvitationToken, $aPlainPassword, array $roles)
     {
-        $this->email = $anEmail;
+        $this->invitationToken = $anInvitationToken;
         $this->plainPassword = $aPlainPassword;
         $this->roles = $roles;
     }
 
     /**
-     * Gets the email.
+     * Gets the invitation token.
      *
      * @return string
      */
-    public function email()
+    public function invitationToken()
     {
-        return $this->email;
+        return $this->invitationToken;
     }
 
     /**

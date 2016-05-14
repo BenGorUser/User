@@ -13,32 +13,32 @@
 namespace BenGorUser\User\Application\Service\ChangePassword;
 
 use BenGorUser\User\Domain\Model\Exception\UserDoesNotExistException;
-use BenGorUser\User\Domain\Model\Exception\UserPasswordInvalidException;
-use BenGorUser\User\Domain\Model\User;
-use BenGorUser\User\Domain\Model\UserId;
+use BenGorUser\User\Domain\Model\UserEmail;
+use BenGorUser\User\Domain\Model\UserPassword;
 use BenGorUser\User\Domain\Model\UserPasswordEncoder;
 use BenGorUser\User\Domain\Model\UserRepository;
 
 /**
- * Specification default change user password command handler.
+ * Without old password change user password command handler class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
+ * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-class DefaultChangeUserPasswordSpecification implements ChangeUserPasswordSpecification
+class WithoutOldPasswordChangeUserPasswordHandler
 {
-    /**
-     * The user repository.
-     *
-     * @var UserRepository
-     */
-    private $repository;
-
     /**
      * The user password encoder.
      *
      * @var UserPasswordEncoder
      */
     private $encoder;
+
+    /**
+     * The user repository.
+     *
+     * @var UserRepository
+     */
+    private $repository;
 
     /**
      * Constructor.
@@ -53,18 +53,20 @@ class DefaultChangeUserPasswordSpecification implements ChangeUserPasswordSpecif
     }
 
     /**
-     * {@inheritdoc}
+     * Handles the given command.
+     *
+     * @param WithoutOldPasswordChangeUserPasswordCommand $aCommand The command
+     *
+     * @throws UserDoesNotExistException when the user does not exist
      */
-    public function user(ChangeUserPasswordCommand $aCommand)
+    public function __invoke(WithoutOldPasswordChangeUserPasswordCommand $aCommand)
     {
-        $user = $this->repository->userOfId(new UserId($aCommand->id()));
+        $user = $this->repository->userOfEmail(new UserEmail($aCommand->email()));
         if (null === $user) {
             throw new UserDoesNotExistException();
         }
-        if (false === $user->password()->equals($aCommand->oldPlainPassword(), $this->encoder)) {
-            throw new UserPasswordInvalidException();
-        }
+        $user->changePassword(UserPassword::fromPlain($aCommand->newPlainPassword(), $this->encoder));
 
-        return $user;
+        $this->repository->persist($user);
     }
 }

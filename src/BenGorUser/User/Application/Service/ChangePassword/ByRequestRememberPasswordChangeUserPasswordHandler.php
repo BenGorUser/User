@@ -13,19 +13,18 @@
 namespace BenGorUser\User\Application\Service\ChangePassword;
 
 use BenGorUser\User\Domain\Model\Exception\UserDoesNotExistException;
-use BenGorUser\User\Domain\Model\Exception\UserPasswordInvalidException;
-use BenGorUser\User\Domain\Model\UserId;
 use BenGorUser\User\Domain\Model\UserPassword;
 use BenGorUser\User\Domain\Model\UserPasswordEncoder;
 use BenGorUser\User\Domain\Model\UserRepository;
+use BenGorUser\User\Domain\Model\UserToken;
 
 /**
- * Change user password command handler class.
+ * By request remember password change user password command handler class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-class ChangeUserPasswordHandler
+class ByRequestRememberPasswordChangeUserPasswordHandler
 {
     /**
      * The user password encoder.
@@ -56,19 +55,15 @@ class ChangeUserPasswordHandler
     /**
      * Handles the given command.
      *
-     * @param ChangeUserPasswordCommand $aCommand The command
+     * @param ByRequestRememberPasswordChangeUserPasswordCommand $aCommand The command
      *
-     * @throws UserDoesNotExistException    when the user does not exist
-     * @throws UserPasswordInvalidException when the user password is invalid
+     * @throws UserDoesNotExistException when the user does not exist
      */
-    public function __invoke(ChangeUserPasswordCommand $aCommand)
+    public function __invoke(ByRequestRememberPasswordChangeUserPasswordCommand $aCommand)
     {
-        $user = $this->repository->userOfId(new UserId($aCommand->id()));
+        $user = $this->repository->userOfRememberPasswordToken(new UserToken($aCommand->rememberPasswordToken()));
         if (null === $user) {
             throw new UserDoesNotExistException();
-        }
-        if (false === $user->password()->equals($aCommand->oldPlainPassword(), $this->encoder)) {
-            throw new UserPasswordInvalidException();
         }
         $user->changePassword(UserPassword::fromPlain($aCommand->newPlainPassword(), $this->encoder));
 

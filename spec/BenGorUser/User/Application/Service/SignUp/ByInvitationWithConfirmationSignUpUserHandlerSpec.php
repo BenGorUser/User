@@ -13,56 +13,70 @@
 namespace spec\BenGorUser\User\Application\Service\SignUp;
 
 use BenGorUser\User\Application\DataTransformer\UserDataTransformer;
-use BenGorUser\User\Application\Service\SignUp\SignUpUserCommand;
-use BenGorUser\User\Application\Service\SignUp\SignUpUserHandler;
-use BenGorUser\User\Domain\Model\Exception\UserAlreadyExistException;
+use BenGorUser\User\Application\Service\SignUp\ByInvitationWithConfirmationSignUpUserCommand;
+use BenGorUser\User\Application\Service\SignUp\ByInvitationWithConfirmationSignUpUserHandler;
+use BenGorUser\User\Domain\Model\Exception\UserGuestDoesNotExistException;
 use BenGorUser\User\Domain\Model\User;
 use BenGorUser\User\Domain\Model\UserEmail;
 use BenGorUser\User\Domain\Model\UserFactory;
+use BenGorUser\User\Domain\Model\UserGuest;
+use BenGorUser\User\Domain\Model\UserGuestRepository;
 use BenGorUser\User\Domain\Model\UserId;
 use BenGorUser\User\Domain\Model\UserPassword;
 use BenGorUser\User\Domain\Model\UserRepository;
 use BenGorUser\User\Domain\Model\UserRole;
+use BenGorUser\User\Domain\Model\UserToken;
 use BenGorUser\User\Infrastructure\Security\DummyUserPasswordEncoder;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
 /**
- * Spec file of SignUpUserHandler class.
+ * Spec file of ByInvitationWithConfirmationSignUpUserHandler class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-class SignUpUserHandlerSpec extends ObjectBehavior
+class ByInvitationWithConfirmationSignUpUserHandlerSpec extends ObjectBehavior
 {
-    function let(UserRepository $repository, UserFactory $factory, UserDataTransformer $dataTransformer)
-    {
+    function let(
+        UserRepository $repository,
+        UserFactory $factory,
+        UserDataTransformer $dataTransformer,
+        UserGuestRepository $userGuestRepository
+    ) {
         $this->beConstructedWith(
             $repository,
             new DummyUserPasswordEncoder('encoded-password'),
             $factory,
-            $dataTransformer
+            $dataTransformer,
+            $userGuestRepository
         );
     }
 
     function it_is_initializable()
     {
-        $this->shouldHaveType(SignUpUserHandler::class);
+        $this->shouldHaveType(ByInvitationWithConfirmationSignUpUserHandler::class);
     }
 
     function it_signs_the_user_up(
-        SignUpUserCommand $command,
+        ByInvitationWithConfirmationSignUpUserCommand $command,
         UserRepository $repository,
         UserFactory $factory,
         UserDataTransformer $dataTransformer,
         User $user,
         \DateTimeImmutable $createdOn,
         \DateTimeImmutable $lastLogin,
-        \DateTimeImmutable $updatedOn
+        \DateTimeImmutable $updatedOn,
+        UserGuestRepository $userGuestRepository,
+        UserGuest $userGuest
     ) {
-        $command->email()->shouldBeCalled()->willReturn('user@user.com');
+        $command->invitationToken()->shouldBeCalled()->willReturn('invitation-token');
+        $userGuestRepository->userGuestOfInvitationToken(new UserToken('invitation-token'))
+            ->shouldBeCalled()->willReturn($userGuest);
+
         $email = new UserEmail('user@user.com');
-        $repository->userOfEmail($email)->shouldBeCalled()->willReturn(null);
+        $userGuest->email()->shouldBeCalled()->willReturn($email);
+        $userGuestRepository->remove($userGuest)->shouldBeCalled();
 
         $id = new UserId('user-id');
         $repository->nextIdentity()->shouldBeCalled()->willReturn($id);
@@ -75,7 +89,6 @@ class SignUpUserHandlerSpec extends ObjectBehavior
         $factory->register(
             $id, $email, Argument::type(UserPassword::class), $roles
         )->shouldBeCalled()->willReturn($user);
-        $user->enableAccount()->shouldBeCalled();
         $repository->persist($user)->shouldBeCalled();
         $dataTransformer->write($user)->shouldBeCalled();
         $dataTransformer->read()->shouldBeCalled()->willReturn([
@@ -93,15 +106,14 @@ class SignUpUserHandlerSpec extends ObjectBehavior
         $this->__invoke($command);
     }
 
-    function it_does_not_sign_up_if_user_exists(
-        SignUpUserCommand $command,
-        UserRepository $repository,
-        User $user
+    function it_does_not_sign_up_because_user_guest_does_not_exist(
+        ByInvitationWithConfirmationSignUpUserCommand $command,
+        UserGuestRepository $userGuestRepository
     ) {
-        $command->email()->shouldBeCalled()->willReturn('user@user.com');
-        $email = new UserEmail('user@user.com');
-        $repository->userOfEmail($email)->shouldBeCalled()->willReturn($user);
+        $command->invitationToken()->shouldBeCalled()->willReturn('invitation-token');
+        $userGuestRepository->userGuestOfInvitationToken(new UserToken('invitation-token'))
+            ->shouldBeCalled()->willReturn(null);
 
-        $this->shouldThrow(UserAlreadyExistException::class)->during__invoke($command);
+        $this->shouldThrow(UserGuestDoesNotExistException::class)->during__invoke($command);
     }
 }
