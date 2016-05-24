@@ -12,6 +12,8 @@
 
 namespace BenGorUser\User\Application\Service\SignUp;
 
+use Ramsey\Uuid\Uuid;
+
 /**
  * With confirmation sign up user command class.
  *
@@ -20,6 +22,13 @@ namespace BenGorUser\User\Application\Service\SignUp;
  */
 class WithConfirmationSignUpUserCommand
 {
+    /**
+     * The user id.
+     *
+     * @var string
+     */
+    private $id;
+
     /**
      * The user email.
      *
@@ -44,15 +53,27 @@ class WithConfirmationSignUpUserCommand
     /**
      * Constructor.
      *
-     * @param string $anEmail        The email
-     * @param string $aPlainPassword The plain password
-     * @param array  $roles          Array which contains the roles
+     * @param string      $anEmail        The email
+     * @param string      $aPlainPassword The plain password
+     * @param array       $roles          Array which contains the roles
+     * @param string|null $anId           User id, it can be null
      */
-    public function __construct($anEmail, $aPlainPassword, array $roles)
+    public function __construct($anEmail, $aPlainPassword, array $roles, $anId = null)
     {
+        $this->id = null === $anId ? Uuid::uuid4()->toString() : $anId;
         $this->email = $anEmail;
         $this->plainPassword = $aPlainPassword;
         $this->roles = $roles;
+    }
+
+    /**
+     * Gets the id.
+     *
+     * @return string
+     */
+    public function id()
+    {
+        return $this->id;
     }
 
     /**

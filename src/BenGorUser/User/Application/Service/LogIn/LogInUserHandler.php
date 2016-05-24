@@ -12,7 +12,6 @@
 
 namespace BenGorUser\User\Application\Service\LogIn;
 
-use BenGorUser\User\Application\DataTransformer\UserDataTransformer;
 use BenGorUser\User\Domain\Model\Exception\UserDoesNotExistException;
 use BenGorUser\User\Domain\Model\UserEmail;
 use BenGorUser\User\Domain\Model\UserPasswordEncoder;
@@ -41,27 +40,15 @@ class LogInUserHandler
     private $encoder;
 
     /**
-     * The user data transformer.
-     *
-     * @var UserDataTransformer
-     */
-    private $dataTransformer;
-
-    /**
      * Constructor.
      *
-     * @param UserRepository      $aRepository      The user repository
-     * @param UserPasswordEncoder $anEncoder        The password encoder
-     * @param UserDataTransformer $aDataTransformer The user data transformer
+     * @param UserRepository      $aRepository The user repository
+     * @param UserPasswordEncoder $anEncoder   The password encoder
      */
-    public function __construct(
-        UserRepository $aRepository,
-        UserPasswordEncoder $anEncoder,
-        UserDataTransformer $aDataTransformer
-    ) {
+    public function __construct(UserRepository $aRepository, UserPasswordEncoder $anEncoder)
+    {
         $this->repository = $aRepository;
         $this->encoder = $anEncoder;
-        $this->dataTransformer = $aDataTransformer;
     }
 
     /**
@@ -79,12 +66,8 @@ class LogInUserHandler
         if (null === $user) {
             throw new UserDoesNotExistException();
         }
-
         $user->login($aCommand->password(), $this->encoder);
 
         $this->repository->persist($user);
-        $this->dataTransformer->write($user);
-
-        return $this->dataTransformer->read();
     }
 }

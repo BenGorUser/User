@@ -12,10 +12,10 @@
 
 namespace BenGorUser\User\Application\Service\SignUp;
 
-use BenGorUser\User\Application\DataTransformer\UserDataTransformer;
 use BenGorUser\User\Domain\Model\Exception\UserAlreadyExistException;
 use BenGorUser\User\Domain\Model\UserEmail;
 use BenGorUser\User\Domain\Model\UserFactory;
+use BenGorUser\User\Domain\Model\UserId;
 use BenGorUser\User\Domain\Model\UserPassword;
 use BenGorUser\User\Domain\Model\UserPasswordEncoder;
 use BenGorUser\User\Domain\Model\UserRepository;
@@ -29,13 +29,6 @@ use BenGorUser\User\Domain\Model\UserRole;
  */
 class SignUpUserHandler
 {
-    /**
-     * The user data transformer.
-     *
-     * @var UserDataTransformer
-     */
-    private $dataTransformer;
-
     /**
      * The user password encoder.
      *
@@ -60,21 +53,15 @@ class SignUpUserHandler
     /**
      * Constructor.
      *
-     * @param UserRepository      $aRepository      The user repository
-     * @param UserPasswordEncoder $anEncoder        The password encoder
-     * @param UserFactory         $aFactory         The user factory
-     * @param UserDataTransformer $aDataTransformer The user data transformer
+     * @param UserRepository      $aRepository The user repository
+     * @param UserPasswordEncoder $anEncoder   The password encoder
+     * @param UserFactory         $aFactory    The user factory
      */
-    public function __construct(
-        UserRepository $aRepository,
-        UserPasswordEncoder $anEncoder,
-        UserFactory $aFactory,
-        UserDataTransformer $aDataTransformer
-    ) {
+    public function __construct(UserRepository $aRepository, UserPasswordEncoder $anEncoder, UserFactory $aFactory)
+    {
         $this->repository = $aRepository;
         $this->encoder = $anEncoder;
         $this->factory = $aFactory;
-        $this->dataTransformer = $aDataTransformer;
     }
 
     /**
@@ -82,14 +69,15 @@ class SignUpUserHandler
      *
      * @param SignUpUserCommand $aCommand The command
      *
-     * @throws UserAlreadyExistException when the user alreay exists
-     *
-     * @return mixed
+     * @throws UserAlreadyExistException when the user id is already exists
      */
     public function __invoke(SignUpUserCommand $aCommand)
     {
+        $id = new UserId($aCommand->id());
+        if (null !== $this->repository->userOfId($id)) {
+            throw new UserAlreadyExistException();
+        }
         $email = new UserEmail($aCommand->email());
-
         if (null !== $this->repository->userOfEmail($email)) {
             throw new UserAlreadyExistException();
         }
@@ -99,7 +87,7 @@ class SignUpUserHandler
         }, $aCommand->roles());
 
         $user = $this->factory->register(
-            $this->repository->nextIdentity(),
+            $id,
             $email,
             UserPassword::fromPlain($aCommand->password(), $this->encoder),
             $userRoles
@@ -107,8 +95,5 @@ class SignUpUserHandler
         $user->enableAccount();
 
         $this->repository->persist($user);
-        $this->dataTransformer->write($user);
-
-        return $this->dataTransformer->read();
     }
 }

@@ -56,8 +56,8 @@ class RequestRememberPasswordHandler
         if (null === $user) {
             throw new UserDoesNotExistException();
         }
-
         $user->rememberPassword();
+
         $this->repository->persist($user);
     }
 }

@@ -12,10 +12,11 @@
 
 namespace BenGorUser\User\Application\Service\SignUp;
 
-use BenGorUser\User\Application\DataTransformer\UserDataTransformer;
+use BenGorUser\User\Domain\Model\Exception\UserAlreadyExistException;
 use BenGorUser\User\Domain\Model\Exception\UserGuestDoesNotExistException;
 use BenGorUser\User\Domain\Model\UserFactory;
 use BenGorUser\User\Domain\Model\UserGuestRepository;
+use BenGorUser\User\Domain\Model\UserId;
 use BenGorUser\User\Domain\Model\UserPassword;
 use BenGorUser\User\Domain\Model\UserPasswordEncoder;
 use BenGorUser\User\Domain\Model\UserRepository;
@@ -30,13 +31,6 @@ use BenGorUser\User\Domain\Model\UserToken;
  */
 class ByInvitationWithConfirmationSignUpUserHandler
 {
-    /**
-     * The user data transformer.
-     *
-     * @var UserDataTransformer
-     */
-    private $dataTransformer;
-
     /**
      * The user password encoder.
      *
@@ -71,20 +65,17 @@ class ByInvitationWithConfirmationSignUpUserHandler
      * @param UserRepository      $aUserRepository      The user repository
      * @param UserPasswordEncoder $anEncoder            The password encoder
      * @param UserFactory         $aFactory             The user factory
-     * @param UserDataTransformer $aDataTransformer     The user data transformer
      * @param UserGuestRepository $aUserGuestRepository The user guest repository
      */
     public function __construct(
         UserRepository $aUserRepository,
         UserPasswordEncoder $anEncoder,
         UserFactory $aFactory,
-        UserDataTransformer $aDataTransformer,
         UserGuestRepository $aUserGuestRepository
     ) {
         $this->userRepository = $aUserRepository;
         $this->encoder = $anEncoder;
         $this->factory = $aFactory;
-        $this->dataTransformer = $aDataTransformer;
         $this->userGuestRepository = $aUserGuestRepository;
     }
 
@@ -93,12 +84,15 @@ class ByInvitationWithConfirmationSignUpUserHandler
      *
      * @param ByInvitationWithConfirmationSignUpUserCommand $aCommand The command
      *
+     * @throws UserAlreadyExistException      when the user id is already exists
      * @throws UserGuestDoesNotExistException when the user guest does not exist
-     *
-     * @return mixed
      */
     public function __invoke(ByInvitationWithConfirmationSignUpUserCommand $aCommand)
     {
+        $id = new UserId($aCommand->id());
+        if (null !== $this->userRepository->userOfId($id)) {
+            throw new UserAlreadyExistException();
+        }
         $userGuest = $this->userGuestRepository->userGuestOfInvitationToken(
             new UserToken($aCommand->invitationToken())
         );
@@ -113,15 +107,12 @@ class ByInvitationWithConfirmationSignUpUserHandler
         }, $aCommand->roles());
 
         $user = $this->factory->register(
-            $this->userRepository->nextIdentity(),
+            $id,
             $email,
             UserPassword::fromPlain($aCommand->password(), $this->encoder),
             $userRoles
         );
 
         $this->userRepository->persist($user);
-        $this->dataTransformer->write($user);
-
-        return $this->dataTransformer->read();
     }
 }

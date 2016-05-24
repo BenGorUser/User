@@ -12,7 +12,6 @@
 
 namespace spec\BenGorUser\User\Application\Service\LogIn;
 
-use BenGorUser\User\Application\DataTransformer\UserDataTransformer;
 use BenGorUser\User\Application\Service\LogIn\LogInUserCommand;
 use BenGorUser\User\Application\Service\LogIn\LogInUserHandler;
 use BenGorUser\User\Domain\Model\Exception\UserDoesNotExistException;
@@ -30,13 +29,9 @@ use PhpSpec\ObjectBehavior;
  */
 class LogInUserHandlerSpec extends ObjectBehavior
 {
-    function let(UserRepository $repository, UserDataTransformer $dataTransformer)
+    function let(UserRepository $repository)
     {
-        $this->beConstructedWith(
-            $repository,
-            new DummyUserPasswordEncoder('encodedPassword'),
-            $dataTransformer
-        );
+        $this->beConstructedWith($repository, new DummyUserPasswordEncoder('encodedPassword'));
     }
 
     function it_is_initializable()
@@ -47,11 +42,7 @@ class LogInUserHandlerSpec extends ObjectBehavior
     function it_logs_the_user_in(
         LogInUserCommand $command,
         UserRepository $repository,
-        User $user,
-        UserDataTransformer $dataTransformer,
-        \DateTimeImmutable $createdOn,
-        \DateTimeImmutable $lastLogin,
-        \DateTimeImmutable $updatedOn
+        User $user
     ) {
         $encoder = new DummyUserPasswordEncoder('encodedPassword');
 
@@ -62,18 +53,6 @@ class LogInUserHandlerSpec extends ObjectBehavior
 
         $repository->userOfEmail(new UserEmail('user@user.com'))->shouldBeCalled()->willReturn($user);
         $repository->persist($user)->shouldBeCalled();
-        $dataTransformer->write($user)->shouldBeCalled();
-        $dataTransformer->read()->shouldBeCalled()->willReturn([
-            'id'                      => 'user-id',
-            'confirmation_token'      => null,
-            'created_on'              => $createdOn,
-            'email'                   => 'user@user.com',
-            'last_login'              => $lastLogin,
-            'password'                => 'encoded-password',
-            'remember_password_token' => null,
-            'roles'                   => ['ROLE_USER'],
-            'updated_on'              => $updatedOn,
-        ]);
 
         $this->__invoke($command);
     }
