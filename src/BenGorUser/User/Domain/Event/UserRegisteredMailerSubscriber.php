@@ -27,13 +27,6 @@ use BenGorUser\User\Domain\Model\UserUrlGenerator;
 class UserRegisteredMailerSubscriber implements UserEventSubscriber
 {
     /**
-     * The fully qualified user class name.
-     *
-     * @var string|null
-     */
-    private $userClass;
-
-    /**
      * The mailable factory.
      *
      * @var UserMailableFactory
@@ -68,20 +61,17 @@ class UserRegisteredMailerSubscriber implements UserEventSubscriber
      * @param UserMailableFactory $aMailableFactory The mailable factory
      * @param UserUrlGenerator    $anUrlGenerator   The url generator
      * @param string              $aRoute           The route name
-     * @param string|null         $aUserClass       The fully qualified user class name
      */
     public function __construct(
         UserMailer $aMailer,
         UserMailableFactory $aMailableFactory,
         UserUrlGenerator $anUrlGenerator,
-        $aRoute,
-        $aUserClass = null
+        $aRoute
     ) {
         $this->mailer = $aMailer;
         $this->mailableFactory = $aMailableFactory;
         $this->urlGenerator = $anUrlGenerator;
         $this->route = $aRoute;
-        $this->userClass = $aUserClass;
     }
 
     /**
@@ -89,12 +79,11 @@ class UserRegisteredMailerSubscriber implements UserEventSubscriber
      */
     public function handle(UserEvent $anEvent)
     {
-        $user = $anEvent->user();
         $url = $this->urlGenerator->generate($this->route, [
-            'confirmation-token' => $user->confirmationToken()->token(),
+            'confirmation-token' => $anEvent->confirmationToken()->token(),
         ]);
-        $mail = $this->mailableFactory->build($user->email(), [
-            'user' => $user, 'url' => $url,
+        $mail = $this->mailableFactory->build($anEvent->email(), [
+            'email' => $anEvent->email(), 'url' => $url,
         ]);
 
         $this->mailer->mail($mail);
@@ -105,10 +94,6 @@ class UserRegisteredMailerSubscriber implements UserEventSubscriber
      */
     public function isSubscribedTo(UserEvent $anEvent)
     {
-        if (null !== $this->userClass && $this->userClass !== get_class($anEvent->user())) {
-            return false;
-        }
-
         return $anEvent instanceof UserRegistered;
     }
 }

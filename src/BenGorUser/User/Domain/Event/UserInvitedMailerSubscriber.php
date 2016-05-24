@@ -26,13 +26,6 @@ use BenGorUser\User\Domain\Model\UserUrlGenerator;
 class UserInvitedMailerSubscriber implements UserEventSubscriber
 {
     /**
-     * The fully qualified user class name.
-     *
-     * @var string|null
-     */
-    private $userClass;
-
-    /**
      * The mailable factory.
      *
      * @var UserMailableFactory
@@ -67,20 +60,17 @@ class UserInvitedMailerSubscriber implements UserEventSubscriber
      * @param UserMailableFactory $aMailableFactory The mailable factory
      * @param UserUrlGenerator    $anUrlGenerator   The url generator
      * @param string              $aRoute           The route name
-     * @param string|null         $aUserClass       The fully qualified user class name
      */
     public function __construct(
         UserMailer $aMailer,
         UserMailableFactory $aMailableFactory,
         UserUrlGenerator $anUrlGenerator,
-        $aRoute,
-        $aUserClass = null
+        $aRoute
     ) {
         $this->mailer = $aMailer;
         $this->mailableFactory = $aMailableFactory;
         $this->urlGenerator = $anUrlGenerator;
         $this->route = $aRoute;
-        $this->userClass = $aUserClass;
     }
 
     /**
@@ -88,12 +78,11 @@ class UserInvitedMailerSubscriber implements UserEventSubscriber
      */
     public function handle(UserEvent $anEvent)
     {
-        $guest = $anEvent->userGuest();
         $url = $this->urlGenerator->generate($this->route, [
-            'invitation-token' => $guest->invitationToken()->token(),
+            'invitation-token' => $anEvent->invitationToken()->token(),
         ]);
-        $mail = $this->mailableFactory->build($guest->email(), [
-            'user' => $guest, 'url' => $url,
+        $mail = $this->mailableFactory->build($anEvent->email(), [
+            'email' => $anEvent->email(), 'url' => $url,
         ]);
 
         $this->mailer->mail($mail);
@@ -104,10 +93,6 @@ class UserInvitedMailerSubscriber implements UserEventSubscriber
      */
     public function isSubscribedTo(UserEvent $anEvent)
     {
-        if (null !== $this->userClass && $this->userClass !== get_class($anEvent->userGuest())) {
-            return false;
-        }
-
         return $anEvent instanceof UserInvited;
     }
 }

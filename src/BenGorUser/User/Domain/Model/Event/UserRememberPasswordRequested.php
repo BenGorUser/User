@@ -12,7 +12,9 @@
 
 namespace BenGorUser\User\Domain\Model\Event;
 
-use BenGorUser\User\Domain\Model\User;
+use BenGorUser\User\Domain\Model\UserEmail;
+use BenGorUser\User\Domain\Model\UserId;
+use BenGorUser\User\Domain\Model\UserToken;
 
 /**
  * User remember password request domain event class.
@@ -23,11 +25,18 @@ use BenGorUser\User\Domain\Model\User;
 final class UserRememberPasswordRequested implements UserEvent
 {
     /**
-     * The user.
+     * The user id.
      *
-     * @var User
+     * @var UserId
      */
-    private $user;
+    private $userId;
+
+    /**
+     * The email.
+     *
+     * @var UserEmail
+     */
+    private $email;
 
     /**
      * The occurred on.
@@ -37,24 +46,41 @@ final class UserRememberPasswordRequested implements UserEvent
     private $occurredOn;
 
     /**
+     * The remember password token.
+     *
+     * @var UserToken
+     */
+    private $rememberPasswordToken;
+
+    /**
      * Constructor.
      *
-     * @param User $aUser The user
+     * @param UserId    $aUserId                The user id
+     * @param UserEmail $anEmail                The email
+     * @param UserToken $aRememberPasswordToken The remember password token
      */
-    public function __construct(User $aUser)
+    public function __construct(UserId $aUserId, UserEmail $anEmail, UserToken $aRememberPasswordToken)
     {
-        $this->user = $aUser;
+        $this->userId = $aUserId;
+        $this->email = $anEmail;
+        $this->rememberPasswordToken = $aRememberPasswordToken;
         $this->occurredOn = new \DateTimeImmutable();
     }
 
     /**
-     * Gets the user.
-     *
-     * @return User
+     * {@inheritdoc}
      */
-    public function user()
+    public function id()
     {
-        return $this->user;
+        return $this->userId;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function email()
+    {
+        return $this->email;
     }
 
     /**
@@ -63,5 +89,15 @@ final class UserRememberPasswordRequested implements UserEvent
     public function occurredOn()
     {
         return $this->occurredOn;
+    }
+
+    /**
+     * Gets the remember password token.
+     *
+     * @return UserToken
+     */
+    public function rememberPasswordToken()
+    {
+        return $this->rememberPasswordToken;
     }
 }

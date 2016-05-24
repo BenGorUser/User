@@ -12,7 +12,9 @@
 
 namespace BenGorUser\User\Domain\Model\Event;
 
-use BenGorUser\User\Domain\Model\User;
+use BenGorUser\User\Domain\Model\UserEmail;
+use BenGorUser\User\Domain\Model\UserId;
+use BenGorUser\User\Domain\Model\UserRole;
 
 /**
  * User role granted domain event class.
@@ -22,11 +24,18 @@ use BenGorUser\User\Domain\Model\User;
 final class UserRoleGranted implements UserEvent
 {
     /**
-     * The user.
+     * The user id.
      *
-     * @var User
+     * @var UserId
      */
-    private $user;
+    private $userId;
+
+    /**
+     * The email.
+     *
+     * @var UserEmail
+     */
+    private $email;
 
     /**
      * The occurred on.
@@ -36,24 +45,41 @@ final class UserRoleGranted implements UserEvent
     private $occurredOn;
 
     /**
+     * The granted role.
+     *
+     * @var UserRole
+     */
+    private $grantedRole;
+
+    /**
      * Constructor.
      *
-     * @param User $aUser The user
+     * @param UserId    $aUserId      The user id
+     * @param UserEmail $anEmail      The email
+     * @param UserRole  $aGrantedRole The granted role
      */
-    public function __construct(User $aUser)
+    public function __construct(UserId $aUserId, UserEmail $anEmail, UserRole $aGrantedRole)
     {
-        $this->user = $aUser;
+        $this->userId = $aUserId;
+        $this->email = $anEmail;
+        $this->grantedRole = $aGrantedRole;
         $this->occurredOn = new \DateTimeImmutable();
     }
 
     /**
-     * Gets the user.
-     *
-     * @return User
+     * {@inheritdoc}
      */
-    public function user()
+    public function id()
     {
-        return $this->user;
+        return $this->userId;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function email()
+    {
+        return $this->email;
     }
 
     /**
@@ -62,5 +88,15 @@ final class UserRoleGranted implements UserEvent
     public function occurredOn()
     {
         return $this->occurredOn;
+    }
+
+    /**
+     * Gets the granted role.
+     *
+     * @return UserRole
+     */
+    public function role()
+    {
+        return $this->grantedRole;
     }
 }

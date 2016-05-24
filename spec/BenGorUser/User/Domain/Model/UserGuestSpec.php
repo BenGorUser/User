@@ -18,7 +18,7 @@ use BenGorUser\User\Domain\Model\UserGuestId;
 use PhpSpec\ObjectBehavior;
 
 /**
- * Spec file of User Guest value object class.
+ * Spec file of UserGuest class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  */

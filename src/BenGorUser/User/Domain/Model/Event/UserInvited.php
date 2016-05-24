@@ -12,7 +12,9 @@
 
 namespace BenGorUser\User\Domain\Model\Event;
 
-use BenGorUser\User\Domain\Model\UserGuest;
+use BenGorUser\User\Domain\Model\UserEmail;
+use BenGorUser\User\Domain\Model\UserGuestId;
+use BenGorUser\User\Domain\Model\UserToken;
 
 /**
  * User invited domain event class.
@@ -22,11 +24,25 @@ use BenGorUser\User\Domain\Model\UserGuest;
 final class UserInvited implements UserEvent
 {
     /**
-     * The guest user.
+     * The user guest id.
      *
-     * @var UserGuest
+     * @var UserGuestId
      */
-    private $guest;
+    private $userGuestId;
+
+    /**
+     * The user email.
+     *
+     * @var UserEmail
+     */
+    private $email;
+
+    /**
+     * The confirmation token.
+     *
+     * @var UserToken
+     */
+    private $invitationToken;
 
     /**
      * The occurred on.
@@ -38,22 +54,32 @@ final class UserInvited implements UserEvent
     /**
      * Constructor.
      *
-     * @param UserGuest $aUserGuest The user
+     * @param UserGuestId $aUserGuestId      The user guest id
+     * @param UserEmail   $anEmail           The email
+     * @param UserToken   $anInvitationToken The invitation token
      */
-    public function __construct(UserGuest $aUserGuest)
+    public function __construct(UserGuestId $aUserGuestId, UserEmail $anEmail, UserToken $anInvitationToken)
     {
-        $this->guest = $aUserGuest;
+        $this->userGuestId = $aUserGuestId;
+        $this->email = $anEmail;
+        $this->invitationToken = $anInvitationToken;
         $this->occurredOn = new \DateTimeImmutable();
     }
 
     /**
-     * Gets the guest user.
-     *
-     * @return UserGuest
+     * {@inheritdoc}
      */
-    public function userGuest()
+    public function id()
     {
-        return $this->guest;
+        return $this->userGuestId;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function email()
+    {
+        return $this->email;
     }
 
     /**
@@ -62,5 +88,15 @@ final class UserInvited implements UserEvent
     public function occurredOn()
     {
         return $this->occurredOn;
+    }
+
+    /**
+     * Gets the invitation token.
+     *
+     * @return UserToken
+     */
+    public function invitationToken()
+    {
+        return $this->invitationToken;
     }
 }

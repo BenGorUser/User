@@ -16,16 +16,13 @@ use BenGorUser\User\Domain\Event\UserEventSubscriber;
 use BenGorUser\User\Domain\Event\UserInvitedMailerSubscriber;
 use BenGorUser\User\Domain\Model\Event\UserInvited;
 use BenGorUser\User\Domain\Model\Event\UserRegistered;
-use BenGorUser\User\Domain\Model\User;
 use BenGorUser\User\Domain\Model\UserEmail;
-use BenGorUser\User\Domain\Model\UserGuest;
 use BenGorUser\User\Domain\Model\UserGuestId;
 use BenGorUser\User\Domain\Model\UserId;
 use BenGorUser\User\Domain\Model\UserMailable;
 use BenGorUser\User\Domain\Model\UserMailableFactory;
 use BenGorUser\User\Domain\Model\UserMailer;
-use BenGorUser\User\Domain\Model\UserPassword;
-use BenGorUser\User\Domain\Model\UserRole;
+use BenGorUser\User\Domain\Model\UserToken;
 use BenGorUser\User\Domain\Model\UserUrlGenerator;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
@@ -55,10 +52,9 @@ class UserInvitedMailerSubscriberSpec extends ObjectBehavior
     function it_handles(UserUrlGenerator $urlGenerator, UserMailableFactory $mailableFactory)
     {
         $domainEvent = new UserInvited(
-            new UserGuest(
-                new UserGuestId(),
-                new UserEmail('bengor@user.com')
-            )
+            new UserGuestId(),
+            new UserEmail('bengor@user.com'),
+            new UserToken('invitation-token')
         );
         $mailable = new UserMailable(
             new UserEmail('benatespina@gmail.com'),
@@ -80,44 +76,17 @@ class UserInvitedMailerSubscriberSpec extends ObjectBehavior
     function it_is_subscribe_to()
     {
         $invitedDomainEvent = new UserInvited(
-            new UserGuest(
-                new UserGuestId(),
-                new UserEmail('bengor@user.com')
-            )
+            new UserGuestId(),
+            new UserEmail('bengor@user.com'),
+            new UserToken('invitation-token')
         );
         $registeredDomainEvent = new UserRegistered(
-            new User(
-                new UserId(),
-                new UserEmail('bengor@user.com'),
-                UserPassword::fromEncoded('endoced-password', 'salt'),
-                [new UserRole('ROLE_USER')]
-            )
+            new UserId(),
+            new UserEmail('bengor@user.com'),
+            new UserToken('confirmation-token')
         );
 
         $this->isSubscribedTo($invitedDomainEvent)->shouldReturn(true);
         $this->isSubscribedTo($registeredDomainEvent)->shouldReturn(false);
-    }
-
-    function it_is_subscribe_to_with_user_class(
-        UserMailer $mailer,
-        UserMailableFactory $mailableFactory,
-        UserUrlGenerator $urlGenerator
-    ) {
-        $this->beConstructedWith(
-            $mailer,
-            $mailableFactory,
-            $urlGenerator,
-            'bengor_user_user_sign_up',
-            User::class
-        );
-
-        $invitedDomainEvent = new UserInvited(
-            new UserGuest(
-                new UserGuestId(),
-                new UserEmail('bengor@user.com')
-            )
-        );
-
-        $this->isSubscribedTo($invitedDomainEvent)->shouldReturn(false);
     }
 }

@@ -12,6 +12,10 @@
 
 namespace BenGorUser\User\Domain\Model\Event;
 
+use BenGorUser\User\Domain\Model\UserEmail;
+use BenGorUser\User\Domain\Model\UserGuestId;
+use BenGorUser\User\Domain\Model\UserId;
+
 /**
  * User event base domain event class.
  *
@@ -20,6 +24,20 @@ namespace BenGorUser\User\Domain\Model\Event;
  */
 interface UserEvent
 {
+    /**
+     * Gets the id.
+     *
+     * @return UserId|UserGuestId
+     */
+    public function id();
+
+    /**
+     * Gets the email.
+     *
+     * @return UserEmail
+     */
+    public function email();
+
     /**
      * Gets the occurred on.
      *

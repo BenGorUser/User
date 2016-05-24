@@ -114,6 +114,12 @@ class UserGuest
     {
         $this->invitationToken = new UserToken();
 
-        $this->publish(new UserInvited($this));
+        $this->publish(
+            new UserInvited(
+                $this->id,
+                $this->email,
+                $this->invitationToken
+            )
+        );
     }
 }

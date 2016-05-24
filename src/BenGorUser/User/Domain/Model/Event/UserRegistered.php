@@ -12,7 +12,9 @@
 
 namespace BenGorUser\User\Domain\Model\Event;
 
-use BenGorUser\User\Domain\Model\User;
+use BenGorUser\User\Domain\Model\UserEmail;
+use BenGorUser\User\Domain\Model\UserId;
+use BenGorUser\User\Domain\Model\UserToken;
 
 /**
  * User registered domain event class.
@@ -23,11 +25,25 @@ use BenGorUser\User\Domain\Model\User;
 final class UserRegistered implements UserEvent
 {
     /**
-     * The user.
+     * The user id.
      *
-     * @var User
+     * @var UserId
      */
-    private $user;
+    private $userId;
+
+    /**
+     * The user email.
+     *
+     * @var UserEmail
+     */
+    private $email;
+
+    /**
+     * The confirmation token.
+     *
+     * @var UserToken
+     */
+    private $confirmationToken;
 
     /**
      * The occurred on.
@@ -39,22 +55,32 @@ final class UserRegistered implements UserEvent
     /**
      * Constructor.
      *
-     * @param User $aUser The user
+     * @param UserId    $aUserId            The user id
+     * @param UserEmail $anEmail            The email
+     * @param UserToken $aConfirmationToken The confirmation token
      */
-    public function __construct(User $aUser)
+    public function __construct(UserId $aUserId, UserEmail $anEmail, UserToken $aConfirmationToken)
     {
-        $this->user = $aUser;
+        $this->userId = $aUserId;
+        $this->email = $anEmail;
+        $this->confirmationToken = $aConfirmationToken;
         $this->occurredOn = new \DateTimeImmutable();
     }
 
     /**
-     * Gets the user.
-     *
-     * @return User
+     * {@inheritdoc}
      */
-    public function user()
+    public function id()
     {
-        return $this->user;
+        return $this->userId;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function email()
+    {
+        return $this->email;
     }
 
     /**
@@ -63,5 +89,15 @@ final class UserRegistered implements UserEvent
     public function occurredOn()
     {
         return $this->occurredOn;
+    }
+
+    /**
+     * Gets the confirmation token.
+     *
+     * @return UserToken
+     */
+    public function confirmationToken()
+    {
+        return $this->confirmationToken;
     }
 }

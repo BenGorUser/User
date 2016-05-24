@@ -118,7 +118,13 @@ class User extends UserAggregateRoot
             $this->grant($userRole);
         }
 
-        $this->publish(new UserRegistered($this));
+        $this->publish(
+            new UserRegistered(
+                $this->id,
+                $this->email,
+                $this->confirmationToken
+            )
+        );
     }
 
     /**
@@ -179,7 +185,12 @@ class User extends UserAggregateRoot
     {
         $this->confirmationToken = null;
 
-        $this->publish(new UserEnabled($this));
+        $this->publish(
+            new UserEnabled(
+                $this->id,
+                $this->email
+            )
+        );
     }
 
     /**
@@ -197,7 +208,13 @@ class User extends UserAggregateRoot
         }
         $this->roles[] = $aRole;
 
-        $this->publish(new UserRoleGranted($this));
+        $this->publish(
+            new UserRoleGranted(
+                $this->id,
+                $this->email,
+                $aRole
+            )
+        );
     }
 
     /**
@@ -269,7 +286,12 @@ class User extends UserAggregateRoot
         }
         $this->lastLogin = new \DateTimeImmutable();
 
-        $this->publish(new UserLoggedIn($this));
+        $this->publish(
+            new UserLoggedIn(
+                $this->id,
+                $this->email
+            )
+        );
     }
 
     /**
@@ -283,7 +305,12 @@ class User extends UserAggregateRoot
             throw new UserInactiveException();
         }
 
-        $this->publish(new UserLoggedOut($this));
+        $this->publish(
+            new UserLoggedOut(
+                $this->id,
+                $this->email
+            )
+        );
     }
 
     /**
@@ -313,7 +340,13 @@ class User extends UserAggregateRoot
     {
         $this->rememberPasswordToken = new UserToken();
 
-        $this->publish(new UserRememberPasswordRequested($this));
+        $this->publish(
+            new UserRememberPasswordRequested(
+                $this->id,
+                $this->email,
+                $this->rememberPasswordToken
+            )
+        );
     }
 
     /**
@@ -333,7 +366,13 @@ class User extends UserAggregateRoot
             }
             throw new UserRoleAlreadyRevokedException();
         }
-        $this->publish(new UserRoleRevoked($this));
+        $this->publish(
+            new UserRoleRevoked(
+                $this->id,
+                $this->email,
+                $aRole
+            )
+        );
     }
 
     /**
