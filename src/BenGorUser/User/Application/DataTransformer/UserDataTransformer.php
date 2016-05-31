@@ -12,8 +12,6 @@
 
 namespace BenGorUser\User\Application\DataTransformer;
 
-use BenGorUser\User\Domain\Model\User;
-
 /**
  * User data transformer.
  *
@@ -24,9 +22,9 @@ interface UserDataTransformer
     /**
      * Writes the high level user domain concepts.
      *
-     * @param User $aUser The user
+     * @param mixed $aUser The user, it can be domain user or just a DTO
      */
-    public function write(User $aUser);
+    public function write($aUser);
 
     /**
      * Reads the low level user infrastructure details.
