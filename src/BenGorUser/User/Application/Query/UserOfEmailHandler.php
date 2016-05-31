@@ -56,6 +56,7 @@ class UserOfEmailHandler
      * @param UserOfEmailQuery $aQuery The query
      *
      * @throws UserDoesNotExistException when the user does not exist
+     *
      * @return mixed
      */
     public function __invoke(UserOfEmailQuery $aQuery)
