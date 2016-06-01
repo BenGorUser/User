@@ -13,6 +13,7 @@
 namespace BenGorUser\User\Domain\Model;
 
 use BenGorUser\User\Domain\Model\Event\UserEnabled;
+use BenGorUser\User\Domain\Model\Event\UserInvited;
 use BenGorUser\User\Domain\Model\Event\UserLoggedIn;
 use BenGorUser\User\Domain\Model\Event\UserLoggedOut;
 use BenGorUser\User\Domain\Model\Event\UserRegistered;
@@ -20,6 +21,7 @@ use BenGorUser\User\Domain\Model\Event\UserRememberPasswordRequested;
 use BenGorUser\User\Domain\Model\Event\UserRoleGranted;
 use BenGorUser\User\Domain\Model\Event\UserRoleRevoked;
 use BenGorUser\User\Domain\Model\Exception\UserInactiveException;
+use BenGorUser\User\Domain\Model\Exception\UserInvitationAlreadyAcceptedException;
 use BenGorUser\User\Domain\Model\Exception\UserPasswordInvalidException;
 use BenGorUser\User\Domain\Model\Exception\UserRoleAlreadyGrantedException;
 use BenGorUser\User\Domain\Model\Exception\UserRoleAlreadyRevokedException;
@@ -60,6 +62,13 @@ class User extends UserAggregateRoot
      * @var UserEmail
      */
     protected $email;
+
+    /**
+     * The invitation token.
+     *
+     * @var UserToken
+     */
+    protected $invitationToken;
 
     /**
      * The last login.
@@ -218,6 +227,32 @@ class User extends UserAggregateRoot
     }
 
     /**
+     * Gets the invitation token.
+     *
+     * @return UserToken
+     */
+    public function invitationToken()
+    {
+        return $this->invitationToken;
+    }
+
+    /**
+     * Creates the invitation token.
+     */
+    public function invite()
+    {
+        $this->invitationToken = new UserToken();
+
+        $this->publish(
+            new UserInvited(
+                $this->id,
+                $this->email,
+                $this->invitationToken
+            )
+        );
+    }
+
+    /**
      * Checks if the user is enabled or not.
      *
      * @return bool
@@ -321,6 +356,17 @@ class User extends UserAggregateRoot
     public function password()
     {
         return $this->password;
+    }
+
+    /**
+     * Updates the invitation token.
+     */
+    public function regenerateInvitationToken()
+    {
+        if (null === $this->invitationToken) {
+            throw new UserInvitationAlreadyAcceptedException();
+        }
+        $this->invite();
     }
 
     /**
