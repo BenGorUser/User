@@ -10,9 +10,9 @@
  * file that was distributed with this source code.
  */
 
-namespace spec\BenGorUser\User\Application\Service\CommandRememberPassword;
+namespace spec\BenGorUser\User\Application\Command\CommandRememberPassword;
 
-use BenGorUser\User\Application\Service\CommandRememberPassword\CommandRememberPasswordCommand;
+use BenGorUser\User\Application\Command\CommandRememberPassword\CommandRememberPasswordCommand;
 use PhpSpec\ObjectBehavior;
 
 /**

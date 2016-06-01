@@ -10,10 +10,10 @@
  * file that was distributed with this source code.
  */
 
-namespace spec\BenGorUser\User\Application\Service\Invite;
+namespace spec\BenGorUser\User\Application\Command\Invite;
 
-use BenGorUser\User\Application\Service\Invite\InviteUserCommand;
-use BenGorUser\User\Application\Service\Invite\InviteUserHandler;
+use BenGorUser\User\Application\Command\Invite\InviteUserCommand;
+use BenGorUser\User\Application\Command\Invite\InviteUserHandler;
 use BenGorUser\User\Domain\Model\Exception\UserAlreadyExistException;
 use BenGorUser\User\Domain\Model\User;
 use BenGorUser\User\Domain\Model\UserEmail;
@@ -25,7 +25,7 @@ use BenGorUser\User\Domain\Model\UserRepository;
 use PhpSpec\ObjectBehavior;
 
 /**
- * Spec file of invite user service class.
+ * Spec file of invite user Command class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  */

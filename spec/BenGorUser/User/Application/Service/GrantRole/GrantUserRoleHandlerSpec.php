@@ -10,10 +10,10 @@
  * file that was distributed with this source code.
  */
 
-namespace spec\BenGorUser\User\Application\Service\GrantRole;
+namespace spec\BenGorUser\User\Application\Command\GrantRole;
 
-use BenGorUser\User\Application\Service\GrantRole\GrantUserRoleCommand;
-use BenGorUser\User\Application\Service\GrantRole\GrantUserRoleHandler;
+use BenGorUser\User\Application\Command\GrantRole\GrantUserRoleCommand;
+use BenGorUser\User\Application\Command\GrantRole\GrantUserRoleHandler;
 use BenGorUser\User\Domain\Model\Exception\UserDoesNotExistException;
 use BenGorUser\User\Domain\Model\User;
 use BenGorUser\User\Domain\Model\UserId;
@@ -22,7 +22,7 @@ use BenGorUser\User\Domain\Model\UserRole;
 use PhpSpec\ObjectBehavior;
 
 /**
- * Spec file of grant user role service class.
+ * Spec file of grant user role Command class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  */

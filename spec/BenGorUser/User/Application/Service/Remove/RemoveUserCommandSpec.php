@@ -10,9 +10,9 @@
  * file that was distributed with this source code.
  */
 
-namespace spec\BenGorUser\User\Application\Service\Remove;
+namespace spec\BenGorUser\User\Application\Command\Remove;
 
-use BenGorUser\User\Application\Service\Remove\RemoveUserCommand;
+use BenGorUser\User\Application\Command\Remove\RemoveUserCommand;
 use PhpSpec\ObjectBehavior;
 
 /**

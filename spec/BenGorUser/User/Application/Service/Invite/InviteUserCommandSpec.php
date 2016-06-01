@@ -10,9 +10,9 @@
  * file that was distributed with this source code.
  */
 
-namespace spec\BenGorUser\User\Application\Service\Invite;
+namespace spec\BenGorUser\User\Application\Command\Invite;
 
-use BenGorUser\User\Application\Service\Invite\InviteUserCommand;
+use BenGorUser\User\Application\Command\Invite\InviteUserCommand;
 use PhpSpec\ObjectBehavior;
 
 /**

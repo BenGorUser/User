@@ -10,9 +10,9 @@
  * file that was distributed with this source code.
  */
 
-namespace spec\BenGorUser\User\Application\Service\Enable;
+namespace spec\BenGorUser\User\Application\Command\Enable;
 
-use BenGorUser\User\Application\Service\Enable\EnableUserCommand;
+use BenGorUser\User\Application\Command\Enable\EnableUserCommand;
 use PhpSpec\ObjectBehavior;
 
 /**

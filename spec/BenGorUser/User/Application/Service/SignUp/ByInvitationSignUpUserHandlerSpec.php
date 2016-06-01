@@ -10,10 +10,10 @@
  * file that was distributed with this source code.
  */
 
-namespace spec\BenGorUser\User\Application\Service\SignUp;
+namespace spec\BenGorUser\User\Application\Command\SignUp;
 
-use BenGorUser\User\Application\Service\SignUp\ByInvitationSignUpUserCommand;
-use BenGorUser\User\Application\Service\SignUp\ByInvitationSignUpUserHandler;
+use BenGorUser\User\Application\Command\SignUp\ByInvitationSignUpUserCommand;
+use BenGorUser\User\Application\Command\SignUp\ByInvitationSignUpUserHandler;
 use BenGorUser\User\Domain\Model\Exception\UserAlreadyExistException;
 use BenGorUser\User\Domain\Model\Exception\UserGuestDoesNotExistException;
 use BenGorUser\User\Domain\Model\User;

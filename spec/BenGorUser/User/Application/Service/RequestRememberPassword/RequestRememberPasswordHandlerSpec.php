@@ -10,10 +10,10 @@
  * file that was distributed with this source code.
  */
 
-namespace spec\BenGorUser\User\Application\Service\CommandRememberPassword;
+namespace spec\BenGorUser\User\Application\Command\CommandRememberPassword;
 
-use BenGorUser\User\Application\Service\RequestRememberPassword\RequestRememberPasswordCommand;
-use BenGorUser\User\Application\Service\RequestRememberPassword\RequestRememberPasswordHandler;
+use BenGorUser\User\Application\Command\RequestRememberPassword\RequestRememberPasswordCommand;
+use BenGorUser\User\Application\Command\RequestRememberPassword\RequestRememberPasswordHandler;
 use BenGorUser\User\Domain\Model\Exception\UserDoesNotExistException;
 use BenGorUser\User\Domain\Model\User;
 use BenGorUser\User\Domain\Model\UserEmail;
@@ -22,7 +22,7 @@ use BenGorUser\User\Infrastructure\Security\Test\DummyUserPasswordEncoder;
 use PhpSpec\ObjectBehavior;
 
 /**
- * Spec file of request remember password token service class.
+ * Spec file of request remember password token Command class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>

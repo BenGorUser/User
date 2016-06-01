@@ -10,9 +10,9 @@
  * file that was distributed with this source code.
  */
 
-namespace spec\BenGorUser\User\Application\Service\SignUp;
+namespace spec\BenGorUser\User\Application\Command\SignUp;
 
-use BenGorUser\User\Application\Service\SignUp\WithConfirmationSignUpUserCommand;
+use BenGorUser\User\Application\Command\SignUp\WithConfirmationSignUpUserCommand;
 use PhpSpec\ObjectBehavior;
 
 /**

@@ -10,9 +10,9 @@
  * file that was distributed with this source code.
  */
 
-namespace spec\BenGorUser\User\Application\Service\ChangePassword;
+namespace spec\BenGorUser\User\Application\Command\ChangePassword;
 
-use BenGorUser\User\Application\Service\ChangePassword\WithoutOldPasswordChangeUserPasswordCommand;
+use BenGorUser\User\Application\Command\ChangePassword\WithoutOldPasswordChangeUserPasswordCommand;
 use PhpSpec\ObjectBehavior;
 
 /**

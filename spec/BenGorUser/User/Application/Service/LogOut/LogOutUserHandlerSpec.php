@@ -10,10 +10,10 @@
  * file that was distributed with this source code.
  */
 
-namespace spec\BenGorUser\User\Application\Service\LogOut;
+namespace spec\BenGorUser\User\Application\Command\LogOut;
 
-use BenGorUser\User\Application\Service\LogOut\LogOutUserCommand;
-use BenGorUser\User\Application\Service\LogOut\LogOutUserHandler;
+use BenGorUser\User\Application\Command\LogOut\LogOutUserCommand;
+use BenGorUser\User\Application\Command\LogOut\LogOutUserHandler;
 use BenGorUser\User\Domain\Model\Exception\UserDoesNotExistException;
 use BenGorUser\User\Domain\Model\User;
 use BenGorUser\User\Domain\Model\UserId;
@@ -21,7 +21,7 @@ use BenGorUser\User\Domain\Model\UserRepository;
 use PhpSpec\ObjectBehavior;
 
 /**
- * Spec file of logout user service class.
+ * Spec file of logout user Command class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>

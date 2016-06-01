@@ -10,10 +10,10 @@
  * file that was distributed with this source code.
  */
 
-namespace spec\BenGorUser\User\Application\Service\LogIn;
+namespace spec\BenGorUser\User\Application\Command\LogIn;
 
-use BenGorUser\User\Application\Service\LogIn\LogInUserCommand;
-use BenGorUser\User\Application\Service\LogIn\LogInUserHandler;
+use BenGorUser\User\Application\Command\LogIn\LogInUserCommand;
+use BenGorUser\User\Application\Command\LogIn\LogInUserHandler;
 use BenGorUser\User\Domain\Model\Exception\UserDoesNotExistException;
 use BenGorUser\User\Domain\Model\User;
 use BenGorUser\User\Domain\Model\UserEmail;

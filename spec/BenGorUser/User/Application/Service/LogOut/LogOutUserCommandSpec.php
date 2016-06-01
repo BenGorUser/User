@@ -10,9 +10,9 @@
  * file that was distributed with this source code.
  */
 
-namespace spec\BenGorUser\User\Application\Service\LogOut;
+namespace spec\BenGorUser\User\Application\Command\LogOut;
 
-use BenGorUser\User\Application\Service\LogOut\LogOutUserCommand;
+use BenGorUser\User\Application\Command\LogOut\LogOutUserCommand;
 use PhpSpec\ObjectBehavior;
 
 /**

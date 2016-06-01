@@ -10,10 +10,10 @@
  * file that was distributed with this source code.
  */
 
-namespace spec\BenGorUser\User\Application\Service\SignUp;
+namespace spec\BenGorUser\User\Application\Command\SignUp;
 
-use BenGorUser\User\Application\Service\SignUp\SignUpUserCommand;
-use BenGorUser\User\Application\Service\SignUp\SignUpUserHandler;
+use BenGorUser\User\Application\Command\SignUp\SignUpUserCommand;
+use BenGorUser\User\Application\Command\SignUp\SignUpUserHandler;
 use BenGorUser\User\Domain\Model\Exception\UserAlreadyExistException;
 use BenGorUser\User\Domain\Model\User;
 use BenGorUser\User\Domain\Model\UserEmail;

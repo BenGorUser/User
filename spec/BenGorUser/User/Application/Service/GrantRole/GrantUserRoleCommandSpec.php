@@ -10,9 +10,9 @@
  * file that was distributed with this source code.
  */
 
-namespace spec\BenGorUser\User\Application\Service\GrantRole;
+namespace spec\BenGorUser\User\Application\Command\GrantRole;
 
-use BenGorUser\User\Application\Service\GrantRole\GrantUserRoleCommand;
+use BenGorUser\User\Application\Command\GrantRole\GrantUserRoleCommand;
 use PhpSpec\ObjectBehavior;
 
 /**

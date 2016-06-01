@@ -10,10 +10,10 @@
  * file that was distributed with this source code.
  */
 
-namespace spec\BenGorUser\User\Application\Service\Enable;
+namespace spec\BenGorUser\User\Application\Command\Enable;
 
-use BenGorUser\User\Application\Service\Enable\EnableUserCommand;
-use BenGorUser\User\Application\Service\Enable\EnableUserHandler;
+use BenGorUser\User\Application\Command\Enable\EnableUserCommand;
+use BenGorUser\User\Application\Command\Enable\EnableUserHandler;
 use BenGorUser\User\Domain\Model\Exception\UserTokenNotFoundException;
 use BenGorUser\User\Domain\Model\User;
 use BenGorUser\User\Domain\Model\UserRepository;
@@ -21,7 +21,7 @@ use BenGorUser\User\Domain\Model\UserToken;
 use PhpSpec\ObjectBehavior;
 
 /**
- * Spec file of enable user service class.
+ * Spec file of enable user Command class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>

@@ -10,10 +10,10 @@
  * file that was distributed with this source code.
  */
 
-namespace spec\BenGorUser\User\Application\Service\ChangePassword;
+namespace spec\BenGorUser\User\Application\Command\ChangePassword;
 
-use BenGorUser\User\Application\Service\ChangePassword\ChangeUserPasswordCommand;
-use BenGorUser\User\Application\Service\ChangePassword\ChangeUserPasswordHandler;
+use BenGorUser\User\Application\Command\ChangePassword\ChangeUserPasswordCommand;
+use BenGorUser\User\Application\Command\ChangePassword\ChangeUserPasswordHandler;
 use BenGorUser\User\Domain\Model\Exception\UserDoesNotExistException;
 use BenGorUser\User\Domain\Model\Exception\UserPasswordInvalidException;
 use BenGorUser\User\Domain\Model\User;

@@ -10,9 +10,9 @@
  * file that was distributed with this source code.
  */
 
-namespace spec\BenGorUser\User\Application\Service\LogIn;
+namespace spec\BenGorUser\User\Application\Command\LogIn;
 
-use BenGorUser\User\Application\Service\LogIn\LogInUserCommand;
+use BenGorUser\User\Application\Command\LogIn\LogInUserCommand;
 use PhpSpec\ObjectBehavior;
 
 /**

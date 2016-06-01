@@ -10,9 +10,9 @@
  * file that was distributed with this source code.
  */
 
-namespace spec\BenGorUser\User\Application\Service\RevokeRole;
+namespace spec\BenGorUser\User\Application\Command\RevokeRole;
 
-use BenGorUser\User\Application\Service\RevokeRole\RevokeUserRoleCommand;
+use BenGorUser\User\Application\Command\RevokeRole\RevokeUserRoleCommand;
 use PhpSpec\ObjectBehavior;
 
 /**
