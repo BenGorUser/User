@@ -28,4 +28,10 @@ class UserOfEmailQuerySpec extends ObjectBehavior
         $this->shouldHaveType(UserOfEmailQuery::class);
         $this->email()->shouldReturn('bengor@user.com');
     }
+
+    function it_cannot_creates_a_query_with_null_email()
+    {
+        $this->beConstructedWith(null);
+        $this->shouldThrow(new \InvalidArgumentException('Email cannot be null'))->duringInstantiation();
+    }
 }

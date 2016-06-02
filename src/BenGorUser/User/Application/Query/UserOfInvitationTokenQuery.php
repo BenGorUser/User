@@ -13,39 +13,39 @@
 namespace BenGorUser\User\Application\Query;
 
 /**
- * User of email query.
+ * User of invitation token query.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  */
-class UserOfEmailQuery
+class UserOfInvitationTokenQuery
 {
     /**
-     * The user email.
+     * The user invitationToken.
      *
      * @var string
      */
-    private $email;
+    private $invitationToken;
 
     /**
      * Constructor.
      *
-     * @param string $anEmail The user email
+     * @param string $anInvitationToken The user invitationToken
      */
-    public function __construct($anEmail)
+    public function __construct($anInvitationToken)
     {
-        if (null === $anEmail) {
-            throw new \InvalidArgumentException('Email cannot be null');
+        if (null === $anInvitationToken) {
+            throw new \InvalidArgumentException('Invitation token cannot be null');
         }
-        $this->email = $anEmail;
+        $this->invitationToken = $anInvitationToken;
     }
 
     /**
-     * Gets the email.
+     * Gets the invitation token.
      *
      * @return string
      */
-    public function email()
+    public function invitationToken()
     {
-        return $this->email;
+        return $this->invitationToken;
     }
 }
