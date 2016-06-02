@@ -12,17 +12,19 @@
 
 namespace BenGorUser\User\Infrastructure\Domain\Model;
 
+use BenGorUser\User\Domain\Model\User;
 use BenGorUser\User\Domain\Model\UserEmail;
-use BenGorUser\User\Domain\Model\UserGuest;
-use BenGorUser\User\Domain\Model\UserGuestFactory as BaseUserGuestFactory;
-use BenGorUser\User\Domain\Model\UserGuestId;
+use BenGorUser\User\Domain\Model\UserFactorySignUp as BaseUserFactorySignUp;
+use BenGorUser\User\Domain\Model\UserId;
+use BenGorUser\User\Domain\Model\UserPassword;
 
 /**
- * Implementation of user guest factory domain class.
+ * Implementation of user sign up factory domain class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
+ * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-final class UserGuestFactory implements BaseUserGuestFactory
+final class UserFactorySignUp implements BaseUserFactorySignUp
 {
     /**
      * The entity fully qualified namespace.
@@ -36,7 +38,7 @@ final class UserGuestFactory implements BaseUserGuestFactory
      *
      * @param string $aClass The entity fully qualified namespace
      */
-    public function __construct($aClass = UserGuest::class)
+    public function __construct($aClass = User::class)
     {
         $this->class = $aClass;
     }
@@ -44,8 +46,8 @@ final class UserGuestFactory implements BaseUserGuestFactory
     /**
      * {@inheritdoc}
      */
-    public function register(UserGuestId $anId, UserEmail $anEmail)
+    public function build(UserId $anId, UserEmail $anEmail, UserPassword $aPassword, array $roles)
     {
-        return new $this->class($anId, $anEmail);
+        return forward_static_call_array([$this->class, 'signUp'], [$anId, $anEmail, $aPassword, $roles]);
     }
 }

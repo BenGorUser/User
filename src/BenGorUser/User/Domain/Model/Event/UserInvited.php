@@ -13,7 +13,7 @@
 namespace BenGorUser\User\Domain\Model\Event;
 
 use BenGorUser\User\Domain\Model\UserEmail;
-use BenGorUser\User\Domain\Model\UserGuestId;
+use BenGorUser\User\Domain\Model\UserId;
 use BenGorUser\User\Domain\Model\UserToken;
 
 /**
@@ -24,11 +24,11 @@ use BenGorUser\User\Domain\Model\UserToken;
 final class UserInvited implements UserEvent
 {
     /**
-     * The user guest id.
+     * The user id.
      *
-     * @var UserGuestId
+     * @var UserId
      */
-    private $userGuestId;
+    private $userId;
 
     /**
      * The user email.
@@ -54,13 +54,13 @@ final class UserInvited implements UserEvent
     /**
      * Constructor.
      *
-     * @param UserGuestId $aUserGuestId      The user guest id
-     * @param UserEmail   $anEmail           The email
-     * @param UserToken   $anInvitationToken The invitation token
+     * @param UserId    $aUserId           The user id
+     * @param UserEmail $anEmail           The email
+     * @param UserToken $anInvitationToken The invitation token
      */
-    public function __construct(UserGuestId $aUserGuestId, UserEmail $anEmail, UserToken $anInvitationToken)
+    public function __construct(UserId $aUserId, UserEmail $anEmail, UserToken $anInvitationToken)
     {
-        $this->userGuestId = $aUserGuestId;
+        $this->userId = $aUserId;
         $this->email = $anEmail;
         $this->invitationToken = $anInvitationToken;
         $this->occurredOn = new \DateTimeImmutable();
@@ -71,7 +71,7 @@ final class UserInvited implements UserEvent
      */
     public function id()
     {
-        return $this->userGuestId;
+        return $this->userId;
     }
 
     /**

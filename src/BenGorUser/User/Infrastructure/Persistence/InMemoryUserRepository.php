@@ -89,6 +89,18 @@ final class InMemoryUserRepository implements UserRepository
     /**
      * {@inheritdoc}
      */
+    public function userOfInvitationToken(UserToken $anInvitationToken)
+    {
+        foreach ($this->users as $user) {
+            if (true === $user->invitationToken()->equals($anInvitationToken)) {
+                return $user;
+            }
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function userOfRememberPasswordToken(UserToken $aRememberPasswordToken)
     {
         foreach ($this->users as $user) {
@@ -128,13 +140,5 @@ final class InMemoryUserRepository implements UserRepository
     public function size()
     {
         return count($this->users);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function nextIdentity()
-    {
-        return new UserId();
     }
 }

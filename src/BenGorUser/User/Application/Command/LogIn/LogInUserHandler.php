@@ -57,8 +57,6 @@ class LogInUserHandler
      * @param LogInUserCommand $aCommand The command
      *
      * @throws UserDoesNotExistException when the user does not exist
-     *
-     * @return mixed
      */
     public function __invoke(LogInUserCommand $aCommand)
     {

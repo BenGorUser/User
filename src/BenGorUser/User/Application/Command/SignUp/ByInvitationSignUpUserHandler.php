@@ -12,11 +12,8 @@
 
 namespace BenGorUser\User\Application\Command\SignUp;
 
-use BenGorUser\User\Domain\Model\Exception\UserAlreadyExistException;
-use BenGorUser\User\Domain\Model\Exception\UserGuestDoesNotExistException;
-use BenGorUser\User\Domain\Model\UserFactory;
-use BenGorUser\User\Domain\Model\UserGuestRepository;
-use BenGorUser\User\Domain\Model\UserId;
+use BenGorUser\User\Domain\Model\Exception\UserDoesNotExistException;
+use BenGorUser\User\Domain\Model\UserFactorySignUp;
 use BenGorUser\User\Domain\Model\UserPassword;
 use BenGorUser\User\Domain\Model\UserPasswordEncoder;
 use BenGorUser\User\Domain\Model\UserRepository;
@@ -41,7 +38,7 @@ class ByInvitationSignUpUserHandler
     /**
      * The user factory.
      *
-     * @var UserFactory
+     * @var UserFactorySignUp
      */
     private $factory;
 
@@ -53,30 +50,20 @@ class ByInvitationSignUpUserHandler
     private $userRepository;
 
     /**
-     * The user guest repository.
-     *
-     * @var UserGuestRepository
-     */
-    private $userGuestRepository;
-
-    /**
      * Constructor.
      *
-     * @param UserRepository      $aUserRepository      The user repository
-     * @param UserPasswordEncoder $anEncoder            The password encoder
-     * @param UserFactory         $aFactory             The user factory
-     * @param UserGuestRepository $aUserGuestRepository The user guest repository
+     * @param UserRepository      $aUserRepository The user repository
+     * @param UserPasswordEncoder $anEncoder       The password encoder
+     * @param UserFactorySignUp   $aFactory        The user sign up factory
      */
     public function __construct(
         UserRepository $aUserRepository,
         UserPasswordEncoder $anEncoder,
-        UserFactory $aFactory,
-        UserGuestRepository $aUserGuestRepository
+        UserFactorySignUp $aFactory
     ) {
         $this->userRepository = $aUserRepository;
         $this->encoder = $anEncoder;
         $this->factory = $aFactory;
-        $this->userGuestRepository = $aUserGuestRepository;
     }
 
     /**
@@ -84,34 +71,21 @@ class ByInvitationSignUpUserHandler
      *
      * @param ByInvitationSignUpUserCommand $aCommand The command
      *
-     * @throws UserAlreadyExistException      when the user id is already exists
-     * @throws UserGuestDoesNotExistException when the user guest does not exist
+     * @throws UserDoesNotExistException when the user does not exist
      */
     public function __invoke(ByInvitationSignUpUserCommand $aCommand)
     {
-        $id = new UserId($aCommand->id());
-        if (null !== $this->userRepository->userOfId($id)) {
-            throw new UserAlreadyExistException();
-        }
-        $userGuest = $this->userGuestRepository->userGuestOfInvitationToken(
+        $user = $this->userRepository->userOfInvitationToken(
             new UserToken($aCommand->invitationToken())
         );
-        if (null === $userGuest) {
-            throw new UserGuestDoesNotExistException();
+        if (null === $user) {
+            throw new UserDoesNotExistException();
         }
-        $email = $userGuest->email();
-        $this->userGuestRepository->remove($userGuest);
 
-        $userRoles = array_map(function ($role) {
-            return new UserRole($role);
-        }, $aCommand->roles());
-
-        $user = $this->factory->register(
-            $id,
-            $email,
-            UserPassword::fromPlain($aCommand->password(), $this->encoder),
-            $userRoles
-        );
+        foreach ($aCommand->roles() as $role) {
+            $user->grant(new UserRole($role));
+        }
+        $user->changePassword(UserPassword::fromPlain($aCommand->password(), $this->encoder));
         $user->enableAccount();
 
         $this->userRepository->persist($user);

@@ -13,7 +13,6 @@
 namespace BenGorUser\User\Domain\Model\Event;
 
 use BenGorUser\User\Domain\Model\UserEmail;
-use BenGorUser\User\Domain\Model\UserGuestId;
 use BenGorUser\User\Domain\Model\UserId;
 
 /**
@@ -27,7 +26,7 @@ interface UserEvent
     /**
      * Gets the id.
      *
-     * @return UserId|UserGuestId
+     * @return UserId
      */
     public function id();
 

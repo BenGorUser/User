@@ -12,6 +12,8 @@
 
 namespace BenGorUser\User\Domain\Model;
 
+use BenGorUser\User\Domain\Model\Exception\UserRoleInvalidException;
+
 /**
  * User role domain class.
  *
@@ -30,9 +32,14 @@ final class UserRole
      * Constructor.
      *
      * @param string $aRole A role in primitive string
+     *
+     * @throws UserRoleInvalidException when the role is null
      */
     public function __construct($aRole)
     {
+        if (null === $aRole) {
+            throw new UserRoleInvalidException();
+        }
         $this->role = $aRole;
     }
 

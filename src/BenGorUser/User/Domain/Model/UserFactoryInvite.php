@@ -13,19 +13,20 @@
 namespace BenGorUser\User\Domain\Model;
 
 /**
- * User guest factory domain class.
+ * User invite factory domain class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
+ * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-interface UserGuestFactory
+interface UserFactoryInvite
 {
     /**
-     * Registers the user guest with given id, and email.
+     * Invites the user with given id, email.
      *
-     * @param UserGuestId $anId    The user guest id
-     * @param UserEmail   $anEmail The user email
+     * @param UserId    $anId    The user id
+     * @param UserEmail $anEmail The user email
      *
-     * @return UserGuest
+     * @return User
      */
-    public function register(UserGuestId $anId, UserEmail $anEmail);
+    public function build(UserId $anId, UserEmail $anEmail);
 }

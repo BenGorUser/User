@@ -13,10 +13,11 @@
 namespace BenGorUser\User\Domain\Model\Exception;
 
 /**
- * User guest does not exist exception class.
+ * User invitation already accepted exception class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
+ * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-final class UserGuestDoesNotExistException extends \Exception
+final class UserInvitationAlreadyAcceptedException extends \Exception
 {
 }

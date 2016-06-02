@@ -95,6 +95,19 @@ final class SqlUserRepository implements UserRepository
     /**
      * {@inheritdoc}
      */
+    public function userOfInvitationToken(UserToken $anInvitationToken)
+    {
+        $statement = $this->execute('SELECT * FROM user WHERE invitation_token = :invitationToken', [
+            'invitationToken' => $anInvitationToken->token(),
+        ]);
+        if ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
+            return $this->buildUser($row);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function userOfRememberPasswordToken(UserToken $aRememberPasswordToken)
     {
         $statement = $this->execute('SELECT * FROM user WHERE remember_password_token = :rememberPasswordToken', [
@@ -138,14 +151,6 @@ final class SqlUserRepository implements UserRepository
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function nextIdentity()
-    {
-        return new UserId();
-    }
-
-    /**
      * Loads the user schema into database create the table
      * with user attribute properties as columns.
      */
@@ -158,8 +163,9 @@ CREATE TABLE user (
     confirmation_token VARCHAR(36),
     created_on DATETIME NOT NULL,
     email VARCHAR(36) NOT NULL,
+    invitation_token VARCHAR(36),
     last_login DATETIME,
-    password VARCHAR(30) NOT NULL,
+    password VARCHAR(30),
     remember_password_token VARCHAR(36),
     roles LONGTEXT NOT NULL COMMENT '(DC2Type:user_roles)',
     updated_on DATETIME NOT NULL
@@ -196,6 +202,7 @@ SQL
             confirmation_token,
             created_on,
             email,
+            invitation_token,
             last_login,
             password,
             salt,
@@ -207,6 +214,7 @@ SQL
             :token,
             :createdOn,
             :email,
+            :invitationToken,
             :lastLogin,
             :password,
             :salt,
@@ -219,6 +227,7 @@ SQL
             'token'                 => $aUser->confirmationToken(),
             'createdOn'             => $aUser->createdOn()->format(self::DATE_FORMAT),
             'email'                 => $aUser->email()->email(),
+            'invitationToken'       => $aUser->invitationToken() ? $aUser->invitationToken()->token() : null,
             'lastLogin'             => $aUser->lastLogin() ? $aUser->lastLogin()->format(self::DATE_FORMAT) : null,
             'password'              => $aUser->password()->encodedPassword(),
             'salt'                  => $aUser->password()->salt(),
@@ -237,6 +246,7 @@ SQL
     {
         $sql = 'UPDATE user SET
             confirmation_token = :confirmationToken,
+            invitation_token = :invitationToken,
             last_login = :lastLogin,
             password = :password,
             remember_password_token = :rememberPasswordToken,
@@ -246,6 +256,7 @@ SQL
         $this->execute($sql, [
             'id'                    => $aUser->id()->id(),
             'confirmationToken'     => $aUser->confirmationToken() ? $aUser->confirmationToken()->token() : null,
+            'invitationToken'       => $aUser->invitationToken() ? $aUser->invitationToken()->token() : null,
             'lastLogin'             => $aUser->lastLogin() ? $aUser->lastLogin()->format(self::DATE_FORMAT) : null,
             'password'              => $aUser->password()->encodedPassword(),
             'rememberPasswordToken' => $aUser->rememberPasswordToken() ? $aUser->rememberPasswordToken()->token() : null,
@@ -288,11 +299,14 @@ SQL
         $confirmationToken = null === $row['confirmation_token']
             ? null
             : new UserToken($row['confirmation_token']);
+        $invitationToken = null === $row['invitation_token']
+            ? null
+            : new UserToken($row['invitation_token']);
         $rememberPasswordToken = null === $row['remember_password_token']
             ? null
             : new UserToken($row['remember_password_token']);
 
-        $user = new User(
+        $user = User::signUp(
             new UserId($row['id']),
             new UserEmail($row['email']),
             UserPassword::fromEncoded($row['password'], $row['salt']),
@@ -303,6 +317,7 @@ SQL
         $user = $this->set($user, 'updatedOn', $updatedOn);
         $user = $this->set($user, 'lastLogin', $lastLogin);
         $user = $this->set($user, 'confirmationToken', $confirmationToken);
+        $user = $this->set($user, 'invitationToken', $invitationToken);
         $user = $this->set($user, 'rememberPasswordToken', $rememberPasswordToken);
 
         return $user;

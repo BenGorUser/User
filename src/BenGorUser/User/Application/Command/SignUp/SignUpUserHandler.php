@@ -14,7 +14,7 @@ namespace BenGorUser\User\Application\Command\SignUp;
 
 use BenGorUser\User\Domain\Model\Exception\UserAlreadyExistException;
 use BenGorUser\User\Domain\Model\UserEmail;
-use BenGorUser\User\Domain\Model\UserFactory;
+use BenGorUser\User\Domain\Model\UserFactorySignUp;
 use BenGorUser\User\Domain\Model\UserId;
 use BenGorUser\User\Domain\Model\UserPassword;
 use BenGorUser\User\Domain\Model\UserPasswordEncoder;
@@ -37,9 +37,9 @@ class SignUpUserHandler
     private $encoder;
 
     /**
-     * The user factory.
+     * The user sign up factory.
      *
-     * @var UserFactory
+     * @var UserFactorySignUp
      */
     private $factory;
 
@@ -55,10 +55,13 @@ class SignUpUserHandler
      *
      * @param UserRepository      $aRepository The user repository
      * @param UserPasswordEncoder $anEncoder   The password encoder
-     * @param UserFactory         $aFactory    The user factory
+     * @param UserFactorySignUp   $aFactory    The user sign up factory
      */
-    public function __construct(UserRepository $aRepository, UserPasswordEncoder $anEncoder, UserFactory $aFactory)
-    {
+    public function __construct(
+        UserRepository $aRepository,
+        UserPasswordEncoder $anEncoder,
+        UserFactorySignUp $aFactory
+    ) {
         $this->repository = $aRepository;
         $this->encoder = $anEncoder;
         $this->factory = $aFactory;
@@ -86,7 +89,7 @@ class SignUpUserHandler
             return new UserRole($role);
         }, $aCommand->roles());
 
-        $user = $this->factory->register(
+        $user = $this->factory->build(
             $id,
             $email,
             UserPassword::fromPlain($aCommand->password(), $this->encoder),

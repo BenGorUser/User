@@ -13,15 +13,15 @@
 namespace BenGorUser\User\Domain\Model;
 
 /**
- * User factory domain class.
+ * User sign up factory domain class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-interface UserFactory
+interface UserFactorySignUp
 {
     /**
-     * Registers the user with given id, email and password.
+     * Sing up the user with given id, email, password and roles.
      *
      * @param UserId       $anId      The user id
      * @param UserEmail    $anEmail   The user email
@@ -30,5 +30,5 @@ interface UserFactory
      *
      * @return User
      */
-    public function register(UserId $anId, UserEmail $anEmail, UserPassword $aPassword, array $roles);
+    public function build(UserId $anId, UserEmail $anEmail, UserPassword $aPassword, array $roles);
 }
