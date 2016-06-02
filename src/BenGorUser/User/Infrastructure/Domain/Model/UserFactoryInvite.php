@@ -14,17 +14,16 @@ namespace BenGorUser\User\Infrastructure\Domain\Model;
 
 use BenGorUser\User\Domain\Model\User;
 use BenGorUser\User\Domain\Model\UserEmail;
-use BenGorUser\User\Domain\Model\UserFactory as BaseUserFactory;
+use BenGorUser\User\Domain\Model\UserFactoryInvite as BaseUserFactoryInvite;
 use BenGorUser\User\Domain\Model\UserId;
-use BenGorUser\User\Domain\Model\UserPassword;
 
 /**
- * Implementation of user factory domain class.
+ * Implementation of user invite factory domain class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-final class UserFactory implements BaseUserFactory
+final class UserFactoryInvite implements BaseUserFactoryInvite
 {
     /**
      * The entity fully qualified namespace.
@@ -46,8 +45,8 @@ final class UserFactory implements BaseUserFactory
     /**
      * {@inheritdoc}
      */
-    public function register(UserId $anId, UserEmail $anEmail, UserPassword $aPassword, array $roles)
+    public function build(UserId $anId, UserEmail $anEmail)
     {
-        return new $this->class($anId, $anEmail, $aPassword, $roles);
+        return forward_static_call_array([$this->class, 'invite'], [$anId, $anEmail]);
     }
 }

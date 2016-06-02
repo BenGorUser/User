@@ -113,8 +113,12 @@ class User extends UserAggregateRoot
      * @param UserPassword $aPassword The encoded password
      * @param array        $userRoles Array which contains the roles
      */
-    public function __construct(UserId $anId, UserEmail $anEmail, UserPassword $aPassword, array $userRoles)
-    {
+    protected function __construct(
+        UserId $anId,
+        UserEmail $anEmail,
+        UserPassword $aPassword = null,
+        array $userRoles = []
+    ) {
         $this->id = $anId;
         $this->email = $anEmail;
         $this->password = $aPassword;
@@ -126,14 +130,53 @@ class User extends UserAggregateRoot
         foreach ($userRoles as $userRole) {
             $this->grant($userRole);
         }
+    }
 
-        $this->publish(
+    /**
+     * Sign up user.
+     *
+     * @param UserId       $anId      The id
+     * @param UserEmail    $anEmail   The email
+     * @param UserPassword $aPassword The encoded password
+     * @param array        $userRoles Array which contains the roles
+     *
+     * @return static
+     */
+    public static function signUp(UserId $anId, UserEmail $anEmail, UserPassword $aPassword, array $userRoles)
+    {
+        $user = new static($anId, $anEmail, $aPassword, $userRoles);
+        $user->publish(
             new UserRegistered(
-                $this->id,
-                $this->email,
-                $this->confirmationToken
+                $user->id(),
+                $user->email(),
+                $user->confirmationToken()
             )
         );
+
+        return $user;
+    }
+
+    /**
+     * Invites user.
+     *
+     * @param UserId    $anId    The id
+     * @param UserEmail $anEmail The email
+     *
+     * @return static
+     */
+    public static function invite(UserId $anId, UserEmail $anEmail)
+    {
+        $user = new static($anId, $anEmail);
+        $user->invitationToken = new UserToken();
+        $user->publish(
+            new UserInvited(
+                $user->id(),
+                $user->email(),
+                $user->invitationToken()
+            )
+        );
+
+        return $user;
     }
 
     /**
@@ -234,22 +277,6 @@ class User extends UserAggregateRoot
     public function invitationToken()
     {
         return $this->invitationToken;
-    }
-
-    /**
-     * Creates the invitation token.
-     */
-    public function invite()
-    {
-        $this->invitationToken = new UserToken();
-
-        $this->publish(
-            new UserInvited(
-                $this->id,
-                $this->email,
-                $this->invitationToken
-            )
-        );
     }
 
     /**
@@ -366,7 +393,7 @@ class User extends UserAggregateRoot
         if (null === $this->invitationToken) {
             throw new UserInvitationAlreadyAcceptedException();
         }
-        $this->invite();
+        $this->invitationToken = new UserToken();
     }
 
     /**

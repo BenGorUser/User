@@ -13,6 +13,7 @@
 namespace spec\BenGorUser\User\Domain\Model;
 
 use BenGorUser\User\Domain\Model\Exception\UserInactiveException;
+use BenGorUser\User\Domain\Model\Exception\UserInvitationAlreadyAcceptedException;
 use BenGorUser\User\Domain\Model\Exception\UserPasswordInvalidException;
 use BenGorUser\User\Domain\Model\Exception\UserRoleAlreadyGrantedException;
 use BenGorUser\User\Domain\Model\Exception\UserRoleAlreadyRevokedException;
@@ -39,7 +40,7 @@ class UserSpec extends ObjectBehavior
     {
         $encoder = new DummyUserPasswordEncoder('encodedPassword');
 
-        $this->beConstructedWith(
+        $this->beConstructedSignUp(
             new UserId(),
             new UserEmail('test@test.com'),
             UserPassword::fromPlain('strongpassword', $encoder),
@@ -105,6 +106,25 @@ class UserSpec extends ObjectBehavior
     {
         $this->enableAccount();
         $this->logout();
+    }
+
+    function it_regenerates_when_token_is_null()
+    {
+        $this->shouldThrow(
+            UserInvitationAlreadyAcceptedException::class
+        )->duringRegenerateInvitationToken();
+    }
+
+    function it_regenerates_invitation_token()
+    {
+        $this->beConstructedInvite(
+            new UserId(),
+            new UserEmail('test@test.com')
+        );
+
+        $token = $this->invitationToken();
+        $this->regenerateInvitationToken();
+        $this->invitationToken()->shouldNotBe($token);
     }
 
     function it_remembers_password()

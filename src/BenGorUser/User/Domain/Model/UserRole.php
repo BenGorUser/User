@@ -32,6 +32,8 @@ final class UserRole
      * Constructor.
      *
      * @param string $aRole A role in primitive string
+     *
+     * @throws UserRoleInvalidException when the role is null
      */
     public function __construct($aRole)
     {

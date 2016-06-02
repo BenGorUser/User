@@ -12,10 +12,10 @@
 
 namespace BenGorUser\User\Application\Command\Invite;
 
-use BenGorUser\User\Domain\Model\Exception\UserAlreadyExistException;
 use BenGorUser\User\Domain\Model\Exception\UserInvitationAlreadyAcceptedException;
 use BenGorUser\User\Domain\Model\UserEmail;
-use BenGorUser\User\Domain\Model\UserFactory;
+use BenGorUser\User\Domain\Model\UserFactoryInvite;
+use BenGorUser\User\Domain\Model\UserId;
 use BenGorUser\User\Domain\Model\UserRepository;
 
 /**
@@ -27,29 +27,29 @@ use BenGorUser\User\Domain\Model\UserRepository;
 class InviteUserHandler
 {
     /**
-     * The user factory.
+     * The user invite factory.
      *
-     * @var UserFactory
+     * @var UserFactoryInvite
      */
-    private $userFactory;
+    private $factory;
 
     /**
      * The user repository.
      *
      * @var UserRepository
      */
-    private $userRepository;
+    private $repository;
 
     /**
      * Constructor.
      *
-     * @param UserRepository $aUserRepository The user repository
-     * @param UserFactory    $aUserFactory    The user factory
+     * @param UserRepository    $aRepository The user repository
+     * @param UserFactoryInvite $aFactory    The user invite factory
      */
-    public function __construct(UserRepository $aUserRepository, UserFactory $aUserFactory)
+    public function __construct(UserRepository $aRepository, UserFactoryInvite $aFactory)
     {
-        $this->userRepository = $aUserRepository;
-        $this->userGuestFactory = $aUserFactory;
+        $this->repository = $aRepository;
+        $this->factory = $aFactory;
     }
 
     /**
@@ -58,27 +58,21 @@ class InviteUserHandler
      * @param InviteUserCommand $aCommand The command
      *
      * @throws UserInvitationAlreadyAcceptedException when the user already accepted invitation
-     * @throws UserAlreadyExistException when the user already exists
      */
     public function __invoke(InviteUserCommand $aCommand)
     {
+        $id = new UserId($aCommand->id());
         $email = new UserEmail($aCommand->email());
 
-        $user = $this->userRepository->userOfEmail($email);
+        $user = $this->repository->userOfEmail($email);
         if (null !== $user && null === $user->invitationToken()) {
             throw new UserInvitationAlreadyAcceptedException();
         }
 
-        $userGuest = $this->userGuestRepository->userGuestOfEmail($email);
-        if (null === $user) {
-            $userGuest = $this->userGuestFactory->register(
-                $this->userGuestRepository->nextIdentity(),
-                $email
-            );
-        } else {
-            $user->regenerateInvitationToken();
-        }
+        null === $user
+            ? $user = $this->factory->build($id, $email)
+            : $user->regenerateInvitationToken();
 
-        $this->userRepository->persist($user);
+        $this->repository->persist($user);
     }
 }

@@ -48,6 +48,15 @@ interface UserRepository
     public function userOfConfirmationToken(UserToken $aConfirmationToken);
 
     /**
+     * Finds the user of given invitation token.
+     *
+     * @param UserToken $anInvitationToken The user invitation token
+     *
+     * @return User
+     */
+    public function userOfInvitationToken(UserToken $anInvitationToken);
+
+    /**
      * Finds the user of given remember password token.
      *
      * @param UserToken $aRememberPasswordToken The remember password token
@@ -76,11 +85,4 @@ interface UserRepository
      * @return int
      */
     public function size();
-
-    /**
-     * Gets the next user id.
-     *
-     * @return UserId
-     */
-    public function nextIdentity();
 }

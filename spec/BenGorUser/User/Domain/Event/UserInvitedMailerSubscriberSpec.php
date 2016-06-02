@@ -17,7 +17,6 @@ use BenGorUser\User\Domain\Event\UserInvitedMailerSubscriber;
 use BenGorUser\User\Domain\Model\Event\UserInvited;
 use BenGorUser\User\Domain\Model\Event\UserRegistered;
 use BenGorUser\User\Domain\Model\UserEmail;
-use BenGorUser\User\Domain\Model\UserGuestId;
 use BenGorUser\User\Domain\Model\UserId;
 use BenGorUser\User\Domain\Model\UserMailable;
 use BenGorUser\User\Domain\Model\UserMailableFactory;
@@ -52,7 +51,7 @@ class UserInvitedMailerSubscriberSpec extends ObjectBehavior
     function it_handles(UserUrlGenerator $urlGenerator, UserMailableFactory $mailableFactory)
     {
         $domainEvent = new UserInvited(
-            new UserGuestId(),
+            new UserId(),
             new UserEmail('bengor@user.com'),
             new UserToken('invitation-token')
         );
@@ -76,7 +75,7 @@ class UserInvitedMailerSubscriberSpec extends ObjectBehavior
     function it_is_subscribe_to()
     {
         $invitedDomainEvent = new UserInvited(
-            new UserGuestId(),
+            new UserId(),
             new UserEmail('bengor@user.com'),
             new UserToken('invitation-token')
         );

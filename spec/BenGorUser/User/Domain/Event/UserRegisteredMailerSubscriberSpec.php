@@ -17,7 +17,6 @@ use BenGorUser\User\Domain\Event\UserRegisteredMailerSubscriber;
 use BenGorUser\User\Domain\Model\Event\UserInvited;
 use BenGorUser\User\Domain\Model\Event\UserRegistered;
 use BenGorUser\User\Domain\Model\UserEmail;
-use BenGorUser\User\Domain\Model\UserGuestId;
 use BenGorUser\User\Domain\Model\UserId;
 use BenGorUser\User\Domain\Model\UserMailable;
 use BenGorUser\User\Domain\Model\UserMailableFactory;
@@ -81,7 +80,7 @@ class UserRegisteredMailerSubscriberSpec extends ObjectBehavior
             new UserToken('confirmation-token')
         );
         $invitedDomainEvent = new UserInvited(
-            new UserGuestId(),
+            new UserId(),
             new UserEmail('bengor@user.com'),
             new UserToken('invitation-token')
         );

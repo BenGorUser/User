@@ -12,12 +12,12 @@
 
 namespace spec\BenGorUser\User\Application\Command\SignUp;
 
-use BenGorUser\User\Application\Command\SignUp\WithConfirmationSignUpUserCommand;
-use BenGorUser\User\Application\Command\SignUp\WithConfirmationSignUpUserHandler;
+use BenGorUser\User\Application\Command\SignUp\SignUpUserCommand;
+use BenGorUser\User\Application\Command\SignUp\SignUpUserHandler;
 use BenGorUser\User\Domain\Model\Exception\UserAlreadyExistException;
 use BenGorUser\User\Domain\Model\User;
 use BenGorUser\User\Domain\Model\UserEmail;
-use BenGorUser\User\Domain\Model\UserFactory;
+use BenGorUser\User\Domain\Model\UserFactorySignUp;
 use BenGorUser\User\Domain\Model\UserId;
 use BenGorUser\User\Domain\Model\UserPassword;
 use BenGorUser\User\Domain\Model\UserRepository;
@@ -27,14 +27,14 @@ use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
 /**
- * Spec file of WithConfirmationSignUpUserHandler class.
+ * Spec file of SignUpUserHandler class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-class WithConfirmationSignUpUserHandlerSpec extends ObjectBehavior
+class SignUpUserHandlerSpec extends ObjectBehavior
 {
-    function let(UserRepository $repository, UserFactory $factory)
+    function let(UserRepository $repository, UserFactorySignUp $factory)
     {
         $this->beConstructedWith(
             $repository,
@@ -45,13 +45,13 @@ class WithConfirmationSignUpUserHandlerSpec extends ObjectBehavior
 
     function it_is_initializable()
     {
-        $this->shouldHaveType(WithConfirmationSignUpUserHandler::class);
+        $this->shouldHaveType(SignUpUserHandler::class);
     }
 
     function it_signs_the_user_up(
-        WithConfirmationSignUpUserCommand $command,
+        SignUpUserCommand $command,
         UserRepository $repository,
-        UserFactory $factory,
+        UserFactorySignUp $factory,
         User $user
     ) {
         $command->id()->shouldBeCalled()->willReturn('user-id');
@@ -67,16 +67,17 @@ class WithConfirmationSignUpUserHandlerSpec extends ObjectBehavior
         $command->roles()->shouldBeCalled()->willReturn(['ROLE_USER']);
         $roles = [new UserRole('ROLE_USER')];
 
-        $factory->register(
+        $factory->build(
             $id, $email, Argument::type(UserPassword::class), $roles
         )->shouldBeCalled()->willReturn($user);
+        $user->enableAccount()->shouldBeCalled();
         $repository->persist($user)->shouldBeCalled();
 
         $this->__invoke($command);
     }
 
     function it_does_not_sign_up_if_user_id_already_exists(
-        WithConfirmationSignUpUserCommand $command,
+        SignUpUserCommand $command,
         UserRepository $repository,
         User $user
     ) {
@@ -88,7 +89,7 @@ class WithConfirmationSignUpUserHandlerSpec extends ObjectBehavior
     }
 
     function it_does_not_sign_up_if_user_email_already_exists(
-        WithConfirmationSignUpUserCommand $command,
+        SignUpUserCommand $command,
         UserRepository $repository,
         User $user
     ) {

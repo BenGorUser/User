@@ -12,6 +12,8 @@
 
 namespace BenGorUser\User\Application\Command\Invite;
 
+use Ramsey\Uuid\Uuid;
+
 /**
  * User invite command class.
  *
@@ -19,6 +21,13 @@ namespace BenGorUser\User\Application\Command\Invite;
  */
 class InviteUserCommand
 {
+    /**
+     * The user id.
+     *
+     * @var string
+     */
+    private $id;
+
     /**
      * The user email.
      *
@@ -29,11 +38,23 @@ class InviteUserCommand
     /**
      * Constructor.
      *
-     * @param string $anEmail The user email
+     * @param string      $anEmail The user email
+     * @param string|null $anId    User id, it can be null
      */
-    public function __construct($anEmail)
+    public function __construct($anEmail, $anId = null)
     {
+        $this->id = null === $anId ? Uuid::uuid4()->toString() : $anId;
         $this->email = $anEmail;
+    }
+
+    /**
+     * Gets the id.
+     *
+     * @return string
+     */
+    public function id()
+    {
+        return $this->id;
     }
 
     /**

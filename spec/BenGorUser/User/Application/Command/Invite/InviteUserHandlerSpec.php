@@ -14,13 +14,11 @@ namespace spec\BenGorUser\User\Application\Command\Invite;
 
 use BenGorUser\User\Application\Command\Invite\InviteUserCommand;
 use BenGorUser\User\Application\Command\Invite\InviteUserHandler;
-use BenGorUser\User\Domain\Model\Exception\UserAlreadyExistException;
+use BenGorUser\User\Domain\Model\Exception\UserInvitationAlreadyAcceptedException;
 use BenGorUser\User\Domain\Model\User;
 use BenGorUser\User\Domain\Model\UserEmail;
-use BenGorUser\User\Domain\Model\UserGuest;
-use BenGorUser\User\Domain\Model\UserGuestFactory;
-use BenGorUser\User\Domain\Model\UserGuestId;
-use BenGorUser\User\Domain\Model\UserGuestRepository;
+use BenGorUser\User\Domain\Model\UserFactoryInvite;
+use BenGorUser\User\Domain\Model\UserId;
 use BenGorUser\User\Domain\Model\UserRepository;
 use PhpSpec\ObjectBehavior;
 
@@ -31,9 +29,9 @@ use PhpSpec\ObjectBehavior;
  */
 class InviteUserHandlerSpec extends ObjectBehavior
 {
-    function let(UserRepository $userRepository, UserGuestRepository $userGuestRepository, UserGuestFactory $factory)
+    function let(UserRepository $userRepository, UserFactoryInvite $factory)
     {
-        $this->beConstructedWith($userRepository, $userGuestRepository, $factory);
+        $this->beConstructedWith($userRepository, $factory);
     }
 
     function it_is_initializable()
@@ -44,23 +42,18 @@ class InviteUserHandlerSpec extends ObjectBehavior
     function it_invites_user(
         InviteUserCommand $command,
         UserRepository $userRepository,
-        UserGuestRepository $userGuestRepository,
-        UserGuestFactory $factory,
-        UserGuest $userGuest
+        UserFactoryInvite $factory,
+        User $user
     ) {
-        $id = new UserGuestId('id');
-
+        $command->id()->shouldBeCalled()->willReturn('user-id');
+        $id = new UserId('user-id');
         $command->email()->shouldBeCalled()->willReturn('user@user.com');
         $email = new UserEmail('user@user.com');
 
         $userRepository->userOfEmail($email)->shouldBeCalled()->willReturn(null);
-        $userGuestRepository->userGuestOfEmail($email)
-            ->shouldBeCalled()->willReturn(null);
+        $factory->build($id, $email)->shouldBeCalled()->willReturn($user);
 
-        $userGuestRepository->nextIdentity()->shouldBeCalled()->willReturn($id);
-        $factory->register($id, $email)->shouldBeCalled()->willReturn($userGuest);
-
-        $userGuestRepository->persist($userGuest)->shouldBeCalled();
+        $userRepository->persist($user)->shouldBeCalled();
 
         $this->__invoke($command);
     }
@@ -68,32 +61,32 @@ class InviteUserHandlerSpec extends ObjectBehavior
     function it_reinvites_user(
         InviteUserCommand $command,
         UserRepository $userRepository,
-        UserGuestRepository $userGuestRepository,
-        UserGuest $userGuest
+        User $user
     ) {
+        $command->id()->shouldBeCalled()->willReturn('user-id');
         $command->email()->shouldBeCalled()->willReturn('user@user.com');
         $email = new UserEmail('user@user.com');
 
-        $userRepository->userOfEmail($email)
-            ->shouldBeCalled()->willReturn(null);
-        $userGuestRepository->userGuestOfEmail($email)
-            ->shouldBeCalled()->willReturn($userGuest);
-        $userGuest->regenerateInvitationToken()->shouldBeCalled();
+        $userRepository->userOfEmail($email)->shouldBeCalled()->willReturn($user);
+        $user->invitationToken()->shouldBeCalled()->willReturn('invitation-token');
+        $user->regenerateInvitationToken()->shouldBeCalled();
 
-        $userGuestRepository->persist($userGuest)->shouldBeCalled();
+        $userRepository->persist($user)->shouldBeCalled();
 
         $this->__invoke($command);
     }
 
-    function it_does_not_invite_if_user_already_exist(
+    function it_does_not_invite_when_user_invitation_already_accepted(
         UserRepository $userRepository,
         User $user,
         InviteUserCommand $command
     ) {
+        $command->id()->shouldBeCalled()->willReturn('user-id');
         $command->email()->shouldBeCalled()->willReturn('user@user.com');
         $email = new UserEmail('user@user.com');
         $userRepository->userOfEmail($email)->shouldBeCalled()->willReturn($user);
+        $user->invitationToken()->shouldBeCalled()->willReturn(null);
 
-        $this->shouldThrow(UserAlreadyExistException::class)->during__invoke($command);
+        $this->shouldThrow(UserInvitationAlreadyAcceptedException::class)->during__invoke($command);
     }
 }

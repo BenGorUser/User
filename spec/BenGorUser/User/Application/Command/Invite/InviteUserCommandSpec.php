@@ -28,5 +28,6 @@ class InviteUserCommandSpec extends ObjectBehavior
         $this->shouldHaveType(InviteUserCommand::class);
 
         $this->email()->shouldBe('email@email.com');
+        $this->id()->shouldNotBe(null);
     }
 }
