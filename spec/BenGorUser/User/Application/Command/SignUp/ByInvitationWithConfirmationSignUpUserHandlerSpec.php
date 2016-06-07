@@ -16,7 +16,6 @@ use BenGorUser\User\Application\Command\SignUp\ByInvitationWithConfirmationSignU
 use BenGorUser\User\Application\Command\SignUp\ByInvitationWithConfirmationSignUpUserHandler;
 use BenGorUser\User\Domain\Model\Exception\UserDoesNotExistException;
 use BenGorUser\User\Domain\Model\User;
-use BenGorUser\User\Domain\Model\UserFactorySignUp;
 use BenGorUser\User\Domain\Model\UserPassword;
 use BenGorUser\User\Domain\Model\UserRepository;
 use BenGorUser\User\Domain\Model\UserRole;
@@ -33,12 +32,11 @@ use Prophecy\Argument;
  */
 class ByInvitationWithConfirmationSignUpUserHandlerSpec extends ObjectBehavior
 {
-    function let(UserRepository $repository, UserFactorySignUp $factory)
+    function let(UserRepository $repository)
     {
         $this->beConstructedWith(
             $repository,
-            new DummyUserPasswordEncoder('encoded-password'),
-            $factory
+            new DummyUserPasswordEncoder('encoded-password')
         );
     }
 

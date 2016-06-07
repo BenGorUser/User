@@ -13,7 +13,6 @@
 namespace BenGorUser\User\Application\Command\SignUp;
 
 use BenGorUser\User\Domain\Model\Exception\UserDoesNotExistException;
-use BenGorUser\User\Domain\Model\UserFactorySignUp;
 use BenGorUser\User\Domain\Model\UserPassword;
 use BenGorUser\User\Domain\Model\UserPasswordEncoder;
 use BenGorUser\User\Domain\Model\UserRepository;
@@ -36,13 +35,6 @@ class ByInvitationSignUpUserHandler
     private $encoder;
 
     /**
-     * The user factory.
-     *
-     * @var UserFactorySignUp
-     */
-    private $factory;
-
-    /**
      * The user repository.
      *
      * @var UserRepository
@@ -54,16 +46,11 @@ class ByInvitationSignUpUserHandler
      *
      * @param UserRepository      $aUserRepository The user repository
      * @param UserPasswordEncoder $anEncoder       The password encoder
-     * @param UserFactorySignUp   $aFactory        The user sign up factory
      */
-    public function __construct(
-        UserRepository $aUserRepository,
-        UserPasswordEncoder $anEncoder,
-        UserFactorySignUp $aFactory
-    ) {
+    public function __construct(UserRepository $aUserRepository, UserPasswordEncoder $anEncoder)
+    {
         $this->userRepository = $aUserRepository;
         $this->encoder = $anEncoder;
-        $this->factory = $aFactory;
     }
 
     /**
