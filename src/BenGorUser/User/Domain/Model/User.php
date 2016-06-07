@@ -386,7 +386,10 @@ class User extends UserAggregateRoot
     }
 
     /**
-     * Updates the invitation token.
+     * Updates the invitation token in case a user has
+     * been already invited and has lost the token.
+     *
+     * @throws UserInvitationAlreadyAcceptedException in case user has already accepted the invitation
      */
     public function regenerateInvitationToken()
     {
