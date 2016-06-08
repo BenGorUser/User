@@ -10,7 +10,7 @@
  * file that was distributed with this source code.
  */
 
-namespace BenGorUser\User\CommandBus;
+namespace BenGorUser\User\Infrastructure\CommandBus;
 
 /**
  * User command bus class.
