@@ -46,7 +46,6 @@ class UserDTODataTransformerSpec extends ObjectBehavior
         $this->shouldThrow(
             new \InvalidArgumentException(sprintf('Expected instance of %s', User::class))
         )->duringWrite(['id' => 'not-user-domain-model-class']);
-
     }
 
     function it_transforms(

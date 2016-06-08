@@ -12,12 +12,10 @@
 
 namespace spec\BenGorUser\User\Domain\Model\Event;
 
-use BenGorUser\User\Domain\Model\Event\UserRegistered;
 use BenGorUser\User\Domain\Model\Event\UserRoleGranted;
 use BenGorUser\User\Domain\Model\UserEmail;
 use BenGorUser\User\Domain\Model\UserId;
 use BenGorUser\User\Domain\Model\UserRole;
-use BenGorUser\User\Domain\Model\UserToken;
 use PhpSpec\ObjectBehavior;
 
 /**

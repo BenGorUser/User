@@ -12,7 +12,6 @@
 
 namespace spec\BenGorUser\User\Domain\Model\Event;
 
-use BenGorUser\User\Domain\Model\Event\UserEnabled;
 use BenGorUser\User\Domain\Model\Event\UserInvited;
 use BenGorUser\User\Domain\Model\UserEmail;
 use BenGorUser\User\Domain\Model\UserId;
