@@ -74,7 +74,7 @@ final class UserMailable
                     throw new UserEmailInvalidException();
                 }
 
-                return $receiver->email();
+                return $receiver;
             }, $to);
         } elseif ($to instanceof UserEmail) {
             $this->to = $to;

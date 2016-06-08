@@ -28,6 +28,7 @@ class SignUpUserCommandSpec extends ObjectBehavior
         $this->beConstructedWith('user@user.net', 'plainPassword', ['ROLE_USER', 'ROLE_ADMIN']);
         $this->shouldHaveType(SignUpUserCommand::class);
 
+        $this->id()->shouldNotBe(null);
         $this->email()->shouldReturn('user@user.net');
         $this->password()->shouldReturn('plainPassword');
         $this->roles()->shouldReturn(['ROLE_USER', 'ROLE_ADMIN']);

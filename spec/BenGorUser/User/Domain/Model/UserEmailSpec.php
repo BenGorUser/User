@@ -17,7 +17,7 @@ use BenGorUser\User\Domain\Model\UserEmail;
 use PhpSpec\ObjectBehavior;
 
 /**
- * Spec file of user email value object class.
+ * Spec file of UserEmail class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
@@ -26,13 +26,13 @@ class UserEmailSpec extends ObjectBehavior
 {
     function it_constructs_with_valid_email()
     {
-        $this->beConstructedWith('test@test.com');
+        $this->beConstructedWith('bengor@user.com');
         $this->shouldHaveType(UserEmail::class);
 
-        $this->email()->shouldBe('test@test.com');
-        $this->domain()->shouldBe('test.com');
-        $this->localPart()->shouldBe('test');
-        $this->__toString()->shouldBe('test@test.com');
+        $this->email()->shouldBe('bengor@user.com');
+        $this->domain()->shouldBe('user.com');
+        $this->localPart()->shouldBe('bengor');
+        $this->__toString()->shouldBe('bengor@user.com');
     }
 
     function it_constructs_with_invalid_email()
@@ -40,5 +40,19 @@ class UserEmailSpec extends ObjectBehavior
         $this->beConstructedWith('invalid string');
 
         $this->shouldThrow(UserEmailInvalidException::class)->duringInstantiation();
+    }
+
+    function it_compares_ids()
+    {
+        $this->beConstructedWith('bengor@user.com');
+
+        $this->equals(new UserEmail('bengor@user.com'))->shouldBe(true);
+    }
+
+    function it_compares_different_ids()
+    {
+        $this->beConstructedWith('bengor@user.com');
+
+        $this->equals(new UserEmail('not-bengor@user.com'))->shouldBe(false);
     }
 }

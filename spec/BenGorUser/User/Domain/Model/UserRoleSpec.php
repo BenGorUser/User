@@ -12,11 +12,12 @@
 
 namespace spec\BenGorUser\User\Domain\Model;
 
+use BenGorUser\User\Domain\Model\Exception\UserRoleInvalidException;
 use BenGorUser\User\Domain\Model\UserRole;
 use PhpSpec\ObjectBehavior;
 
 /**
- * Spec file of user role value object class.
+ * Spec file of UserRole class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  */
@@ -29,5 +30,12 @@ class UserRoleSpec extends ObjectBehavior
 
         $this->role()->shouldBe('ROLE_USER');
         $this->__toString()->shouldBe('ROLE_USER');
+    }
+
+    function it_constructs_with_null()
+    {
+        $this->beConstructedWith(null);
+
+        $this->shouldThrow(UserRoleInvalidException::class)->duringInstantiation();
     }
 }

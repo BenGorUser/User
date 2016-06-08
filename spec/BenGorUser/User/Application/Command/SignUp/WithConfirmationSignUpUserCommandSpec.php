@@ -28,6 +28,7 @@ class WithConfirmationSignUpUserCommandSpec extends ObjectBehavior
         $this->beConstructedWith('user@user.net', 'plainPassword', ['ROLE_USER', 'ROLE_ADMIN']);
         $this->shouldHaveType(WithConfirmationSignUpUserCommand::class);
 
+        $this->id()->shouldNotBe(null);
         $this->email()->shouldReturn('user@user.net');
         $this->password()->shouldReturn('plainPassword');
         $this->roles()->shouldReturn(['ROLE_USER', 'ROLE_ADMIN']);

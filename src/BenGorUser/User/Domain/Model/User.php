@@ -198,6 +198,7 @@ class User extends UserAggregateRoot
     {
         $this->password = $aPassword;
         $this->rememberPasswordToken = null;
+        $this->updatedOn = new \DateTimeImmutable();
     }
 
     /**
@@ -236,6 +237,7 @@ class User extends UserAggregateRoot
     public function enableAccount()
     {
         $this->confirmationToken = null;
+        $this->updatedOn = new \DateTimeImmutable();
 
         $this->publish(
             new UserEnabled(
@@ -259,6 +261,7 @@ class User extends UserAggregateRoot
             throw new UserRoleAlreadyGrantedException();
         }
         $this->roles[] = $aRole;
+        $this->updatedOn = new \DateTimeImmutable();
 
         $this->publish(
             new UserRoleGranted(
@@ -442,6 +445,7 @@ class User extends UserAggregateRoot
             }
             throw new UserRoleAlreadyRevokedException();
         }
+        $this->updatedOn = new \DateTimeImmutable();
         $this->publish(
             new UserRoleRevoked(
                 $this->id,

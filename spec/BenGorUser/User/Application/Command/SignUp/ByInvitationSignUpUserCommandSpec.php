@@ -28,6 +28,7 @@ class ByInvitationSignUpUserCommandSpec extends ObjectBehavior
         $this->beConstructedWith('invitation-token', 'plainPassword', ['ROLE_USER', 'ROLE_ADMIN']);
         $this->shouldHaveType(ByInvitationSignUpUserCommand::class);
 
+        $this->id()->shouldNotBe(null);
         $this->invitationToken()->shouldReturn('invitation-token');
         $this->password()->shouldReturn('plainPassword');
         $this->roles()->shouldReturn(['ROLE_USER', 'ROLE_ADMIN']);

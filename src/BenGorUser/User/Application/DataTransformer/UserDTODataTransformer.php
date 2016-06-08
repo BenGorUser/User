@@ -35,9 +35,7 @@ class UserDTODataTransformer implements UserDataTransformer
     public function write($aUser)
     {
         if (!$aUser instanceof User) {
-            throw new \InvalidArgumentException(
-                sprintf('Expected instance of %s, %s given', User::class, get_class($aUser))
-            );
+            throw new \InvalidArgumentException(sprintf('Expected instance of %s', User::class));
         }
         $this->user = $aUser;
     }

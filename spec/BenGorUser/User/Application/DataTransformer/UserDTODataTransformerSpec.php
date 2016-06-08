@@ -19,7 +19,6 @@ use BenGorUser\User\Domain\Model\UserEmail;
 use BenGorUser\User\Domain\Model\UserId;
 use BenGorUser\User\Domain\Model\UserPassword;
 use BenGorUser\User\Domain\Model\UserRole;
-use BenGorUser\User\Domain\Model\UserToken;
 use PhpSpec\ObjectBehavior;
 
 /**
@@ -40,6 +39,16 @@ class UserDTODataTransformerSpec extends ObjectBehavior
         $this->shouldImplement(UserDataTransformer::class);
     }
 
+    function it_transform_without_user_domain_class()
+    {
+        $this->read()->shouldReturn([]);
+
+        $this->shouldThrow(
+            new \InvalidArgumentException(sprintf('Expected instance of %s', User::class))
+        )->duringWrite(['id' => 'not-user-domain-model-class']);
+
+    }
+
     function it_transforms(
         User $user,
         \DateTimeImmutable $createdOn,
@@ -55,7 +64,7 @@ class UserDTODataTransformerSpec extends ObjectBehavior
         $password = UserPassword::fromEncoded('encoded-password', 'user-password-salt');
 
         $user->id()->shouldBeCalled()->willReturn(new UserId('user-id'));
-        $user->confirmationToken()->shouldBeCalled()->willReturn(new UserToken('confirmation-token'));
+        $user->confirmationToken()->shouldBeCalled()->willReturn(null);
         $user->createdOn()->shouldBeCalled()->willReturn($createdOn);
         $user->email()->shouldBeCalled()->willReturn(new UserEmail('user@user.com'));
         $user->lastLogin()->shouldBeCalled()->willReturn($lastLogin);
@@ -65,7 +74,7 @@ class UserDTODataTransformerSpec extends ObjectBehavior
 
         $this->read()->shouldReturn([
             'id'                      => 'user-id',
-            'confirmation_token'      => 'confirmation-token',
+            'confirmation_token'      => null,
             'created_on'              => $createdOn,
             'email'                   => 'user@user.com',
             'last_login'              => $lastLogin,

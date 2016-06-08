@@ -19,7 +19,7 @@ use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
 /**
- * Spec file of User Id value object class.
+ * Spec file of UserPassword class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
@@ -38,8 +38,9 @@ class UserPasswordSpec extends ObjectBehavior
 
         $this->beConstructedFromEncoded($encodedPassword, $salt);
 
-        $this->encodedPassword()->shouldBe($encodedPassword);
-        $this->salt()->shouldBe($salt);
+        $this->encodedPassword()->shouldReturn($encodedPassword);
+        $this->__toString()->shouldReturn($encodedPassword);
+        $this->salt()->shouldReturn($salt);
     }
 
     function it_generates_from_plain_password(UserPasswordEncoder $encoder)
@@ -51,7 +52,7 @@ class UserPasswordSpec extends ObjectBehavior
 
         $this->beConstructedFromPlain($plainPassword, $encoder);
 
-        $this->encodedPassword($encodedPassword)->shouldBe($encodedPassword);
+        $this->encodedPassword($encodedPassword)->shouldReturn($encodedPassword);
         $this->salt()->shouldNotBe(null);
     }
 
@@ -60,6 +61,6 @@ class UserPasswordSpec extends ObjectBehavior
         $encoder = new DummyUserPasswordEncoder('ajdqwjnfewnewnfewkjqnfewkjn');
         $this->beConstructedFromEncoded('ajdqwjnfewnewnfewkjqnfewkjn', 'thisIsTheSalt');
 
-        $this->equals(123456, $encoder)->shouldBe(true);
+        $this->equals(123456, $encoder)->shouldReturn(true);
     }
 }

@@ -10,13 +10,13 @@
  * file that was distributed with this source code.
  */
 
-namespace spec\BenGorUser\User\Application\Command\CommandRememberPassword;
+namespace spec\BenGorUser\User\Application\Command\RequestRememberPassword;
 
-use BenGorUser\User\Application\Command\CommandRememberPassword\CommandRememberPasswordCommand;
+use BenGorUser\User\Application\Command\RequestRememberPassword\RequestRememberPasswordCommand;
 use PhpSpec\ObjectBehavior;
 
 /**
- * Spec file of request remember password request class.
+ * Spec file of RequestRememberPasswordCommand class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
@@ -26,7 +26,7 @@ class RequestRememberPasswordCommandSpec extends ObjectBehavior
     function it_creates_request()
     {
         $this->beConstructedWith('test@test.com');
-        $this->shouldHaveType(CommandRememberPasswordCommand::class);
+        $this->shouldHaveType(RequestRememberPasswordCommand::class);
 
         $this->email()->shouldBe('test@test.com');
     }

@@ -29,7 +29,7 @@ use DateTimeImmutable;
 use PhpSpec\ObjectBehavior;
 
 /**
- * Spec file of User domain class.
+ * Spec file of User class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
@@ -56,17 +56,23 @@ class UserSpec extends ObjectBehavior
     function it_registers_a_user()
     {
         $this->id()->id()->shouldNotBe(null);
-        $this->email()->email()->shouldBe('test@test.com');
+        $this->email()->email()->shouldReturn('test@test.com');
         $this->confirmationToken()->token()->shouldNotBe(null);
-        $this->isEnabled()->shouldBe(false);
+        $this->isEnabled()->shouldReturn(false);
+        $this->createdOn()->shouldReturnAnInstanceOf(\DateTimeImmutable::class);
+        $this->updatedOn()->shouldReturnAnInstanceOf(\DateTimeImmutable::class);
+
+        $this->events()->shouldHaveCount(2);
+        $this->eraseEvents();
+        $this->events()->shouldHaveCount(0);
     }
 
     function it_enables_an_account()
     {
-        $this->isEnabled()->shouldBe(false);
+        $this->isEnabled()->shouldReturn(false);
         $this->confirmationToken()->shouldReturnAnInstanceOf(UserToken::class);
         $this->enableAccount();
-        $this->isEnabled()->shouldBe(true);
+        $this->isEnabled()->shouldReturn(true);
         $this->confirmationToken()->shouldReturn(null);
     }
 
@@ -150,6 +156,7 @@ class UserSpec extends ObjectBehavior
     {
         $role = new UserRole('ROLE_USER');
         $roleAdmin = new UserRole('ROLE_ADMIN');
+        $notAvailableRole = new UserRole('NOT_AVAILABLE_ROLE');
 
         $this->isRoleAllowed($role)->shouldReturn(true);
         $this->shouldThrow(new UserRoleAlreadyGrantedException())->duringGrant($role);
@@ -159,6 +166,7 @@ class UserSpec extends ObjectBehavior
         $this->revoke($role);
         $this->roles()->shouldHaveCount(1);
         $this->shouldThrow(new UserRoleAlreadyRevokedException())->duringRevoke($role);
+        $this->shouldThrow(new UserRoleInvalidException())->duringRevoke($notAvailableRole);
         $this->roles()->shouldHaveCount(1);
     }
 
