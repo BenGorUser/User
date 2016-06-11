@@ -16,7 +16,6 @@ use BenGorUser\User\Domain\Model\Exception\UserDoesNotExistException;
 use BenGorUser\User\Domain\Model\UserPassword;
 use BenGorUser\User\Domain\Model\UserPasswordEncoder;
 use BenGorUser\User\Domain\Model\UserRepository;
-use BenGorUser\User\Domain\Model\UserRole;
 use BenGorUser\User\Domain\Model\UserToken;
 
 /**
@@ -67,10 +66,6 @@ class ByInvitationWithConfirmationSignUpUserHandler
         );
         if (null === $user) {
             throw new UserDoesNotExistException();
-        }
-
-        foreach ($aCommand->roles() as $role) {
-            $user->grant(new UserRole($role));
         }
         $user->changePassword(UserPassword::fromPlain($aCommand->password(), $this->encoder));
 

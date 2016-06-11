@@ -25,12 +25,10 @@ class ByInvitationWithConfirmationSignUpUserCommandSpec extends ObjectBehavior
 {
     function it_creates_a_command()
     {
-        $this->beConstructedWith('invitation-token', 'plainPassword', ['ROLE_USER', 'ROLE_ADMIN']);
+        $this->beConstructedWith('invitation-token', 'plainPassword');
         $this->shouldHaveType(ByInvitationWithConfirmationSignUpUserCommand::class);
 
-        $this->id()->shouldNotBe(null);
         $this->invitationToken()->shouldReturn('invitation-token');
         $this->password()->shouldReturn('plainPassword');
-        $this->roles()->shouldReturn(['ROLE_USER', 'ROLE_ADMIN']);
     }
 }

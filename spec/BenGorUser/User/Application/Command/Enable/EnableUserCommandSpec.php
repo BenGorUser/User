@@ -16,7 +16,7 @@ use BenGorUser\User\Application\Command\Enable\EnableUserCommand;
 use PhpSpec\ObjectBehavior;
 
 /**
- * Spec file of enable user request class.
+ * Spec file of EnableUserCommand class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>

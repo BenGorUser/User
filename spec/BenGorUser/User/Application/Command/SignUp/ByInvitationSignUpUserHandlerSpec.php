@@ -18,7 +18,6 @@ use BenGorUser\User\Domain\Model\Exception\UserDoesNotExistException;
 use BenGorUser\User\Domain\Model\User;
 use BenGorUser\User\Domain\Model\UserPassword;
 use BenGorUser\User\Domain\Model\UserRepository;
-use BenGorUser\User\Domain\Model\UserRole;
 use BenGorUser\User\Domain\Model\UserToken;
 use BenGorUser\User\Infrastructure\Security\DummyUserPasswordEncoder;
 use PhpSpec\ObjectBehavior;
@@ -55,8 +54,6 @@ class ByInvitationSignUpUserHandlerSpec extends ObjectBehavior
             ->shouldBeCalled()->willReturn($user);
 
         $command->password()->shouldBeCalled()->willReturn('plain-password');
-        $command->roles()->shouldBeCalled()->willReturn(['ROLE_USER']);
-        $user->grant(Argument::type(UserRole::class))->shouldBeCalled();
         $user->changePassword(Argument::type(UserPassword::class))->shouldBeCalled();
         $user->enableAccount()->shouldBeCalled();
 

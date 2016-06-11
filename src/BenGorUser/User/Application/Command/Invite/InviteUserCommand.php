@@ -36,15 +36,24 @@ class InviteUserCommand
     private $email;
 
     /**
+     * Array which contains the roles.
+     *
+     * @var array
+     */
+    private $roles;
+
+    /**
      * Constructor.
      *
      * @param string      $anEmail The user email
+     * @param array       $roles   Array which contains the roles
      * @param string|null $anId    User id, it can be null
      */
-    public function __construct($anEmail, $anId = null)
+    public function __construct($anEmail, array $roles, $anId = null)
     {
         $this->id = null === $anId ? Uuid::uuid4()->toString() : $anId;
         $this->email = $anEmail;
+        $this->roles = $roles;
     }
 
     /**
@@ -65,5 +74,15 @@ class InviteUserCommand
     public function email()
     {
         return $this->email;
+    }
+
+    /**
+     * Gets the roles.
+     *
+     * @return array
+     */
+    public function roles()
+    {
+        return $this->roles;
     }
 }

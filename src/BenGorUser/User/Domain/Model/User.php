@@ -108,16 +108,16 @@ class User extends UserAggregateRoot
     /**
      * Constructor.
      *
-     * @param UserId       $anId      The id
-     * @param UserEmail    $anEmail   The email
-     * @param UserPassword $aPassword The encoded password
-     * @param array        $userRoles Array which contains the roles
+     * @param UserId            $anId      The id
+     * @param UserEmail         $anEmail   The email
+     * @param array             $userRoles Array which contains the roles
+     * @param UserPassword|null $aPassword The encoded password
      */
     protected function __construct(
         UserId $anId,
         UserEmail $anEmail,
-        UserPassword $aPassword = null,
-        array $userRoles = []
+        array $userRoles,
+        UserPassword $aPassword = null
     ) {
         $this->id = $anId;
         $this->email = $anEmail;
@@ -144,7 +144,7 @@ class User extends UserAggregateRoot
      */
     public static function signUp(UserId $anId, UserEmail $anEmail, UserPassword $aPassword, array $userRoles)
     {
-        $user = new static($anId, $anEmail, $aPassword, $userRoles);
+        $user = new static($anId, $anEmail, $userRoles, $aPassword);
         $user->publish(
             new UserRegistered(
                 $user->id(),
@@ -159,14 +159,15 @@ class User extends UserAggregateRoot
     /**
      * Invites user.
      *
-     * @param UserId    $anId    The id
-     * @param UserEmail $anEmail The email
+     * @param UserId    $anId      The id
+     * @param UserEmail $anEmail   The email
+     * @param array     $userRoles Array which contains the roles
      *
      * @return static
      */
-    public static function invite(UserId $anId, UserEmail $anEmail)
+    public static function invite(UserId $anId, UserEmail $anEmail, array $userRoles)
     {
-        $user = new static($anId, $anEmail);
+        $user = new static($anId, $anEmail, $userRoles);
         $user->invitationToken = new UserToken();
         $user->publish(
             new UserInvited(

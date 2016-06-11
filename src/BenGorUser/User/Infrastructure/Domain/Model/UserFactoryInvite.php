@@ -45,8 +45,8 @@ final class UserFactoryInvite implements BaseUserFactoryInvite
     /**
      * {@inheritdoc}
      */
-    public function build(UserId $anId, UserEmail $anEmail)
+    public function build(UserId $anId, UserEmail $anEmail, array $roles)
     {
-        return forward_static_call_array([$this->class, 'invite'], [$anId, $anEmail]);
+        return forward_static_call_array([$this->class, 'invite'], [$anId, $anEmail, $roles]);
     }
 }

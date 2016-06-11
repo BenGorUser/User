@@ -12,8 +12,6 @@
 
 namespace BenGorUser\User\Application\Command\SignUp;
 
-use Ramsey\Uuid\Uuid;
-
 /**
  * By invitation sign up user command class.
  *
@@ -22,13 +20,6 @@ use Ramsey\Uuid\Uuid;
  */
 class ByInvitationSignUpUserCommand
 {
-    /**
-     * The user id.
-     *
-     * @var string
-     */
-    private $id;
-
     /**
      * The invitation token.
      *
@@ -44,36 +35,15 @@ class ByInvitationSignUpUserCommand
     private $plainPassword;
 
     /**
-     * Array which contains the roles.
-     *
-     * @var array
-     */
-    private $roles;
-
-    /**
      * Constructor.
      *
-     * @param string      $anInvitationToken The invitation token
-     * @param string      $aPlainPassword    The plain password
-     * @param array       $roles             Array which contains the roles
-     * @param string|null $anId              User id, it can be null
+     * @param string $anInvitationToken The invitation token
+     * @param string $aPlainPassword    The plain password
      */
-    public function __construct($anInvitationToken, $aPlainPassword, array $roles, $anId = null)
+    public function __construct($anInvitationToken, $aPlainPassword)
     {
-        $this->id = null === $anId ? Uuid::uuid4()->toString() : $anId;
         $this->invitationToken = $anInvitationToken;
         $this->plainPassword = $aPlainPassword;
-        $this->roles = $roles;
-    }
-
-    /**
-     * Gets the id.
-     *
-     * @return string
-     */
-    public function id()
-    {
-        return $this->id;
     }
 
     /**
@@ -94,15 +64,5 @@ class ByInvitationSignUpUserCommand
     public function password()
     {
         return $this->plainPassword;
-    }
-
-    /**
-     * Gets the roles.
-     *
-     * @return array
-     */
-    public function roles()
-    {
-        return $this->roles;
     }
 }

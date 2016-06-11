@@ -21,7 +21,7 @@ use BenGorUser\User\Domain\Model\UserRepository;
 use PhpSpec\ObjectBehavior;
 
 /**
- * Spec file of logout user Command class.
+ * Spec file of LogOutUserHandler class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>

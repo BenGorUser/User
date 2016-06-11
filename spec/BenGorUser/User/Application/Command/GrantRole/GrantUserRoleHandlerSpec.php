@@ -22,7 +22,7 @@ use BenGorUser\User\Domain\Model\UserRole;
 use PhpSpec\ObjectBehavior;
 
 /**
- * Spec file of grant user role Command class.
+ * Spec file of GrantUserRoleHandler class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  */

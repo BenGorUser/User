@@ -16,7 +16,7 @@ use BenGorUser\User\Application\Command\GrantRole\GrantUserRoleCommand;
 use PhpSpec\ObjectBehavior;
 
 /**
- * Spec file of grant user role request class.
+ * Spec file of GrantUserRoleCommand class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  */

@@ -17,6 +17,7 @@ use BenGorUser\User\Domain\Model\UserEmail;
 use BenGorUser\User\Domain\Model\UserFactoryInvite;
 use BenGorUser\User\Domain\Model\UserId;
 use BenGorUser\User\Domain\Model\UserRepository;
+use BenGorUser\User\Domain\Model\UserRole;
 
 /**
  * Invite user command handler class.
@@ -69,8 +70,12 @@ class InviteUserHandler
             throw new UserInvitationAlreadyAcceptedException();
         }
 
+        $userRoles = array_map(function ($role) {
+            return new UserRole($role);
+        }, $aCommand->roles());
+
         null === $user
-            ? $user = $this->factory->build($id, $email)
+            ? $user = $this->factory->build($id, $email, $userRoles)
             : $user->regenerateInvitationToken();
 
         $this->repository->persist($user);

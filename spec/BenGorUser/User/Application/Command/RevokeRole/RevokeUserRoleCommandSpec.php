@@ -16,7 +16,7 @@ use BenGorUser\User\Application\Command\RevokeRole\RevokeUserRoleCommand;
 use PhpSpec\ObjectBehavior;
 
 /**
- * Spec file of revoke user role request class.
+ * Spec file of RevokeUserRoleCommand class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  */

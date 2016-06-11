@@ -16,7 +16,7 @@ use BenGorUser\User\Application\Command\Invite\InviteUserCommand;
 use PhpSpec\ObjectBehavior;
 
 /**
- * Spec file of invite user request class.
+ * Spec file of InviteUserCommand class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  */
@@ -24,10 +24,11 @@ class InviteUserCommandSpec extends ObjectBehavior
 {
     function it_creates_request()
     {
-        $this->beConstructedWith('email@email.com');
+        $this->beConstructedWith('email@email.com', ['ROLE_USER']);
         $this->shouldHaveType(InviteUserCommand::class);
 
-        $this->email()->shouldBe('email@email.com');
+        $this->email()->shouldReturn('email@email.com');
+        $this->roles()->shouldReturn(['ROLE_USER']);
         $this->id()->shouldNotBe(null);
     }
 }

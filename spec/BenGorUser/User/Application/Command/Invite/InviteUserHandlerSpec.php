@@ -20,10 +20,11 @@ use BenGorUser\User\Domain\Model\UserEmail;
 use BenGorUser\User\Domain\Model\UserFactoryInvite;
 use BenGorUser\User\Domain\Model\UserId;
 use BenGorUser\User\Domain\Model\UserRepository;
+use BenGorUser\User\Domain\Model\UserRole;
 use PhpSpec\ObjectBehavior;
 
 /**
- * Spec file of invite user Command class.
+ * Spec file of InviteUserHandler class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  */
@@ -51,7 +52,10 @@ class InviteUserHandlerSpec extends ObjectBehavior
         $email = new UserEmail('user@user.com');
 
         $userRepository->userOfEmail($email)->shouldBeCalled()->willReturn(null);
-        $factory->build($id, $email)->shouldBeCalled()->willReturn($user);
+
+        $command->roles()->shouldBeCalled()->willReturn(['ROLE_USER']);
+        $roles = [new UserRole('ROLE_USER')];
+        $factory->build($id, $email, $roles)->shouldBeCalled()->willReturn($user);
 
         $userRepository->persist($user)->shouldBeCalled();
 
@@ -68,6 +72,7 @@ class InviteUserHandlerSpec extends ObjectBehavior
         $email = new UserEmail('user@user.com');
 
         $userRepository->userOfEmail($email)->shouldBeCalled()->willReturn($user);
+        $command->roles()->shouldBeCalled()->willReturn(['ROLE_USER']);
         $user->invitationToken()->shouldBeCalled()->willReturn('invitation-token');
         $user->regenerateInvitationToken()->shouldBeCalled();
 

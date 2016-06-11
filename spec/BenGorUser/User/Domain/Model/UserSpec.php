@@ -125,7 +125,8 @@ class UserSpec extends ObjectBehavior
     {
         $this->beConstructedInvite(
             new UserId(),
-            new UserEmail('test@test.com')
+            new UserEmail('test@test.com'),
+            [new UserRole('ROLE_USER')]
         );
 
         $token = $this->invitationToken();

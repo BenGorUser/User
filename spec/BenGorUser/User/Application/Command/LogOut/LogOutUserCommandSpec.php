@@ -16,7 +16,7 @@ use BenGorUser\User\Application\Command\LogOut\LogOutUserCommand;
 use PhpSpec\ObjectBehavior;
 
 /**
- * Spec file of logout user request class.
+ * Spec file of LogOutUserCommand class.
  *
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>

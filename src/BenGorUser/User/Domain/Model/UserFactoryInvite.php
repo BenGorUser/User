@@ -23,10 +23,11 @@ interface UserFactoryInvite
     /**
      * Invites the user with given id, email.
      *
-     * @param UserId    $anId    The user id
-     * @param UserEmail $anEmail The user email
+     * @param UserId     $anId    The user id
+     * @param UserEmail  $anEmail The user email
+     * @param UserRole[] $roles   List of roles
      *
      * @return User
      */
-    public function build(UserId $anId, UserEmail $anEmail);
+    public function build(UserId $anId, UserEmail $anEmail, array $roles);
 }
