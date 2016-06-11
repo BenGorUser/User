@@ -20,7 +20,7 @@ use BenGorUser\User\Domain\Model\Exception\UserEmailInvalidException;
  * @author Beñat Espiña <benatespina@gmail.com>
  * @author Gorka Laucirica <gorka.lauzirika@gmail.com>
  */
-final class UserMailable
+class UserMailable
 {
     /**
      * The receiver or receivers.
