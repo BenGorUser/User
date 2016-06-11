@@ -41,7 +41,7 @@ final class UserRegistered implements UserEvent
     /**
      * The confirmation token.
      *
-     * @var UserToken
+     * @var UserToken|null
      */
     private $confirmationToken;
 
@@ -55,11 +55,11 @@ final class UserRegistered implements UserEvent
     /**
      * Constructor.
      *
-     * @param UserId    $aUserId            The user id
-     * @param UserEmail $anEmail            The email
-     * @param UserToken $aConfirmationToken The confirmation token
+     * @param UserId         $aUserId            The user id
+     * @param UserEmail      $anEmail            The email
+     * @param UserToken|null $aConfirmationToken The confirmation token
      */
-    public function __construct(UserId $aUserId, UserEmail $anEmail, UserToken $aConfirmationToken)
+    public function __construct(UserId $aUserId, UserEmail $anEmail, UserToken $aConfirmationToken = null)
     {
         $this->userId = $aUserId;
         $this->email = $anEmail;
@@ -94,7 +94,7 @@ final class UserRegistered implements UserEvent
     /**
      * Gets the confirmation token.
      *
-     * @return UserToken
+     * @return UserToken|null
      */
     public function confirmationToken()
     {

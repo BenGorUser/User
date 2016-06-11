@@ -114,6 +114,21 @@ class UserSpec extends ObjectBehavior
         $this->logout();
     }
 
+    function it_accepts_invitation_request()
+    {
+        $this->beConstructedInvite(
+            new UserId(),
+            new UserEmail('test@test.com'),
+            [new UserRole('ROLE_USER')]
+        );
+
+        $this->invitationToken()->shouldReturnAnInstanceOf(UserToken::class);
+
+        $this->acceptInvitation();
+
+        $this->invitationToken()->shouldReturn(null);
+    }
+
     function it_regenerates_when_token_is_null()
     {
         $this->shouldThrow(

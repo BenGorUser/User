@@ -69,6 +69,7 @@ class ByInvitationSignUpUserHandler
         }
         $user->changePassword(UserPassword::fromPlain($aCommand->password(), $this->encoder));
         $user->enableAccount();
+        $user->acceptInvitation();
 
         $this->userRepository->persist($user);
     }

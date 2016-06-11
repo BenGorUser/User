@@ -191,6 +191,21 @@ class User extends UserAggregateRoot
     }
 
     /**
+     * Accepts the invitation request.
+     */
+    public function acceptInvitation()
+    {
+        $this->invitationToken = null;
+        $this->updatedOn = new \DateTimeImmutable();
+        $this->publish(
+            new UserRegistered(
+                $this->id(),
+                $this->email()
+            )
+        );
+    }
+
+    /**
      * Updates the user password.
      *
      * @param UserPassword $aPassword The old password

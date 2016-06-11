@@ -56,6 +56,7 @@ class ByInvitationSignUpUserHandlerSpec extends ObjectBehavior
         $command->password()->shouldBeCalled()->willReturn('plain-password');
         $user->changePassword(Argument::type(UserPassword::class))->shouldBeCalled();
         $user->enableAccount()->shouldBeCalled();
+        $user->acceptInvitation()->shouldBeCalled();
 
         $repository->persist($user)->shouldBeCalled();
 
