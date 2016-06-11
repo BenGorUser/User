@@ -4,7 +4,6 @@
 #### Default
 #### With confirmation
 #### By invitation
-#### By invitation and with confirmation
 
 ## Invite
 
@@ -18,6 +17,7 @@
 
 ## Change password
 #### Default
+#### Without old password
 #### By request remember password
 
 ## Remove user

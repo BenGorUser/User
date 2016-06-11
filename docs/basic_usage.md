@@ -21,19 +21,9 @@ $encoder = new YourUserPasswordEncoder();
 ## Running commands
 
 BenGorUser relies in a command bus to run use cases against the domain. This library exposes an interface and there are
-already some bridges implemented for some of the most used command buses in the PHP community.
+already some bridges implemented for some of the most used command buses in the PHP community, [check it out](adapter_bus.md).
 
-To make it work just select the command bus the that fits you better:
-
-* [SimpleBusBridge][1]: `composer require bengoruser/simple-bus-bridge` 
-* [TacticianBridge][2]: `composer require bengoruser/tactician-bridge`
-    
-> You can write your own bridge for your favorite command bus, check [command_bus](command_bus.md) to learn more.
-    
 Once you have installed the bridge just create an instance of the command bus that will be later used to handle commands.
-
-> Check [SimpleBusBridge getting started docs][3] or [TacticianBridge getting started docs][3] to know how to create a
-command bus instance
 
 To run a command just do the following:
 
@@ -41,26 +31,11 @@ To run a command just do the following:
 $commandBus->handle(new LogInUserCommand('test@bengoruser.con', '123456'));
 ```
 
-> Plenty of commands are available and more detailed info is available at [command](command.md) documentation
-file
+> Plenty of commands are available and more detailed info is available at [command](command.md) documentation file.
 
 ##Subscribing to events
 
-**Important:** DomainEventPubliser was removed in v0.6.0, new docs to come. 
-
-In order to receive registration confirmation mail and remember password mail you need to subscribe to
-the [domain events](events.md) triggered by the model. `DomainEventPublisher` triggers the subscribers based on domain 
-events. To subscribe to those events just do the following:
-
-```php
-DomainEventPublisher::instance()->subscribe(
-    new YourSubscriber()
-);
-```
+In order to receive registration confirmation mail, remember password mail or invitation email, you need to subscribe to
+the [domain events](events.md) triggered by the model.
  
 > Some subscribers have been already implemented. For more info read about [events and subscribers](events.md)
-
-[1]: https://github.com/BenGorUser/SimpleBusBridge
-[2]: https://github.com/BenGorUser/TacticianBridge
-[3]: https://github.com/BenGorUser/SimpleBusBridge
-[4]: https://github.com/BenGorUser/TacticianBridge
