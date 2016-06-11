@@ -122,7 +122,6 @@ class User extends UserAggregateRoot
         $this->id = $anId;
         $this->email = $anEmail;
         $this->password = $aPassword;
-        $this->confirmationToken = new UserToken();
         $this->createdOn = new \DateTimeImmutable();
         $this->updatedOn = new \DateTimeImmutable();
 
@@ -145,6 +144,7 @@ class User extends UserAggregateRoot
     public static function signUp(UserId $anId, UserEmail $anEmail, UserPassword $aPassword, array $userRoles)
     {
         $user = new static($anId, $anEmail, $userRoles, $aPassword);
+        $user->confirmationToken = new UserToken();
         $user->publish(
             new UserRegistered(
                 $user->id(),
