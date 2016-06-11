@@ -12,10 +12,14 @@ BenGorUser is **lightweight, flexible and easy to use** user management library.
 this library offers a well tested and documented codebase with many common use cases already implemented, such as:
  
  * User registration
- * User registration with confirmation email
- * Remember password
+    * Basic
+    * with confirmation email
+    * By invitation
+ * Change password
+    * Basic
+    * Without old password
+    * By request remember password
  * Log in / log out
- * User invitation
  * User removal
  * Role management
     * Grant
