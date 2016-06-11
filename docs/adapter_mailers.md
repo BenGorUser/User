@@ -3,7 +3,7 @@
 The following mailer adapters are available:
 
 * [SwiftmailerBridge](https://github.com/BenGorUser/SwiftMailerBridge)
-* [MandrillBridge](https://github.com/BenGorUser/SwiftMailerBridge) 
+* [MandrillBridge](https://github.com/BenGorUser/MandrillBridge) 
 
 > In case you have created a new adapter, please send us a Pull Request with a link to your repository.
 
