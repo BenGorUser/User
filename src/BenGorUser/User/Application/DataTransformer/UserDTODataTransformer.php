@@ -53,9 +53,19 @@ class UserDTODataTransformer implements UserDataTransformer
             return $role->role();
         }, $this->user->roles());
 
+        $encodedPassword = !$this->user->password()
+            ? null
+            : $this->user->password()->encodedPassword();
+        $salt = !$this->user->password()
+            ? null
+            : $this->user->password()->salt();
+
         $confirmationToken = !$this->user->confirmationToken()
             ? null
             : $this->user->confirmationToken()->token();
+        $invitationToken = !$this->user->invitationToken()
+            ? null
+            : $this->user->invitationToken()->token();
         $rememberPasswordToken = !$this->user->rememberPasswordToken()
             ? null
             : $this->user->rememberPasswordToken()->token();
@@ -65,9 +75,10 @@ class UserDTODataTransformer implements UserDataTransformer
             'confirmation_token'      => $confirmationToken,
             'created_on'              => $this->user->createdOn(),
             'email'                   => $this->user->email()->email(),
+            'invitation_token'        => $invitationToken,
             'last_login'              => $this->user->lastLogin(),
-            'encoded_password'        => $this->user->password()->encodedPassword(),
-            'salt'                    => $this->user->password()->salt(),
+            'encoded_password'        => $encodedPassword,
+            'salt'                    => $salt,
             'remember_password_token' => $rememberPasswordToken,
             'roles'                   => $roles,
             'updated_on'              => $this->user->updatedOn(),

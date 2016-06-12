@@ -66,6 +66,7 @@ class UserDTODataTransformerSpec extends ObjectBehavior
         $user->confirmationToken()->shouldBeCalled()->willReturn(null);
         $user->createdOn()->shouldBeCalled()->willReturn($createdOn);
         $user->email()->shouldBeCalled()->willReturn(new UserEmail('user@user.com'));
+        $user->invitationToken()->shouldBeCalled()->willReturn(null);
         $user->lastLogin()->shouldBeCalled()->willReturn($lastLogin);
         $user->password()->shouldBeCalled()->willReturn($password);
         $user->rememberPasswordToken()->shouldBeCalled()->willReturn(null);
@@ -76,6 +77,7 @@ class UserDTODataTransformerSpec extends ObjectBehavior
             'confirmation_token'      => null,
             'created_on'              => $createdOn,
             'email'                   => 'user@user.com',
+            'invitation_token'        => null,
             'last_login'              => $lastLogin,
             'encoded_password'        => 'encoded-password',
             'salt'                    => 'user-password-salt',
