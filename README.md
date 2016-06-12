@@ -13,7 +13,7 @@ this library offers a well tested and documented codebase with many common use c
  
  * User registration
     * Basic
-    * with confirmation email
+    * With confirmation
     * By invitation
  * Change password
     * Basic
