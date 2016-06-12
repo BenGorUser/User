@@ -2,7 +2,8 @@
 
 The following persistence adapters are available:
 
-*  [DoctrineOrmBridge](https://github.com/BenGorUser/DoctrineORMBridge)
+*  [DoctrineORMBridge](https://github.com/BenGorUser/DoctrineORMBridge)
+*  [DoctrineODMMongoDBBridge](https://github.com/BenGorUser/DoctrineODMMongoDBBridge)
 
 > In case you have created a new adapter, please send us a Pull Request with a link to your repository.
 
