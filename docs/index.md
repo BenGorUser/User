@@ -5,9 +5,11 @@
 * [Domain model](domain_model.md)
 * [Events](events.md)
 * Adapters
-    * [Bus adapters](adapter_bus.md)
-    * [Encoder adapters](adapter_encoders.md)
-    * [Mailer adapters](adapter_mailers.md)
-    * [Persistence adapters](adapter_persistence.md)
+    * [Bus adapters](adapters_bus.md)
+    * [Security adapters](adapters_security.md)
+    * [Mailer adapters](adapters_mailers.md)
+    * [Persistence adapters](adapters_persistence.md)
+    * [Routing adapters](adapters_routing.md)
+    * [UI adapters](adapters_ui.md)
     
 

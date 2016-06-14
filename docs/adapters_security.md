@@ -1,4 +1,4 @@
-#Encoders
+#Security adapters
 
 The following encoder adapters are available:
 

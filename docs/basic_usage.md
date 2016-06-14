@@ -16,7 +16,7 @@ $repository = new InMemoryUserRepository();
 $encoder = new YourUserPasswordEncoder(); 
 ```
 
-> You may want to read more about [repositories](repositories.md) and [encoders](encoders.md)
+> You may want to read more about [repositories](adapters_persistence.md) and [encoders](adapters_security.md)
 
 ## Running commands
 
