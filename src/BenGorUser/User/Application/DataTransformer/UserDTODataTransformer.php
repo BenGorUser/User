@@ -27,7 +27,7 @@ class UserDTODataTransformer implements UserDataTransformer
      *
      * @var User
      */
-    private $user;
+    protected $user;
 
     /**
      * {@inheritdoc}
