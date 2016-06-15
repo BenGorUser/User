@@ -38,4 +38,10 @@ class UserRoleSpec extends ObjectBehavior
 
         $this->shouldThrow(UserRoleInvalidException::class)->duringInstantiation();
     }
+
+    function it_should_only_construct_with_string()
+    {
+        $this->beConstructedWith(new UserRole('asdasd'));
+        $this->shouldThrow(UserRoleInvalidException::class)->duringInstantiation();
+    }
 }
