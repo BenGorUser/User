@@ -33,11 +33,11 @@ final class UserRole
      *
      * @param string $aRole A role in primitive string
      *
-     * @throws UserRoleInvalidException when the role is null
+     * @throws UserRoleInvalidException when the role is not a string
      */
     public function __construct($aRole)
     {
-        if (null === $aRole) {
+        if (!is_string($aRole)) {
             throw new UserRoleInvalidException();
         }
         $this->role = $aRole;
