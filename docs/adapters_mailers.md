@@ -8,7 +8,6 @@ The following mailer adapters are available:
 > In case you have created a new adapter, please send us a Pull Request with a link to your repository.
 
 ## About the mailer architecture
-
 The process of sending a mail has been splitted into three diferent responsibilities:
 
 * **The mail information container**: The `UserMailable` class standardizes the usage of the "mail" across the library 
@@ -25,8 +24,5 @@ TL;DR: The mail sending flow works as follows:
 * Use an instance of `UserMailer` to send the `UserMailable` created in the previous step.
 
 ##Implement your own mailer
-
 To implement an adapter to use it with your own mailer library just extend the `UserMailer` interface and implement
 `mail(UserMailable $userMailable)` to handle the `UserMailable` instance as required.
-
-

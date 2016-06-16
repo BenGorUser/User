@@ -1,6 +1,6 @@
 #Domain Model
 
-This component provides two main models containing domain logic that alows handling user common use cases. Both are 
+This component provides two main models containing domain logic that allows handling user common use cases. Both are 
 extensible to allow custom use cases. Also multiple value object have been created with their own encapsulated logic.
  
 ##User
