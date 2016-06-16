@@ -35,18 +35,18 @@ final class InMemoryUserRepository implements UserRepository
     private $users;
 
     /**
-     * The user event bus.
+     * The user event bus, it can be null
      *
-     * @var UserEventBus
+     * @var UserEventBus|null
      */
     private $eventBus;
 
     /**
      * Constructor.
      *
-     * @param UserEventBus $anEventBus The user event bus
+     * @param UserEventBus|null $anEventBus The user event bus, it can be null
      */
-    public function __construct(UserEventBus $anEventBus)
+    public function __construct(UserEventBus $anEventBus = null)
     {
         $this->users = [];
         $this->eventBus = $anEventBus;
@@ -117,8 +117,8 @@ final class InMemoryUserRepository implements UserRepository
     {
         $this->users[$aUser->id()->id()] = $aUser;
 
-        foreach ($aUser->events() as $event) {
-            $this->eventBus->handle($event);
+        if ($this->eventBus instanceof UserEventBus) {
+            $this->handle($aUser->events());
         }
     }
 
@@ -129,8 +129,8 @@ final class InMemoryUserRepository implements UserRepository
     {
         unset($this->users[$aUser->id()->id()]);
 
-        foreach ($aUser->events() as $event) {
-            $this->eventBus->handle($event);
+        if ($this->eventBus instanceof UserEventBus) {
+            $this->handle($aUser->events());
         }
     }
 
@@ -140,5 +140,17 @@ final class InMemoryUserRepository implements UserRepository
     public function size()
     {
         return count($this->users);
+    }
+
+    /**
+     * Handles the given events with event bus.
+     *
+     * @param array $events A collection of user domain events
+     */
+    private function handle($events)
+    {
+        foreach ($events as $event) {
+            $this->eventBus->handle($event);
+        }
     }
 }

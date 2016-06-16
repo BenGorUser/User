@@ -39,19 +39,19 @@ final class SqlUserRepository implements UserRepository
     private $pdo;
 
     /**
-     * The user event bus.
+     * The user event bus, it can be null
      *
-     * @var UserEventBus
+     * @var UserEventBus|null
      */
     private $eventBus;
 
     /**
      * Constructor.
      *
-     * @param \PDO         $aPdo       The pdo instance
-     * @param UserEventBus $anEventBus The user event bus
+     * @param \PDO              $aPdo       The pdo instance
+     * @param UserEventBus|null $anEventBus The user event bus, it can be null
      */
-    public function __construct(\PDO $aPdo, UserEventBus $anEventBus)
+    public function __construct(\PDO $aPdo, UserEventBus $anEventBus = null)
     {
         $this->pdo = $aPdo;
         $this->eventBus = $anEventBus;
@@ -125,8 +125,8 @@ final class SqlUserRepository implements UserRepository
     {
         ($this->exist($aUser)) ? $this->update($aUser) : $this->insert($aUser);
 
-        foreach ($aUser->events() as $event) {
-            $this->eventBus->handle($event);
+        if ($this->eventBus instanceof UserEventBus) {
+            $this->handle($aUser->events());
         }
     }
 
@@ -137,8 +137,8 @@ final class SqlUserRepository implements UserRepository
     {
         $this->execute('DELETE FROM user WHERE id = :id', ['id' => $aUser->id()->id()]);
 
-        foreach ($aUser->events() as $event) {
-            $this->eventBus->handle($event);
+        if ($this->eventBus instanceof UserEventBus) {
+            $this->handle($aUser->events());
         }
     }
 
@@ -187,7 +187,7 @@ SQL
             'SELECT COUNT(*) FROM user WHERE id = :id', [':id' => $aUser->id()->id()]
         )->fetchColumn();
 
-        return (int) $count === 1;
+        return (int)$count === 1;
     }
 
     /**
@@ -371,5 +371,17 @@ SQL
         $reflectionCreatedOn->setValue($user, $propertyValue);
 
         return $user;
+    }
+
+    /**
+     * Handles the given events with event bus.
+     *
+     * @param array $events A collection of user domain events
+     */
+    private function handle($events)
+    {
+        foreach ($events as $event) {
+            $this->eventBus->handle($event);
+        }
     }
 }
