@@ -4,6 +4,8 @@
 * [Command](command.md)
 * [Domain model](domain_model.md)
 * [Events](events.md)
+* Usage
+    * [Sign up with confirmation email with CarlosBuenosvinosDddBridge](usage_sign_up_with_confirmation_carlosbuenosvinosdddbridge.md)
 * Adapters
     * [Bus adapters](adapters_bus.md)
     * [Security adapters](adapters_security.md)
