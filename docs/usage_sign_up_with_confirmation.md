@@ -71,10 +71,10 @@ $service = new \BenGorUser\CarlosBuenosvinosDddBridge\Application\Service\SignUp
 
 $resourcesPath = __DIR__ . '/../vendor/bengor-user/twig-bridge/src/BenGorUser/TwigBridge/Infrastructure/Ui';
 
-$translator = new \Symfony\Component\Translation\Translator('en_EN');
+$translator = new \Symfony\Component\Translation\Translator('en_US');
 $translator->addLoader('xlf', new \Symfony\Component\Translation\Loader\XliffFileLoader());
 $translator->addResource('xlf', $resourcesPath . '/Translations/BenGorUser.es.xlf', 'es_ES', 'BenGorUser');
-$translator->addResource('xlf', $resourcesPath . '/Translations/BenGorUser.en.xlf', 'en_EN', 'BenGorUser');
+$translator->addResource('xlf', $resourcesPath . '/Translations/BenGorUser.en.xlf', 'en_US', 'BenGorUser');
 $translator->addResource('xlf', $resourcesPath . '/Translations/BenGorUser.eu.xlf', 'eu_ES', 'BenGorUser');
 
 $loader = new Twig_Loader_Filesystem($resourcesPath . '/Twig/views');
