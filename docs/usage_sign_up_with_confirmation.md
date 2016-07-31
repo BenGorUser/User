@@ -1,23 +1,42 @@
-#How to sign up user with confirmation email using CarlosBuenosvinosDddBridge
+#Sign up with confirmation
 
 The following code builds all the sign up with confirmation email process.
+You have to use different adapters or even write your custom adapters but this example
+uses:
 
-Please before to execute this script, be sure you have installed the following bengor user bridges:
-* bengor-user/carlosbuenosvinos-ddd-bridge
-* bengor-user/doctrine-orm-bridge
-* bengor-user/swift-mailer-bridge
-* bengor-user/symfony-routing-bridge
-* bengor-user/twig-bridge
+* [CarlosBuenosvinosDddBridge](https://github.com/BenGorUser/CarlosBuenosvinosDddBridge)
+* [DoctrineORMBridge](https://github.com/BenGorUser/DoctrineORMBridge)
+* [SwiftMailerBridge](https://github.com/BenGorUser/SwiftMailerBridge)
+* [SymfonyRoutingBridge](https://github.com/BenGorUser/SymfonyRoutingBridge)
+* [TwigBridge](https://github.com/BenGorUser/TwigBridge)
+
 
 Then you have to create the database with `bengor_user_carlosbuenosvinosdddbridge` name.
 > This snippet takes in mind that the database user is `root` and database password is `null`,
 > if it is not, you have to change with according values the `$connection` array.
 
+This is the minimum `composer.json` file
+```json
+{
+    "require": {
+        "php": "^5.5 || ^7.0",
+        "bengor-user/user": "^0.6",
+        "bengor-user/carlosbuenosvinos-ddd-bridge": "^1.0.0",
+        "bengor-user/doctrine-orm-bridge": "^1.0.3",
+        "bengor-user/swift-mailer-bridge": "^1.0.0",
+        "bengor-user/symfony-routing-bridge": "^1.0.0",
+        "bengor-user/twig-bridge": "^1.0.1"
+    }
+}
+```
+
 ```php
+// src/Foo.php
+
 #!/usr/bin/env php
 <?php
 
-require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 $connection = [
     'dbname'   => 'bengor_user_carlosbuenosvinosdddbridge',
@@ -28,7 +47,7 @@ $connection = [
 ];
 $entityManager = (new \BenGorUser\DoctrineORMBridge\Infrastructure\Persistence\EntityManagerFactory())->build(
     $connection,
-    [__DIR__ . '/vendor/bengor-user/carlosbuenosvinos-ddd-bridge/src/BenGorUser/CarlosBuenosvinosDddBridge/Infrastructure/Persistence/Doctrine/ORM/Mapping']
+    [__DIR__ . '/../vendor/bengor-user/carlosbuenosvinos-ddd-bridge/src/BenGorUser/CarlosBuenosvinosDddBridge/Infrastructure/Persistence/Doctrine/ORM/Mapping']
 );
 $tool = new \Doctrine\ORM\Tools\SchemaTool($entityManager);
 $classes = [
@@ -50,7 +69,7 @@ $service = new \BenGorUser\CarlosBuenosvinosDddBridge\Application\Service\SignUp
     )
 );
 
-$resourcesPath = __DIR__ . '/vendor/bengor-user/twig-bridge/src/BenGorUser/TwigBridge/Infrastructure/Ui';
+$resourcesPath = __DIR__ . '/../vendor/bengor-user/twig-bridge/src/BenGorUser/TwigBridge/Infrastructure/Ui';
 
 $translator = new \Symfony\Component\Translation\Translator('en_EN');
 $translator->addLoader('xlf', new \Symfony\Component\Translation\Loader\XliffFileLoader());
@@ -79,7 +98,9 @@ $url = $generator->generate('bengor_user_user_homepage');
                 new Swift_Mailer(
                     (new Swift_SmtpTransport(
                         'smtp.gmail.com', 465, 'ssl'
-                    ))->setUsername('CHANGE-FOR-YOUR-MAILER-USERNAME')->setPassword('CHANGE-FOR-YOUR-MAILER-PASSWORD')
+                    ))
+                        ->setUsername('CHANGE-FOR-YOUR-MAILER-USERNAME')
+                        ->setPassword('CHANGE-FOR-YOUR-MAILER-PASSWORD')
                 )
             ),
             new \BenGorUser\TwigBridge\Infrastructure\Mailing\TwigUserMailableFactory(
@@ -112,3 +133,12 @@ $url = $generator->generate('bengor_user_user_homepage');
 
 die('The sign up process is successfully done!');
 ```
+> Remember that you have to update `CHANGE-FOR-YOUR-MAILER-USERNAME` and `CHANGE-FOR-YOUR-MAILER-PASSWORD`
+placeholders or the confirmation email won't be send
+
+Finally you can execute the PHP file like this:
+```shell
+$ php src/Foo.php
+```
+
+- Back to the [index](index.md).
