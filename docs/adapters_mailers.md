@@ -26,3 +26,5 @@ TL;DR: The mail sending flow works as follows:
 ##Implement your own mailer
 To implement an adapter to use it with your own mailer library just extend the `UserMailer` interface and implement
 `mail(UserMailable $userMailable)` to handle the `UserMailable` instance as required.
+
+- Back to the [index](index.md).

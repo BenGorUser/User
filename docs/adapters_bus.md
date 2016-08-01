@@ -20,3 +20,5 @@ To implement your own command bus you need to implement `BenGorUser\User\Infrast
 ##Implement your own event bus
 To implement your own event bus you need to implement `BenGorUser\User\Infrastructure\Domain\Model\UserEventBus` interface method
 `handle()`.
+
+- Back to the [index](index.md).

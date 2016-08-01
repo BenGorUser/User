@@ -15,3 +15,5 @@ adapters have been implemented for a plug and play usage.
 
 All this repositories implement `BenGor\User\Domain\Model\UserRepository` interface. In case you have
 some specific requirement you can implement your own adapter.
+
+- Back to the [index](index.md).

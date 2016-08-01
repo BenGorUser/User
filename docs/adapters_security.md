@@ -15,3 +15,5 @@ already created for a plug and play usage. In case you have some specific requir
 ##Implement your own encoder
 To implement your own encoder you need to implement `BenGorUser\User\Domain\Model\UserPasswordEncoder` interface methods
 `encode()` and `isPasswordValid()`
+
+- Back to the [index](index.md).

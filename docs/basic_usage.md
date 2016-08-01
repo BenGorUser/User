@@ -53,4 +53,6 @@ In order to receive, for example, a registration confirmation mail, you need to 
 
 > Some subscribers have been already implemented. For more info read about [events and subscribers](events.md)
 
-> You may want to read more about [mailers](adapter_mailers.md)
+> You may want to read more about [mailers](adapters_mailers.md)
+
+- Back to the [index](index.md).
