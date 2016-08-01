@@ -25,7 +25,7 @@ This is the minimum `composer.json` file
         "bengor-user/doctrine-orm-bridge": "^1.0.3",
         "bengor-user/swift-mailer-bridge": "^1.0.0",
         "bengor-user/symfony-routing-bridge": "^1.0.0",
-        "bengor-user/twig-bridge": "^1.0.1"
+        "bengor-user/twig-bridge": "^1.0.2"
     }
 }
 ```
