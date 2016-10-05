@@ -457,6 +457,7 @@ class User extends UserAggregateRoot
         foreach ($this->roles as $key => $role) {
             if ($role->equals($aRole)) {
                 unset($this->roles[$key]);
+                $this->roles = array_values($this->roles);
                 break;
             }
             throw new UserRoleAlreadyRevokedException();
