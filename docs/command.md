@@ -7,6 +7,8 @@
 
 ## Invite
 
+## Resend Invitation
+
 ## Enable
 
 ## Log in
