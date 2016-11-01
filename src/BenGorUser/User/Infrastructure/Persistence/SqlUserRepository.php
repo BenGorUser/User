@@ -190,7 +190,7 @@ SQL
             'SELECT COUNT(*) FROM user WHERE id = :id', [':id' => $aUser->id()->id()]
         )->fetchColumn();
 
-        return (int) $count === 1;
+        return (int)$count === 1;
     }
 
     /**
@@ -318,17 +318,17 @@ SQL
         $confirmationToken = null;
         if (null !== $row['confirmation_token_token']) {
             $confirmationToken = new UserToken($row['confirmation_token_token']);
-            $this->set($confirmationToken, 'createdOn', $row['confirmation_token_created_on']);
+            $this->set($confirmationToken, 'createdOn', new \DateTimeImmutable($row['confirmation_token_created_on']));
         }
         $invitationToken = null;
         if (null !== $row['invitation_token_token']) {
             $invitationToken = new UserToken($row['invitation_token_token']);
-            $this->set($invitationToken, 'createdOn', $row['invitation_token_created_on']);
+            $this->set($invitationToken, 'createdOn', new \DateTimeImmutable($row['invitation_token_created_on']);
         }
         $rememberPasswordToken = null;
         if (null !== $row['remember_password_token_token']) {
             $rememberPasswordToken = new UserToken($row['remember_password_token_token']);
-            $this->set($rememberPasswordToken, 'createdOn', $row['remember_password_token_created_on']);
+            $this->set($rememberPasswordToken, 'createdOn', new \DateTimeImmutable($row['remember_password_token_created_on']);
         }
 
         $user = User::signUp(
@@ -391,9 +391,9 @@ SQL
     {
         $reflectionUser = new \ReflectionClass($object);
 
-        $reflectionCreatedOn = $reflectionUser->getProperty($propertyName);
-        $reflectionCreatedOn->setAccessible(true);
-        $reflectionCreatedOn->setValue($object, $propertyValue);
+        $reflectionProperty = $reflectionUser->getProperty($propertyName);
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($object, $propertyValue);
 
         return $object;
     }
