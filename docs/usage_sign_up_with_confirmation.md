@@ -20,12 +20,12 @@ This is the minimum `composer.json` file
 {
     "require": {
         "php": "^5.5 || ^7.0",
-        "bengor-user/user": "^0.6",
-        "bengor-user/carlosbuenosvinos-ddd-bridge": "^1.0.0",
-        "bengor-user/doctrine-orm-bridge": "^1.0.3",
-        "bengor-user/swift-mailer-bridge": "^1.0.0",
-        "bengor-user/symfony-routing-bridge": "^1.0.0",
-        "bengor-user/twig-bridge": "^1.0.2"
+        "bengor-user/user": "^0.7",
+        "bengor-user/carlosbuenosvinos-ddd-bridge": "^1.1.0",
+        "bengor-user/doctrine-orm-bridge": "^1.1.0",
+        "bengor-user/swift-mailer-bridge": "^1.0.1",
+        "bengor-user/symfony-routing-bridge": "^1.0.1",
+        "bengor-user/twig-bridge": "^1.0.3"
     }
 }
 ```
