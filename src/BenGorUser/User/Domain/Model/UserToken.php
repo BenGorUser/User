@@ -30,6 +30,13 @@ final class UserToken
     private $token;
 
     /**
+     * The created on.
+     *
+     * @var \DateTimeImmutable
+     */
+    private $createdOn;
+
+    /**
      * Constructor.
      *
      * @param string|null $token User token. New will be generated if empty
@@ -37,6 +44,7 @@ final class UserToken
     public function __construct($token = null)
     {
         $this->token = $token ?: Uuid::uuid4()->toString();
+        $this->createdOn = new \DateTimeImmutable();
     }
 
     /**
@@ -50,6 +58,16 @@ final class UserToken
     }
 
     /**
+     * Gets the created on.
+     *
+     * @return \DateTimeImmutable
+     */
+    public function createdOn()
+    {
+        return $this->createdOn;
+    }
+
+    /**
      * Method that checks if the id given is equal to the current.
      *
      * @param UserToken $aToken The token
@@ -58,7 +76,22 @@ final class UserToken
      */
     public function equals(UserToken $aToken)
     {
-        return $this->token() === $aToken->token();
+        return $this->token === $aToken->token();
+    }
+
+    /**
+     * Checks if the token is expired comparing
+     * with the given lifetime.
+     *
+     * @param int $lifetime The lifetime of the token
+     *
+     * @return bool
+     */
+    public function isExpired($lifetime)
+    {
+        $interval = $this->createdOn->diff(new \DateTimeImmutable());
+
+        return $interval->s >= (int) $lifetime;
     }
 
     /**

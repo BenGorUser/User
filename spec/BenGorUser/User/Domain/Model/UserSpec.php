@@ -129,6 +129,12 @@ class UserSpec extends ObjectBehavior
         $this->invitationToken()->shouldReturn(null);
     }
 
+    function it_does_not_accept_invitation_request_when_the_invitation_is_already_accepted()
+    {
+        $this->isInvitationTokenExpired()->shouldReturn(null);
+        $this->shouldThrow(UserInvitationAlreadyAcceptedException::class)->duringAcceptInvitation();
+    }
+
     function it_regenerates_when_token_is_null()
     {
         $this->shouldThrow(
@@ -199,5 +205,22 @@ class UserSpec extends ObjectBehavior
         $this->isRoleAllowed($role)->shouldReturn(true);
         $this->isGranted($role)->shouldReturn(true);
         $this->shouldThrow(new UserRoleAlreadyGrantedException())->duringGrant($role);
+    }
+
+    function it_manages_token_expirations()
+    {
+        $this->beConstructedInvite(
+            new UserId(),
+            new UserEmail('test@test.com'),
+            [new UserRole('ROLE_USER')]
+        );
+
+        $this->isRememberPasswordTokenExpired()->shouldReturn(null);
+        $this->rememberPassword();
+        $this->isRememberPasswordTokenExpired()->shouldReturn(false);
+
+        $this->isInvitationTokenExpired()->shouldReturn(false);
+        $this->acceptInvitation();
+        $this->isInvitationTokenExpired()->shouldReturn(null);
     }
 }
