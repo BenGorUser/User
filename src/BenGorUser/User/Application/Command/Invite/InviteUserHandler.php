@@ -12,7 +12,7 @@
 
 namespace BenGorUser\User\Application\Command\Invite;
 
-use BenGorUser\User\Domain\Model\Exception\UserInvitationAlreadyAcceptedException;
+use BenGorUser\User\Domain\Model\Exception\UserAlreadyExistException;
 use BenGorUser\User\Domain\Model\UserEmail;
 use BenGorUser\User\Domain\Model\UserFactoryInvite;
 use BenGorUser\User\Domain\Model\UserId;
@@ -58,25 +58,24 @@ class InviteUserHandler
      *
      * @param InviteUserCommand $aCommand The command
      *
-     * @throws UserInvitationAlreadyAcceptedException when the user already accepted invitation
+     * @throws UserAlreadyExistException when the user already exists
      */
     public function __invoke(InviteUserCommand $aCommand)
     {
-        $id = new UserId($aCommand->id());
         $email = new UserEmail($aCommand->email());
 
         $user = $this->repository->userOfEmail($email);
-        if (null !== $user && null === $user->invitationToken()) {
-            throw new UserInvitationAlreadyAcceptedException();
+        if (null !== $user) {
+            throw new UserAlreadyExistException();
         }
 
-        $userRoles = array_map(function ($role) {
-            return new UserRole($role);
-        }, $aCommand->roles());
-
-        null === $user
-            ? $user = $this->factory->build($id, $email, $userRoles)
-            : $user->regenerateInvitationToken();
+        $user = $this->factory->build(
+            new UserId($aCommand->id()),
+            $email,
+            array_map(function ($role) {
+                return new UserRole($role);
+            }, $aCommand->roles())
+        );
 
         $this->repository->persist($user);
     }

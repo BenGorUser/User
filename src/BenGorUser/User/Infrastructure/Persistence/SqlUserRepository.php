@@ -39,7 +39,7 @@ final class SqlUserRepository implements UserRepository
     private $pdo;
 
     /**
-     * The user event bus, it can be null
+     * The user event bus, it can be null.
      *
      * @var UserEventBus|null
      */
@@ -156,7 +156,7 @@ final class SqlUserRepository implements UserRepository
      */
     public function initSchema()
     {
-        $this->pdo->exec(<<<SQL
+        $this->pdo->exec(<<<'SQL'
 DROP TABLE IF EXISTS user;
 CREATE TABLE user (
     id CHAR(36) PRIMARY KEY,
@@ -187,7 +187,7 @@ SQL
             'SELECT COUNT(*) FROM user WHERE id = :id', [':id' => $aUser->id()->id()]
         )->fetchColumn();
 
-        return (int)$count === 1;
+        return (int) $count === 1;
     }
 
     /**

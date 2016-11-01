@@ -13,6 +13,7 @@
 namespace BenGorUser\User\Domain\Event;
 
 use BenGorUser\User\Domain\Model\Event\UserEvent;
+use BenGorUser\User\Domain\Model\Event\UserInvitationTokenRegenerated;
 use BenGorUser\User\Domain\Model\Event\UserInvited;
 use BenGorUser\User\Domain\Model\UserMailableFactory;
 use BenGorUser\User\Domain\Model\UserMailer;
@@ -93,6 +94,6 @@ class UserInvitedMailerSubscriber implements UserEventSubscriber
      */
     public function isSubscribedTo(UserEvent $anEvent)
     {
-        return $anEvent instanceof UserInvited;
+        return $anEvent instanceof UserInvited || $anEvent instanceof UserInvitationTokenRegenerated;
     }
 }

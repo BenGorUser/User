@@ -35,7 +35,7 @@ final class InMemoryUserRepository implements UserRepository
     private $users;
 
     /**
-     * The user event bus, it can be null
+     * The user event bus, it can be null.
      *
      * @var UserEventBus|null
      */

@@ -14,6 +14,7 @@ namespace spec\BenGorUser\User\Domain\Event;
 
 use BenGorUser\User\Domain\Event\UserEventSubscriber;
 use BenGorUser\User\Domain\Event\UserInvitedMailerSubscriber;
+use BenGorUser\User\Domain\Model\Event\UserInvitationTokenRegenerated;
 use BenGorUser\User\Domain\Model\Event\UserInvited;
 use BenGorUser\User\Domain\Model\Event\UserRegistered;
 use BenGorUser\User\Domain\Model\UserEmail;
@@ -79,6 +80,11 @@ class UserInvitedMailerSubscriberSpec extends ObjectBehavior
             new UserEmail('bengor@user.com'),
             new UserToken('invitation-token')
         );
+        $invitationTokenRegeneratedEvent = new UserInvitationTokenRegenerated(
+            new UserId(),
+            new UserEmail('bengor@user.com'),
+            new UserToken('invitation-token')
+        );
         $registeredDomainEvent = new UserRegistered(
             new UserId(),
             new UserEmail('bengor@user.com'),
@@ -86,6 +92,7 @@ class UserInvitedMailerSubscriberSpec extends ObjectBehavior
         );
 
         $this->isSubscribedTo($invitedDomainEvent)->shouldReturn(true);
+        $this->isSubscribedTo($invitationTokenRegeneratedEvent)->shouldReturn(true);
         $this->isSubscribedTo($registeredDomainEvent)->shouldReturn(false);
     }
 }
