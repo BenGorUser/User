@@ -416,6 +416,14 @@ class User extends UserAggregateRoot
             throw new UserInvitationAlreadyAcceptedException();
         }
         $this->invitationToken = new UserToken();
+
+        $this->publish(
+            new UserInvited(
+                $this->id,
+                $this->email,
+                $this->invitationToken
+            )
+        );
     }
 
     /**
