@@ -13,6 +13,7 @@
 namespace BenGorUser\User\Domain\Model;
 
 use BenGorUser\User\Domain\Model\Event\UserEnabled;
+use BenGorUser\User\Domain\Model\Event\UserInvitationTokenRegenerated;
 use BenGorUser\User\Domain\Model\Event\UserInvited;
 use BenGorUser\User\Domain\Model\Event\UserLoggedIn;
 use BenGorUser\User\Domain\Model\Event\UserLoggedOut;
@@ -418,7 +419,7 @@ class User extends UserAggregateRoot
         $this->invitationToken = new UserToken();
 
         $this->publish(
-            new UserInvited(
+            new UserInvitationTokenRegenerated(
                 $this->id,
                 $this->email,
                 $this->invitationToken
