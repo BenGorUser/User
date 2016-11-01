@@ -27,6 +27,7 @@ use BenGorUser\User\Domain\Model\Exception\UserRoleAlreadyGrantedException;
 use BenGorUser\User\Domain\Model\Exception\UserRoleAlreadyRevokedException;
 use BenGorUser\User\Domain\Model\Exception\UserRoleInvalidException;
 use BenGorUser\User\Domain\Model\Exception\UserTokenExpiredException;
+use BenGorUser\User\Domain\Model\Exception\UserTokenNotFoundException;
 
 /**
  * User domain class.
@@ -194,10 +195,10 @@ class User extends UserAggregateRoot
      */
     public function acceptInvitation()
     {
-        if (null === $this->isInvitationTokenExpired()) {
+        if ($this->isInvitationTokenAccepted()) {
             throw new UserInvitationAlreadyAcceptedException();
         }
-        if (true === $this->isInvitationTokenExpired()) {
+        if ($this->isInvitationTokenExpired()) {
             throw new UserTokenExpiredException();
         }
         $this->invitationToken = null;
@@ -219,10 +220,6 @@ class User extends UserAggregateRoot
      */
     public function changePassword(UserPassword $aPassword)
     {
-        if ($this->isRememberPasswordTokenExpired()) {
-            throw new UserTokenExpiredException();
-        }
-
         $this->password = $aPassword;
         $this->rememberPasswordToken = null;
         $this->updatedOn = new \DateTimeImmutable();
@@ -341,31 +338,49 @@ class User extends UserAggregateRoot
     }
 
     /**
-     * Checks if the invitation token is expired or not.
+     * Checks if the invitation token is accepted or not.
      *
-     * @return bool|null
+     * @return bool
      */
-    public function isInvitationTokenExpired()
+    public function isInvitationTokenAccepted()
     {
-        if ($this->invitationToken instanceof UserToken) {
-            return $this->invitationToken->isExpired(
-                $this->invitationTokenLifetime()
-            );
-        }
+        return null === $this->invitationToken;
     }
 
     /**
      * Checks if the invitation token is expired or not.
      *
-     * @return bool|null
+     * @throws UserTokenNotFoundException when the invitation token does not exist
+     *
+     * @return bool
+     */
+    public function isInvitationTokenExpired()
+    {
+        if (!$this->invitationToken instanceof UserToken) {
+            throw new UserTokenNotFoundException();
+        }
+
+        return $this->invitationToken->isExpired(
+            $this->invitationTokenLifetime()
+        );
+    }
+
+    /**
+     * Checks if the remember password token is expired or not.
+     *
+     * @throws UserTokenNotFoundException when the remember password token does not exist
+     *
+     * @return bool
      */
     public function isRememberPasswordTokenExpired()
     {
-        if ($this->rememberPasswordToken instanceof UserToken) {
-            return $this->rememberPasswordToken->isExpired(
-                $this->rememberPasswordTokenLifetime()
-            );
+        if (!$this->rememberPasswordToken instanceof UserToken) {
+            throw new UserTokenNotFoundException();
         }
+
+        return $this->rememberPasswordToken->isExpired(
+            $this->rememberPasswordTokenLifetime()
+        );
     }
 
     /**
@@ -563,7 +578,7 @@ class User extends UserAggregateRoot
 
     /**
      * Extension point that determines the lifetime
-     * of the remember password token in second.
+     * of the remember password token in seconds.
      *
      * @return int
      */

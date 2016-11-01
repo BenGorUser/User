@@ -18,6 +18,7 @@ use BenGorUser\User\Domain\Model\Exception\UserPasswordInvalidException;
 use BenGorUser\User\Domain\Model\Exception\UserRoleAlreadyGrantedException;
 use BenGorUser\User\Domain\Model\Exception\UserRoleAlreadyRevokedException;
 use BenGorUser\User\Domain\Model\Exception\UserRoleInvalidException;
+use BenGorUser\User\Domain\Model\Exception\UserTokenNotFoundException;
 use BenGorUser\User\Domain\Model\User;
 use BenGorUser\User\Domain\Model\UserEmail;
 use BenGorUser\User\Domain\Model\UserId;
@@ -131,7 +132,7 @@ class UserSpec extends ObjectBehavior
 
     function it_does_not_accept_invitation_request_when_the_invitation_is_already_accepted()
     {
-        $this->isInvitationTokenExpired()->shouldReturn(null);
+        $this->isInvitationTokenAccepted()->shouldReturn(true);
         $this->shouldThrow(UserInvitationAlreadyAcceptedException::class)->duringAcceptInvitation();
     }
 
@@ -207,7 +208,14 @@ class UserSpec extends ObjectBehavior
         $this->shouldThrow(new UserRoleAlreadyGrantedException())->duringGrant($role);
     }
 
-    function it_manages_token_expirations()
+    function it_manages_remember_password_token_expirations()
+    {
+        $this->shouldThrow(UserTokenNotFoundException::class)->duringIsRememberPasswordTokenExpired();
+        $this->rememberPassword();
+        $this->isRememberPasswordTokenExpired()->shouldReturn(false);
+    }
+
+    function it_manages_invitation_token_expirations()
     {
         $this->beConstructedInvite(
             new UserId(),
@@ -215,12 +223,9 @@ class UserSpec extends ObjectBehavior
             [new UserRole('ROLE_USER')]
         );
 
-        $this->isRememberPasswordTokenExpired()->shouldReturn(null);
-        $this->rememberPassword();
-        $this->isRememberPasswordTokenExpired()->shouldReturn(false);
-
         $this->isInvitationTokenExpired()->shouldReturn(false);
+        $this->isInvitationTokenAccepted()->shouldReturn(false);
         $this->acceptInvitation();
-        $this->isInvitationTokenExpired()->shouldReturn(null);
+        $this->isInvitationTokenAccepted()->shouldReturn(true);
     }
 }

@@ -12,7 +12,8 @@
 
 namespace BenGorUser\User\Application\Command\ChangePassword;
 
-use BenGorUser\User\Domain\Model\Exception\UserDoesNotExistException;
+use BenGorUser\User\Domain\Model\Exception\UserTokenExpiredException;
+use BenGorUser\User\Domain\Model\Exception\UserTokenNotFoundException;
 use BenGorUser\User\Domain\Model\UserPassword;
 use BenGorUser\User\Domain\Model\UserPasswordEncoder;
 use BenGorUser\User\Domain\Model\UserRepository;
@@ -57,13 +58,17 @@ class ByRequestRememberPasswordChangeUserPasswordHandler
      *
      * @param ByRequestRememberPasswordChangeUserPasswordCommand $aCommand The command
      *
-     * @throws UserDoesNotExistException when the user does not exist
+     * @throws UserTokenNotFoundException when the user does not exist
+     * @throws UserTokenExpiredException  when the token is expired
      */
     public function __invoke(ByRequestRememberPasswordChangeUserPasswordCommand $aCommand)
     {
         $user = $this->repository->userOfRememberPasswordToken(new UserToken($aCommand->rememberPasswordToken()));
         if (null === $user) {
-            throw new UserDoesNotExistException();
+            throw new UserTokenNotFoundException();
+        }
+        if ($user->isRememberPasswordTokenExpired()) {
+            throw new UserTokenExpiredException();
         }
         $user->changePassword(UserPassword::fromPlain($aCommand->newPlainPassword(), $this->encoder));
 
