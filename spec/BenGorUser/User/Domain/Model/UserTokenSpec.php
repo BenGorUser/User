@@ -31,6 +31,7 @@ class UserTokenSpec extends ObjectBehavior
     function it_constructs_with_null_token()
     {
         $this->token()->shouldNotBe(null);
+        $this->createdOn()->shouldReturnAnInstanceOf(\DateTimeImmutable::class);
     }
 
     function it_constructs_with_string_token()
@@ -38,6 +39,7 @@ class UserTokenSpec extends ObjectBehavior
         $this->beConstructedWith('tokenId');
 
         $this->token()->shouldBe('tokenId');
+        $this->createdOn()->shouldReturnAnInstanceOf(\DateTimeImmutable::class);
     }
 
     function it_compares_ids()
@@ -52,6 +54,15 @@ class UserTokenSpec extends ObjectBehavior
         $this->beConstructedWith('tokenId');
 
         $this->equals(new UserToken('notEqual'))->shouldBe(false);
+    }
+
+    function it_checks_if_it_is_expired()
+    {
+        $this->beConstructedWith('tokenId');
+
+        $this->isExpired(3600)->shouldReturn(false);
+        $this->isExpired(0)->shouldReturn(true);
+        $this->isExpired(null)->shouldReturn(true);
     }
 
     function it_renders_string()

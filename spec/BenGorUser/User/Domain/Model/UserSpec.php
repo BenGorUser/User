@@ -18,6 +18,7 @@ use BenGorUser\User\Domain\Model\Exception\UserPasswordInvalidException;
 use BenGorUser\User\Domain\Model\Exception\UserRoleAlreadyGrantedException;
 use BenGorUser\User\Domain\Model\Exception\UserRoleAlreadyRevokedException;
 use BenGorUser\User\Domain\Model\Exception\UserRoleInvalidException;
+use BenGorUser\User\Domain\Model\Exception\UserTokenNotFoundException;
 use BenGorUser\User\Domain\Model\User;
 use BenGorUser\User\Domain\Model\UserEmail;
 use BenGorUser\User\Domain\Model\UserId;
@@ -129,6 +130,12 @@ class UserSpec extends ObjectBehavior
         $this->invitationToken()->shouldReturn(null);
     }
 
+    function it_does_not_accept_invitation_request_when_the_invitation_is_already_accepted()
+    {
+        $this->isInvitationTokenAccepted()->shouldReturn(true);
+        $this->shouldThrow(UserInvitationAlreadyAcceptedException::class)->duringAcceptInvitation();
+    }
+
     function it_regenerates_when_token_is_null()
     {
         $this->shouldThrow(
@@ -199,5 +206,26 @@ class UserSpec extends ObjectBehavior
         $this->isRoleAllowed($role)->shouldReturn(true);
         $this->isGranted($role)->shouldReturn(true);
         $this->shouldThrow(new UserRoleAlreadyGrantedException())->duringGrant($role);
+    }
+
+    function it_manages_remember_password_token_expirations()
+    {
+        $this->shouldThrow(UserTokenNotFoundException::class)->duringIsRememberPasswordTokenExpired();
+        $this->rememberPassword();
+        $this->isRememberPasswordTokenExpired()->shouldReturn(false);
+    }
+
+    function it_manages_invitation_token_expirations()
+    {
+        $this->beConstructedInvite(
+            new UserId(),
+            new UserEmail('test@test.com'),
+            [new UserRole('ROLE_USER')]
+        );
+
+        $this->isInvitationTokenExpired()->shouldReturn(false);
+        $this->isInvitationTokenAccepted()->shouldReturn(false);
+        $this->acceptInvitation();
+        $this->isInvitationTokenAccepted()->shouldReturn(true);
     }
 }

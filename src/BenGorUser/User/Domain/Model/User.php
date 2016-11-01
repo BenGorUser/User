@@ -27,6 +27,8 @@ use BenGorUser\User\Domain\Model\Exception\UserPasswordInvalidException;
 use BenGorUser\User\Domain\Model\Exception\UserRoleAlreadyGrantedException;
 use BenGorUser\User\Domain\Model\Exception\UserRoleAlreadyRevokedException;
 use BenGorUser\User\Domain\Model\Exception\UserRoleInvalidException;
+use BenGorUser\User\Domain\Model\Exception\UserTokenExpiredException;
+use BenGorUser\User\Domain\Model\Exception\UserTokenNotFoundException;
 
 /**
  * User domain class.
@@ -114,12 +116,8 @@ class User extends UserAggregateRoot
      * @param array             $userRoles Array which contains the roles
      * @param UserPassword|null $aPassword The encoded password
      */
-    protected function __construct(
-        UserId $anId,
-        UserEmail $anEmail,
-        array $userRoles,
-        UserPassword $aPassword = null
-    ) {
+    protected function __construct(UserId $anId, UserEmail $anEmail, array $userRoles, UserPassword $aPassword = null)
+    {
         $this->id = $anId;
         $this->email = $anEmail;
         $this->password = $aPassword;
@@ -193,9 +191,17 @@ class User extends UserAggregateRoot
 
     /**
      * Accepts the invitation request.
+     *
+     * @throws UserTokenExpiredException when the token is expired
      */
     public function acceptInvitation()
     {
+        if ($this->isInvitationTokenAccepted()) {
+            throw new UserInvitationAlreadyAcceptedException();
+        }
+        if ($this->isInvitationTokenExpired()) {
+            throw new UserTokenExpiredException();
+        }
         $this->invitationToken = null;
         $this->updatedOn = new \DateTimeImmutable();
         $this->publish(
@@ -210,6 +216,8 @@ class User extends UserAggregateRoot
      * Updates the user password.
      *
      * @param UserPassword $aPassword The old password
+     *
+     * @throws UserTokenExpiredException when the token is expired
      */
     public function changePassword(UserPassword $aPassword)
     {
@@ -268,6 +276,9 @@ class User extends UserAggregateRoot
      * Adds the given role.
      *
      * @param UserRole $aRole The user role
+     *
+     * @throws UserRoleInvalidException        when the user is role is invalid
+     * @throws UserRoleAlreadyGrantedException when the user role is already granted
      */
     public function grant(UserRole $aRole)
     {
@@ -325,6 +336,52 @@ class User extends UserAggregateRoot
         }
 
         return false;
+    }
+
+    /**
+     * Checks if the invitation token is accepted or not.
+     *
+     * @return bool
+     */
+    public function isInvitationTokenAccepted()
+    {
+        return null === $this->invitationToken;
+    }
+
+    /**
+     * Checks if the invitation token is expired or not.
+     *
+     * @throws UserTokenNotFoundException when the invitation token does not exist
+     *
+     * @return bool
+     */
+    public function isInvitationTokenExpired()
+    {
+        if (!$this->invitationToken instanceof UserToken) {
+            throw new UserTokenNotFoundException();
+        }
+
+        return $this->invitationToken->isExpired(
+            $this->invitationTokenLifetime()
+        );
+    }
+
+    /**
+     * Checks if the remember password token is expired or not.
+     *
+     * @throws UserTokenNotFoundException when the remember password token does not exist
+     *
+     * @return bool
+     */
+    public function isRememberPasswordTokenExpired()
+    {
+        if (!$this->rememberPasswordToken instanceof UserToken) {
+            throw new UserTokenNotFoundException();
+        }
+
+        return $this->rememberPasswordToken->isExpired(
+            $this->rememberPasswordTokenLifetime()
+        );
     }
 
     /**
@@ -457,6 +514,9 @@ class User extends UserAggregateRoot
      * Removes the given role.
      *
      * @param UserRole $aRole The user role
+     *
+     * @throws UserRoleInvalidException        when the role is invalid
+     * @throws UserRoleAlreadyRevokedException when the role is already revoked
      */
     public function revoke(UserRole $aRole)
     {
@@ -512,5 +572,27 @@ class User extends UserAggregateRoot
     public static function availableRoles()
     {
         return ['ROLE_USER', 'ROLE_ADMIN'];
+    }
+
+    /**
+     * Extension point that determines the lifetime
+     * of the invitation token in seconds.
+     *
+     * @return int
+     */
+    protected function invitationTokenLifetime()
+    {
+        return 604800; // 1 week
+    }
+
+    /**
+     * Extension point that determines the lifetime
+     * of the remember password token in seconds.
+     *
+     * @return int
+     */
+    protected function rememberPasswordTokenLifetime()
+    {
+        return 3600; // 1 hour
     }
 }

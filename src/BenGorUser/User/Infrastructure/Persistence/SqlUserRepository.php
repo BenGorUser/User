@@ -84,7 +84,7 @@ final class SqlUserRepository implements UserRepository
      */
     public function userOfConfirmationToken(UserToken $aConfirmationToken)
     {
-        $statement = $this->execute('SELECT * FROM user WHERE confirmation_token = :confirmationToken', [
+        $statement = $this->execute('SELECT * FROM user WHERE confirmation_token_token = :confirmationToken', [
             'confirmationToken' => $aConfirmationToken->token(),
         ]);
         if ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
@@ -97,7 +97,7 @@ final class SqlUserRepository implements UserRepository
      */
     public function userOfInvitationToken(UserToken $anInvitationToken)
     {
-        $statement = $this->execute('SELECT * FROM user WHERE invitation_token = :invitationToken', [
+        $statement = $this->execute('SELECT * FROM user WHERE invitation_token_token = :invitationToken', [
             'invitationToken' => $anInvitationToken->token(),
         ]);
         if ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
@@ -110,7 +110,7 @@ final class SqlUserRepository implements UserRepository
      */
     public function userOfRememberPasswordToken(UserToken $aRememberPasswordToken)
     {
-        $statement = $this->execute('SELECT * FROM user WHERE remember_password_token = :rememberPasswordToken', [
+        $statement = $this->execute('SELECT * FROM user WHERE remember_password_token_token = :rememberPasswordToken', [
             'rememberPasswordToken' => $aRememberPasswordToken->token(),
         ]);
         if ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
@@ -160,13 +160,16 @@ final class SqlUserRepository implements UserRepository
 DROP TABLE IF EXISTS user;
 CREATE TABLE user (
     id CHAR(36) PRIMARY KEY,
-    confirmation_token VARCHAR(36),
+    confirmation_token_token VARCHAR(36),
+    confirmation_token_created_on DATETIME,
     created_on DATETIME NOT NULL,
     email VARCHAR(36) NOT NULL,
-    invitation_token VARCHAR(36),
+    invitation_token_token VARCHAR(36),
+    invitation_token_created_on DATETIME,
     last_login DATETIME,
     password VARCHAR(30),
-    remember_password_token VARCHAR(36),
+    remember_password_token_token VARCHAR(36),
+    remember_password_token_created_on DATETIME,
     roles LONGTEXT NOT NULL COMMENT '(DC2Type:user_roles)',
     updated_on DATETIME NOT NULL
 )
@@ -199,41 +202,50 @@ SQL
     {
         $sql = 'INSERT INTO user (
             id,
-            confirmation_token,
+            confirmation_token_token,
+            confirmation_token_created_on,
             created_on,
             email,
-            invitation_token,
+            invitation_token_token,
+            invitation_token_created_on,
             last_login,
             password,
             salt,
-            remember_password_token,
+            remember_password_token_token,
+            remember_password_token_created_on,
             roles,
             updated_on
         ) VALUES (
             :id,
-            :token,
+            :confirmationTokenToken,
+            :confirmationTokenCreatedOn,
             :createdOn,
             :email,
-            :invitationToken,
+            :invitationTokenToken,
+            :invitationTokenCreatedOn,
             :lastLogin,
             :password,
             :salt,
-            :rememberPasswordToken,
+            :rememberPasswordTokenToken,
+            :rememberPasswordTokenCreatedOn,
             :roles,
             :updatedOn
         )';
         $this->execute($sql, [
-            'id'                    => $aUser->id()->id(),
-            'token'                 => $aUser->confirmationToken(),
-            'createdOn'             => $aUser->createdOn()->format(self::DATE_FORMAT),
-            'email'                 => $aUser->email()->email(),
-            'invitationToken'       => $aUser->invitationToken() ? $aUser->invitationToken()->token() : null,
-            'lastLogin'             => $aUser->lastLogin() ? $aUser->lastLogin()->format(self::DATE_FORMAT) : null,
-            'password'              => $aUser->password()->encodedPassword(),
-            'salt'                  => $aUser->password()->salt(),
-            'rememberPasswordToken' => $aUser->rememberPasswordToken() ? $aUser->rememberPasswordToken()->token() : null,
-            'roles'                 => $this->rolesToString($aUser->roles()),
-            'updatedOn'             => $aUser->updatedOn()->format(self::DATE_FORMAT),
+            'id'                             => $aUser->id()->id(),
+            'confirmationTokenToken'         => $aUser->confirmationToken() ? $aUser->confirmationToken()->token() : null,
+            'confirmationTokenCreatedOn'     => $aUser->confirmationToken() ? $aUser->confirmationToken()->createdOn() : null,
+            'createdOn'                      => $aUser->createdOn()->format(self::DATE_FORMAT),
+            'email'                          => $aUser->email()->email(),
+            'invitationTokenToken'           => $aUser->invitationToken() ? $aUser->invitationToken()->token() : null,
+            'invitationTokenCreatedOn'       => $aUser->invitationToken() ? $aUser->invitationToken()->createdOn() : null,
+            'lastLogin'                      => $aUser->lastLogin() ? $aUser->lastLogin()->format(self::DATE_FORMAT) : null,
+            'password'                       => $aUser->password()->encodedPassword(),
+            'salt'                           => $aUser->password()->salt(),
+            'rememberPasswordTokenToken'     => $aUser->rememberPasswordToken() ? $aUser->rememberPasswordToken()->token() : null,
+            'rememberPasswordTokenCreatedOn' => $aUser->rememberPasswordToken() ? $aUser->rememberPasswordToken()->createdOn() : null,
+            'roles'                          => $this->rolesToString($aUser->roles()),
+            'updatedOn'                      => $aUser->updatedOn()->format(self::DATE_FORMAT),
         ]);
     }
 
@@ -245,23 +257,29 @@ SQL
     private function update(User $aUser)
     {
         $sql = 'UPDATE user SET
-            confirmation_token = :confirmationToken,
-            invitation_token = :invitationToken,
+            confirmation_token_token = :confirmationTokenToken,
+            confirmation_token_created_on = :confirmationTokenCreatedOn,
+            invitation_token_token = :invitationTokenToken,
+            invitation_token_created_on = :invitationTokenCreatedOn,
             last_login = :lastLogin,
             password = :password,
-            remember_password_token = :rememberPasswordToken,
+            remember_password_token_token = :rememberPasswordTokenToken,
+            remember_password_token_created_on = :rememberPasswordTokenCreatedOn,
             roles = :roles,
             updated_on = :updatedOn
             WHERE id = :id';
         $this->execute($sql, [
-            'id'                    => $aUser->id()->id(),
-            'confirmationToken'     => $aUser->confirmationToken() ? $aUser->confirmationToken()->token() : null,
-            'invitationToken'       => $aUser->invitationToken() ? $aUser->invitationToken()->token() : null,
-            'lastLogin'             => $aUser->lastLogin() ? $aUser->lastLogin()->format(self::DATE_FORMAT) : null,
-            'password'              => $aUser->password()->encodedPassword(),
-            'rememberPasswordToken' => $aUser->rememberPasswordToken() ? $aUser->rememberPasswordToken()->token() : null,
-            'roles'                 => $this->rolesToString($aUser->roles()),
-            'updatedOn'             => $aUser->updatedOn()->format(self::DATE_FORMAT),
+            'id'                             => $aUser->id()->id(),
+            'confirmationTokenToken'         => $aUser->confirmationToken() ? $aUser->confirmationToken()->token() : null,
+            'confirmationTokenCreatedOn'     => $aUser->confirmationToken() ? $aUser->confirmationToken()->createdOn() : null,
+            'invitationTokenToken'           => $aUser->invitationToken() ? $aUser->invitationToken()->token() : null,
+            'invitationTokenCreatedOn'       => $aUser->invitationToken() ? $aUser->invitationToken()->createdOn() : null,
+            'lastLogin'                      => $aUser->lastLogin() ? $aUser->lastLogin()->format(self::DATE_FORMAT) : null,
+            'password'                       => $aUser->password()->encodedPassword(),
+            'rememberPasswordTokenToken'     => $aUser->rememberPasswordToken() ? $aUser->rememberPasswordToken()->token() : null,
+            'rememberPasswordTokenCreatedOn' => $aUser->rememberPasswordToken() ? $aUser->rememberPasswordToken()->createdOn() : null,
+            'roles'                          => $this->rolesToString($aUser->roles()),
+            'updatedOn'                      => $aUser->updatedOn()->format(self::DATE_FORMAT),
         ]);
     }
 
@@ -296,15 +314,22 @@ SQL
         $lastLogin = null === $row['last_login']
             ? null
             : new \DateTimeImmutable($row['last_login']);
-        $confirmationToken = null === $row['confirmation_token']
-            ? null
-            : new UserToken($row['confirmation_token']);
-        $invitationToken = null === $row['invitation_token']
-            ? null
-            : new UserToken($row['invitation_token']);
-        $rememberPasswordToken = null === $row['remember_password_token']
-            ? null
-            : new UserToken($row['remember_password_token']);
+
+        $confirmationToken = null;
+        if (null !== $row['confirmation_token_token']) {
+            $confirmationToken = new UserToken($row['confirmation_token_token']);
+            $this->set($confirmationToken, 'createdOn', $row['confirmation_token_created_on']);
+        }
+        $invitationToken = null;
+        if (null !== $row['invitation_token_token']) {
+            $invitationToken = new UserToken($row['invitation_token_token']);
+            $this->set($invitationToken, 'createdOn', $row['invitation_token_created_on']);
+        }
+        $rememberPasswordToken = null;
+        if (null !== $row['remember_password_token_token']) {
+            $rememberPasswordToken = new UserToken($row['remember_password_token_token']);
+            $this->set($rememberPasswordToken, 'createdOn', $row['remember_password_token_created_on']);
+        }
 
         $user = User::signUp(
             new UserId($row['id']),
@@ -356,21 +381,21 @@ SQL
     /**
      * Populates by Reflection the domain object with the given SQL plain values.
      *
-     * @param User   $user          The user domain object
+     * @param object $object        The domain object
      * @param string $propertyName  The property name
      * @param mixed  $propertyValue The property value
      *
-     * @return User
+     * @return object
      */
-    private function set(User $user, $propertyName, $propertyValue)
+    private function set($object, $propertyName, $propertyValue)
     {
-        $reflectionUser = new \ReflectionClass($user);
+        $reflectionUser = new \ReflectionClass($object);
 
         $reflectionCreatedOn = $reflectionUser->getProperty($propertyName);
         $reflectionCreatedOn->setAccessible(true);
-        $reflectionCreatedOn->setValue($user, $propertyValue);
+        $reflectionCreatedOn->setValue($object, $propertyValue);
 
-        return $user;
+        return $object;
     }
 
     /**

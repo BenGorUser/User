@@ -14,7 +14,8 @@ namespace spec\BenGorUser\User\Application\Command\ChangePassword;
 
 use BenGorUser\User\Application\Command\ChangePassword\ByRequestRememberPasswordChangeUserPasswordCommand;
 use BenGorUser\User\Application\Command\ChangePassword\ByRequestRememberPasswordChangeUserPasswordHandler;
-use BenGorUser\User\Domain\Model\Exception\UserDoesNotExistException;
+use BenGorUser\User\Domain\Model\Exception\UserTokenExpiredException;
+use BenGorUser\User\Domain\Model\Exception\UserTokenNotFoundException;
 use BenGorUser\User\Domain\Model\User;
 use BenGorUser\User\Domain\Model\UserPassword;
 use BenGorUser\User\Domain\Model\UserPasswordEncoder;
@@ -51,7 +52,7 @@ class ByRequestRememberPasswordChangeUserPasswordHandlerSpec extends ObjectBehav
             new UserToken('remember-password-token')
         )->shouldBeCalled()->willReturn($user);
         $command->newPlainPassword()->shouldBeCalled()->willReturn('new-plain-pass');
-
+        $user->isRememberPasswordTokenExpired()->shouldBeCalled()->willReturn(false);
         $user->changePassword(Argument::type(UserPassword::class))->shouldBeCalled();
 
         $repository->persist($user)->shouldBeCalled();
@@ -59,7 +60,7 @@ class ByRequestRememberPasswordChangeUserPasswordHandlerSpec extends ObjectBehav
         $this->__invoke($command);
     }
 
-    function it_does_not_change_password_because_user_does_not_exist(
+    function it_does_not_change_password_because_token_does_not_exist(
         ByRequestRememberPasswordChangeUserPasswordCommand $command,
         UserRepository $repository
     ) {
@@ -67,6 +68,19 @@ class ByRequestRememberPasswordChangeUserPasswordHandlerSpec extends ObjectBehav
         $repository->userOfRememberPasswordToken(new UserToken('non-exist-remember-password-token'))
             ->shouldBeCalled()->willReturn(null);
 
-        $this->shouldThrow(UserDoesNotExistException::class)->during__invoke($command);
+        $this->shouldThrow(UserTokenNotFoundException::class)->during__invoke($command);
+    }
+
+    function it_does_not_change_password_because_the_token_is_expired(
+        ByRequestRememberPasswordChangeUserPasswordCommand $command,
+        UserRepository $repository,
+        User $user
+    ) {
+        $command->rememberPasswordToken()->shouldBeCalled()->willReturn('non-exist-remember-password-token');
+        $repository->userOfRememberPasswordToken(new UserToken('non-exist-remember-password-token'))
+            ->shouldBeCalled()->willReturn($user);
+        $user->isRememberPasswordTokenExpired()->shouldBeCalled()->willReturn(true);
+
+        $this->shouldThrow(UserTokenExpiredException::class)->during__invoke($command);
     }
 }
