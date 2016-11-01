@@ -7,6 +7,8 @@ To get the diff between two versions, go to https://github.com/BenGorUser/User/c
 
 ##v0.7.0
 
+* Added user of id query handler.
+* UserOfRememberPasswordToken and UserOfInvitationToken query handlers now checks if the token is expired
 * Reset password expire after 1 hour by default for security reasons.
 * Invitation tokens expire after 1 week by default for security reasons.
 * Split `InviteHandler` into `InviteHandler` and `ResendInvitationHandler`.
