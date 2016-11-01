@@ -190,7 +190,7 @@ SQL
             'SELECT COUNT(*) FROM user WHERE id = :id', [':id' => $aUser->id()->id()]
         )->fetchColumn();
 
-        return (int)$count === 1;
+        return (int) $count === 1;
     }
 
     /**

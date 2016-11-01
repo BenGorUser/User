@@ -16,6 +16,7 @@ use BenGorUser\User\Application\DataTransformer\UserDataTransformer;
 use BenGorUser\User\Application\Query\UserOfInvitationTokenHandler;
 use BenGorUser\User\Application\Query\UserOfInvitationTokenQuery;
 use BenGorUser\User\Domain\Model\Exception\UserDoesNotExistException;
+use BenGorUser\User\Domain\Model\Exception\UserTokenExpiredException;
 use BenGorUser\User\Domain\Model\User;
 use BenGorUser\User\Domain\Model\UserRepository;
 use BenGorUser\User\Domain\Model\UserToken;
@@ -50,6 +51,7 @@ class UserOfInvitationTokenHandlerSpec extends ObjectBehavior
         $query->invitationToken()->shouldBeCalled()->willReturn('invitation-token');
         $token = new UserToken('invitation-token');
         $repository->userOfInvitationToken($token)->shouldBeCalled()->willReturn($user);
+        $user->isInvitationTokenExpired()->shouldBeCalled()->willReturn(false);
         $dataTransformer->write($user)->shouldBeCalled();
 
         $dataTransformer->read()->shouldBeCalled()->willReturn([
@@ -86,5 +88,18 @@ class UserOfInvitationTokenHandlerSpec extends ObjectBehavior
         $repository->userOfInvitationToken($token)->shouldBeCalled()->willReturn(null);
 
         $this->shouldThrow(UserDoesNotExistException::class)->during__invoke($query);
+    }
+
+    function it_does_not_get_the_user_because_the_invitation_token_is_expired(
+        UserRepository $repository,
+        UserOfInvitationTokenQuery $query,
+        User $user
+    ) {
+        $query->invitationToken()->shouldBeCalled()->willReturn('invitation-token');
+        $token = new UserToken('invitation-token');
+        $repository->userOfInvitationToken($token)->shouldBeCalled()->willReturn($user);
+        $user->isInvitationTokenExpired()->shouldBeCalled()->willReturn(true);
+
+        $this->shouldThrow(UserTokenExpiredException::class)->during__invoke($query);
     }
 }

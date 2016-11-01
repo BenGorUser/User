@@ -14,6 +14,7 @@ namespace BenGorUser\User\Application\Query;
 
 use BenGorUser\User\Application\DataTransformer\UserDataTransformer;
 use BenGorUser\User\Domain\Model\Exception\UserDoesNotExistException;
+use BenGorUser\User\Domain\Model\Exception\UserTokenExpiredException;
 use BenGorUser\User\Domain\Model\UserRepository;
 use BenGorUser\User\Domain\Model\UserToken;
 
@@ -56,6 +57,7 @@ class UserOfRememberPasswordTokenHandler
      * @param UserOfRememberPasswordTokenQuery $aQuery The query
      *
      * @throws UserDoesNotExistException when the user does not exist
+     * @throws UserTokenExpiredException when the token is expired
      *
      * @return mixed
      */
@@ -64,6 +66,9 @@ class UserOfRememberPasswordTokenHandler
         $user = $this->repository->userOfRememberPasswordToken(new UserToken($aQuery->rememberPasswordToken()));
         if (null === $user) {
             throw new UserDoesNotExistException();
+        }
+        if ($user->isRememberPasswordTokenExpired()) {
+            throw new UserTokenExpiredException();
         }
 
         $this->dataTransformer->write($user);

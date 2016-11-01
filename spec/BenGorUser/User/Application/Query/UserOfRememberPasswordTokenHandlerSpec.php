@@ -16,6 +16,7 @@ use BenGorUser\User\Application\DataTransformer\UserDataTransformer;
 use BenGorUser\User\Application\Query\UserOfRememberPasswordTokenHandler;
 use BenGorUser\User\Application\Query\UserOfRememberPasswordTokenQuery;
 use BenGorUser\User\Domain\Model\Exception\UserDoesNotExistException;
+use BenGorUser\User\Domain\Model\Exception\UserTokenExpiredException;
 use BenGorUser\User\Domain\Model\User;
 use BenGorUser\User\Domain\Model\UserRepository;
 use BenGorUser\User\Domain\Model\UserToken;
@@ -50,6 +51,7 @@ class UserOfRememberPasswordTokenHandlerSpec extends ObjectBehavior
         $query->rememberPasswordToken()->shouldBeCalled()->willReturn('remember-password-token');
         $token = new UserToken('remember-password-token');
         $repository->userOfRememberPasswordToken($token)->shouldBeCalled()->willReturn($user);
+        $user->isRememberPasswordTokenExpired()->shouldBeCalled()->willReturn(false);
         $dataTransformer->write($user)->shouldBeCalled();
 
         $dataTransformer->read()->shouldBeCalled()->willReturn([
@@ -86,5 +88,18 @@ class UserOfRememberPasswordTokenHandlerSpec extends ObjectBehavior
         $repository->userOfRememberPasswordToken($token)->shouldBeCalled()->willReturn(null);
 
         $this->shouldThrow(UserDoesNotExistException::class)->during__invoke($query);
+    }
+
+    function it_does_not_get_the_user_because_the_remember_password_token_is_expired(
+        UserRepository $repository,
+        UserOfRememberPasswordTokenQuery $query,
+        User $user
+    ) {
+        $query->rememberPasswordToken()->shouldBeCalled()->willReturn('remember-password-token');
+        $token = new UserToken('remember-password-token');
+        $repository->userOfRememberPasswordToken($token)->shouldBeCalled()->willReturn($user);
+        $user->isRememberPasswordTokenExpired()->shouldBeCalled()->willReturn(true);
+
+        $this->shouldThrow(UserTokenExpiredException::class)->during__invoke($query);
     }
 }
