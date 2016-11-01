@@ -323,12 +323,12 @@ SQL
         $invitationToken = null;
         if (null !== $row['invitation_token_token']) {
             $invitationToken = new UserToken($row['invitation_token_token']);
-            $this->set($invitationToken, 'createdOn', new \DateTimeImmutable($row['invitation_token_created_on']);
+            $this->set($invitationToken, 'createdOn', new \DateTimeImmutable($row['invitation_token_created_on']));
         }
         $rememberPasswordToken = null;
         if (null !== $row['remember_password_token_token']) {
             $rememberPasswordToken = new UserToken($row['remember_password_token_token']);
-            $this->set($rememberPasswordToken, 'createdOn', new \DateTimeImmutable($row['remember_password_token_created_on']);
+            $this->set($rememberPasswordToken, 'createdOn', new \DateTimeImmutable($row['remember_password_token_created_on']));
         }
 
         $user = User::signUp(
