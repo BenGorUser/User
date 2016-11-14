@@ -345,7 +345,7 @@ class User extends UserAggregateRoot
      */
     public function isInvitationTokenAccepted()
     {
-        return null === $this->invitationToken;
+        return null === $this->invitationToken || null === $this->invitationToken->token();
     }
 
     /**
@@ -470,7 +470,7 @@ class User extends UserAggregateRoot
      */
     public function regenerateInvitationToken()
     {
-        if (null === $this->invitationToken) {
+        if ($this->isInvitationTokenAccepted()) {
             throw new UserInvitationAlreadyAcceptedException();
         }
         $this->invitationToken = new UserToken();
