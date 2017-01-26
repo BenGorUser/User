@@ -20,30 +20,29 @@ For the full copyright and license information, please view the LICENSE
 file that was distributed with this source code.
 EOF;
 
-Symfony\CS\Fixer\Contrib\HeaderCommentFixer::setHeader($header);
-
-$finder = Symfony\CS\Finder\DefaultFinder::create()
-    ->in(__DIR__ . '/src')
-    ->notName('*.yml')
-    ->notName('*.xml')
-    ->notName('*Spec.php');
-
-return Symfony\CS\Config\Config::create()
-    ->finder($finder)
-    ->level(Symfony\CS\FixerInterface::SYMFONY_LEVEL)
-    ->fixers([
-        '-unalign_double_arrow',
-        '-concat_without_spaces',
-        'align_double_arrow',
-        'concat_with_spaces',
-        'header_comment',
-        'multiline_spaces_before_semicolon',
-        'newline_after_open_tag',
-        'ordered_use',
-        'php4_constructor',
-        'phpdoc_order',
-        'short_array_syntax',
-        'short_echo_tag',
-        'strict',
-        'strict_param',
+return PhpCsFixer\Config::create()
+    ->setRiskyAllowed(true)
+    ->setFinder(
+        PhpCsFixer\Finder::create()
+            ->in(__DIR__ . '/src')
+            ->exclude([
+                'BenGorUser/UserBundle/Resources',
+            ])
+    )
+    ->setRules([
+        '@Symfony'                              => true,
+        '@Symfony:risky'                        => true,
+        'binary_operator_spaces'                => [
+            'align_double_arrow' => true,
+        ],
+        'concat_space'                          => ['spacing' => 'one'],
+        'header_comment'                        => [
+            'header'      => $header,
+            'commentType' => PhpCsFixer\Fixer\Comment\HeaderCommentFixer::HEADER_COMMENT,
+        ],
+        'no_unreachable_default_argument_value' => false,
+        'ordered_imports'                       => true,
+        'phpdoc_order'                          => true,
+        'phpdoc_annotation_without_dot'         => false,
+        'strict_param'                          => true,
     ]);
