@@ -5,6 +5,9 @@ This changelog references the relevant changes (bug and security fixes) done in 
 To get the diff for a specific change, go to https://github.com/BenGorUser/User/commit/XXX where XXX is the change hash
 To get the diff between two versions, go to https://github.com/BenGorUser/User/compare/v0.6.0...v0.7.0
 
+##v0.8.0
+* Introduced hacks to prevent Doctrine's bug with nullable embeddables.
+
 ##v0.7.1
 * Fixed bug related with invitation token acceptance.
 

@@ -21,6 +21,7 @@ use BenGorUser\User\Domain\Model\User;
 use BenGorUser\User\Domain\Model\UserRepository;
 use BenGorUser\User\Domain\Model\UserToken;
 use PhpSpec\ObjectBehavior;
+use Prophecy\Argument;
 
 /**
  * Spec file of UserOfRememberPasswordTokenHandler class.
@@ -49,8 +50,7 @@ class UserOfRememberPasswordTokenHandlerSpec extends ObjectBehavior
         \DateTimeImmutable $updatedOn
     ) {
         $query->rememberPasswordToken()->shouldBeCalled()->willReturn('remember-password-token');
-        $token = new UserToken('remember-password-token');
-        $repository->userOfRememberPasswordToken($token)->shouldBeCalled()->willReturn($user);
+        $repository->userOfRememberPasswordToken(Argument::type(UserToken::class))->shouldBeCalled()->willReturn($user);
         $user->isRememberPasswordTokenExpired()->shouldBeCalled()->willReturn(false);
         $dataTransformer->write($user)->shouldBeCalled();
 
@@ -84,8 +84,7 @@ class UserOfRememberPasswordTokenHandlerSpec extends ObjectBehavior
         UserOfRememberPasswordTokenQuery $query
     ) {
         $query->rememberPasswordToken()->shouldBeCalled()->willReturn('remember-password-token');
-        $token = new UserToken('remember-password-token');
-        $repository->userOfRememberPasswordToken($token)->shouldBeCalled()->willReturn(null);
+        $repository->userOfRememberPasswordToken(Argument::type(UserToken::class))->shouldBeCalled()->willReturn(null);
 
         $this->shouldThrow(UserDoesNotExistException::class)->during__invoke($query);
     }
@@ -96,8 +95,7 @@ class UserOfRememberPasswordTokenHandlerSpec extends ObjectBehavior
         User $user
     ) {
         $query->rememberPasswordToken()->shouldBeCalled()->willReturn('remember-password-token');
-        $token = new UserToken('remember-password-token');
-        $repository->userOfRememberPasswordToken($token)->shouldBeCalled()->willReturn($user);
+        $repository->userOfRememberPasswordToken(Argument::type(UserToken::class))->shouldBeCalled()->willReturn($user);
         $user->isRememberPasswordTokenExpired()->shouldBeCalled()->willReturn(true);
 
         $this->shouldThrow(UserTokenExpiredException::class)->during__invoke($query);

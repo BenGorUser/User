@@ -19,6 +19,7 @@ use BenGorUser\User\Domain\Model\User;
 use BenGorUser\User\Domain\Model\UserRepository;
 use BenGorUser\User\Domain\Model\UserToken;
 use PhpSpec\ObjectBehavior;
+use Prophecy\Argument;
 
 /**
  * Spec file of EnableUserHandler class.
@@ -42,7 +43,7 @@ class EnableUserHandlerSpec extends ObjectBehavior
     {
         $command->confirmationToken()->shouldBeCalled()->willReturn('confirmation-token');
         $user->enableAccount()->shouldBeCalled();
-        $repository->userOfConfirmationToken(new UserToken('confirmation-token'))->shouldBeCalled()->willReturn($user);
+        $repository->userOfConfirmationToken(Argument::type(UserToken::class))->shouldBeCalled()->willReturn($user);
         $repository->persist($user)->shouldBeCalled();
 
         $this->__invoke($command);
@@ -55,7 +56,7 @@ class EnableUserHandlerSpec extends ObjectBehavior
     ) {
         $command->confirmationToken()->shouldBeCalled()->willReturn('confirmation-token');
         $user->enableAccount()->shouldNotBeCalled();
-        $repository->userOfConfirmationToken(new UserToken('confirmation-token'))->shouldBeCalled()->willReturn(null);
+        $repository->userOfConfirmationToken(Argument::type(UserToken::class))->shouldBeCalled()->willReturn(null);
         $repository->persist($user)->shouldNotBeCalled();
 
         $this->shouldThrow(UserTokenNotFoundException::class)->during__invoke($command);

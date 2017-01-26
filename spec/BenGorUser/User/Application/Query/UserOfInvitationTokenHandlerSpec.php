@@ -21,6 +21,7 @@ use BenGorUser\User\Domain\Model\User;
 use BenGorUser\User\Domain\Model\UserRepository;
 use BenGorUser\User\Domain\Model\UserToken;
 use PhpSpec\ObjectBehavior;
+use Prophecy\Argument;
 
 /**
  * Spec file of UserOfInvitationTokenHandler class.
@@ -49,8 +50,7 @@ class UserOfInvitationTokenHandlerSpec extends ObjectBehavior
         \DateTimeImmutable $updatedOn
     ) {
         $query->invitationToken()->shouldBeCalled()->willReturn('invitation-token');
-        $token = new UserToken('invitation-token');
-        $repository->userOfInvitationToken($token)->shouldBeCalled()->willReturn($user);
+        $repository->userOfInvitationToken(Argument::type(UserToken::class))->shouldBeCalled()->willReturn($user);
         $user->isInvitationTokenExpired()->shouldBeCalled()->willReturn(false);
         $dataTransformer->write($user)->shouldBeCalled();
 
@@ -84,8 +84,7 @@ class UserOfInvitationTokenHandlerSpec extends ObjectBehavior
         UserOfInvitationTokenQuery $query
     ) {
         $query->invitationToken()->shouldBeCalled()->willReturn('invitation-token');
-        $token = new UserToken('invitation-token');
-        $repository->userOfInvitationToken($token)->shouldBeCalled()->willReturn(null);
+        $repository->userOfInvitationToken(Argument::type(UserToken::class))->shouldBeCalled()->willReturn(null);
 
         $this->shouldThrow(UserDoesNotExistException::class)->during__invoke($query);
     }
@@ -96,8 +95,7 @@ class UserOfInvitationTokenHandlerSpec extends ObjectBehavior
         User $user
     ) {
         $query->invitationToken()->shouldBeCalled()->willReturn('invitation-token');
-        $token = new UserToken('invitation-token');
-        $repository->userOfInvitationToken($token)->shouldBeCalled()->willReturn($user);
+        $repository->userOfInvitationToken(Argument::type(UserToken::class))->shouldBeCalled()->willReturn($user);
         $user->isInvitationTokenExpired()->shouldBeCalled()->willReturn(true);
 
         $this->shouldThrow(UserTokenExpiredException::class)->during__invoke($query);

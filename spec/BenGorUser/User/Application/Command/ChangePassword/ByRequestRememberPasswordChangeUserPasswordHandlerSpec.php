@@ -48,9 +48,7 @@ class ByRequestRememberPasswordChangeUserPasswordHandlerSpec extends ObjectBehav
         User $user
     ) {
         $command->rememberPasswordToken()->shouldBeCalled()->willReturn('remember-password-token');
-        $repository->userOfRememberPasswordToken(
-            new UserToken('remember-password-token')
-        )->shouldBeCalled()->willReturn($user);
+        $repository->userOfRememberPasswordToken(Argument::type(UserToken::class))->shouldBeCalled()->willReturn($user);
         $command->newPlainPassword()->shouldBeCalled()->willReturn('new-plain-pass');
         $user->isRememberPasswordTokenExpired()->shouldBeCalled()->willReturn(false);
         $user->changePassword(Argument::type(UserPassword::class))->shouldBeCalled();
@@ -65,8 +63,7 @@ class ByRequestRememberPasswordChangeUserPasswordHandlerSpec extends ObjectBehav
         UserRepository $repository
     ) {
         $command->rememberPasswordToken()->shouldBeCalled()->willReturn('non-exist-remember-password-token');
-        $repository->userOfRememberPasswordToken(new UserToken('non-exist-remember-password-token'))
-            ->shouldBeCalled()->willReturn(null);
+        $repository->userOfRememberPasswordToken(Argument::type(UserToken::class))->shouldBeCalled()->willReturn(null);
 
         $this->shouldThrow(UserTokenNotFoundException::class)->during__invoke($command);
     }
@@ -77,8 +74,7 @@ class ByRequestRememberPasswordChangeUserPasswordHandlerSpec extends ObjectBehav
         User $user
     ) {
         $command->rememberPasswordToken()->shouldBeCalled()->willReturn('non-exist-remember-password-token');
-        $repository->userOfRememberPasswordToken(new UserToken('non-exist-remember-password-token'))
-            ->shouldBeCalled()->willReturn($user);
+        $repository->userOfRememberPasswordToken(Argument::type(UserToken::class))->shouldBeCalled()->willReturn($user);
         $user->isRememberPasswordTokenExpired()->shouldBeCalled()->willReturn(true);
 
         $this->shouldThrow(UserTokenExpiredException::class)->during__invoke($command);

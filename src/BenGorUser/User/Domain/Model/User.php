@@ -229,11 +229,16 @@ class User extends UserAggregateRoot
     /**
      * Gets the confirmation token.
      *
-     * @return UserToken
+     * @return UserToken|null
      */
     public function confirmationToken()
     {
-        return $this->confirmationToken;
+        // This ternary is a hack that avoids the
+        // DoctrineORM limitation with nullable embeddables
+        return $this->confirmationToken instanceof UserToken
+        && null === $this->confirmationToken->token()
+            ? null
+            : $this->confirmationToken;
     }
 
     /**
@@ -303,11 +308,16 @@ class User extends UserAggregateRoot
     /**
      * Gets the invitation token.
      *
-     * @return UserToken
+     * @return UserToken|null
      */
     public function invitationToken()
     {
-        return $this->invitationToken;
+        // This ternary is a hack that avoids the
+        // DoctrineORM limitation with nullable embeddables
+        return $this->invitationToken instanceof UserToken
+        && null === $this->invitationToken->token()
+            ? null
+            : $this->invitationToken;
     }
 
     /**
@@ -317,7 +327,7 @@ class User extends UserAggregateRoot
      */
     public function isEnabled()
     {
-        return null === $this->confirmationToken || null === $this->confirmationToken->token();
+        return null === $this->confirmationToken();
     }
 
     /**
@@ -345,7 +355,7 @@ class User extends UserAggregateRoot
      */
     public function isInvitationTokenAccepted()
     {
-        return null === $this->invitationToken || null === $this->invitationToken->token();
+        return null === $this->invitationToken();
     }
 
     /**
@@ -357,7 +367,7 @@ class User extends UserAggregateRoot
      */
     public function isInvitationTokenExpired()
     {
-        if (!$this->invitationToken instanceof UserToken) {
+        if (!$this->invitationToken() instanceof UserToken) {
             throw new UserTokenNotFoundException();
         }
 
@@ -375,7 +385,7 @@ class User extends UserAggregateRoot
      */
     public function isRememberPasswordTokenExpired()
     {
-        if (!$this->rememberPasswordToken instanceof UserToken) {
+        if (!$this->rememberPasswordToken() instanceof UserToken) {
             throw new UserTokenNotFoundException();
         }
 
@@ -470,7 +480,7 @@ class User extends UserAggregateRoot
      */
     public function regenerateInvitationToken()
     {
-        if ($this->isInvitationTokenAccepted()) {
+        if (null === $this->invitationToken()) {
             throw new UserInvitationAlreadyAcceptedException();
         }
         $this->invitationToken = new UserToken();
@@ -491,7 +501,12 @@ class User extends UserAggregateRoot
      */
     public function rememberPasswordToken()
     {
-        return $this->rememberPasswordToken;
+        // This ternary is a hack that avoids the
+        // DoctrineORM limitation with nullable embeddables
+        return $this->rememberPasswordToken instanceof UserToken
+        && null === $this->rememberPasswordToken->token()
+            ? null
+            : $this->rememberPasswordToken;
     }
 
     /**

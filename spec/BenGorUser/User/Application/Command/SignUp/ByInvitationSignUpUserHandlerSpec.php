@@ -50,8 +50,7 @@ class ByInvitationSignUpUserHandlerSpec extends ObjectBehavior
         User $user
     ) {
         $command->invitationToken()->shouldBeCalled()->willReturn('invitation-token');
-        $repository->userOfInvitationToken(new UserToken('invitation-token'))
-            ->shouldBeCalled()->willReturn($user);
+        $repository->userOfInvitationToken(Argument::type(UserToken::class))->shouldBeCalled()->willReturn($user);
 
         $command->password()->shouldBeCalled()->willReturn('plain-password');
         $user->changePassword(Argument::type(UserPassword::class))->shouldBeCalled();
@@ -67,8 +66,7 @@ class ByInvitationSignUpUserHandlerSpec extends ObjectBehavior
         UserRepository $repository
     ) {
         $command->invitationToken()->shouldBeCalled()->willReturn('invitation-token');
-        $repository->userOfInvitationToken(new UserToken('invitation-token'))
-            ->shouldBeCalled()->willReturn(null);
+        $repository->userOfInvitationToken(Argument::type(UserToken::class))->shouldBeCalled()->willReturn(null);
 
         $this->shouldThrow(UserDoesNotExistException::class)->during__invoke($command);
     }
