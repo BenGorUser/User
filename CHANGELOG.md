@@ -7,6 +7,7 @@ To get the diff between two versions, go to https://github.com/BenGorUser/User/c
 
 ##v0.8.0
 * Introduced hacks to prevent Doctrine's bug with nullable embeddables.
+* [Travis CI] Dropped support for HHVM and added for PHP 7.1.
 
 ##v0.7.1
 * Fixed bug related with invitation token acceptance.
