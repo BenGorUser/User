@@ -36,7 +36,7 @@ class UserInvitedMailerSubscriberSpec extends ObjectBehavior
 {
     function let(UserMailer $mailer, UserMailableFactory $mailableFactory, UserUrlGenerator $urlGenerator)
     {
-        $this->beConstructedWith($mailer, $mailableFactory, $urlGenerator, 'bengor_user_user_sign_up');
+        $this->beConstructedWith($mailer, $mailableFactory, $urlGenerator);
     }
 
     function it_is_initializable()
@@ -63,12 +63,8 @@ class UserInvitedMailerSubscriberSpec extends ObjectBehavior
             'Dummy mail body text'
         );
 
-        $urlGenerator->generate(
-            'bengor_user_user_sign_up', Argument::type('array')
-        )->shouldBeCalled()->willReturn('bengor.user.com/user/sign-up');
-        $mailableFactory->build(
-            'bengor@user.com', Argument::type('array')
-        )->shouldBeCalled()->willReturn($mailable);
+        $urlGenerator->generate('invitation-token')->shouldBeCalled()->willReturn('bengor.user.com/user/sign-up');
+        $mailableFactory->build('bengor@user.com', Argument::type('array'))->shouldBeCalled()->willReturn($mailable);
 
         $this->handle($domainEvent);
     }

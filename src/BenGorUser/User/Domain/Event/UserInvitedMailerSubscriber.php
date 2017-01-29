@@ -41,13 +41,6 @@ class UserInvitedMailerSubscriber implements UserEventSubscriber
     private $mailer;
 
     /**
-     * The route name.
-     *
-     * @var string
-     */
-    private $route;
-
-    /**
      * The url generator.
      *
      * @var UserUrlGenerator
@@ -60,18 +53,15 @@ class UserInvitedMailerSubscriber implements UserEventSubscriber
      * @param UserMailer          $aMailer          The mailer
      * @param UserMailableFactory $aMailableFactory The mailable factory
      * @param UserUrlGenerator    $anUrlGenerator   The url generator
-     * @param string              $aRoute           The route name
      */
     public function __construct(
         UserMailer $aMailer,
         UserMailableFactory $aMailableFactory,
-        UserUrlGenerator $anUrlGenerator,
-        $aRoute
+        UserUrlGenerator $anUrlGenerator
     ) {
         $this->mailer = $aMailer;
         $this->mailableFactory = $aMailableFactory;
         $this->urlGenerator = $anUrlGenerator;
-        $this->route = $aRoute;
     }
 
     /**
@@ -79,12 +69,17 @@ class UserInvitedMailerSubscriber implements UserEventSubscriber
      */
     public function handle(UserEvent $anEvent)
     {
-        $url = $this->urlGenerator->generate($this->route, [
-            'invitation-token' => $anEvent->invitationToken()->token(),
-        ]);
-        $mail = $this->mailableFactory->build($anEvent->email(), [
-            'email' => $anEvent->email(), 'url' => $url,
-        ]);
+        $url = $this->urlGenerator->generate(
+            $anEvent->invitationToken()->token()
+        );
+
+        $mail = $this->mailableFactory->build(
+            $anEvent->email(),
+            [
+                'email' => $anEvent->email(),
+                'url'   => $url,
+            ]
+        );
 
         $this->mailer->mail($mail);
     }

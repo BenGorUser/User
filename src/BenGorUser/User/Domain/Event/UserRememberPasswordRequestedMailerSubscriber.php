@@ -40,13 +40,6 @@ class UserRememberPasswordRequestedMailerSubscriber implements UserEventSubscrib
     private $mailer;
 
     /**
-     * The route name.
-     *
-     * @var string
-     */
-    private $route;
-
-    /**
      * The url generator.
      *
      * @var UserUrlGenerator
@@ -59,18 +52,15 @@ class UserRememberPasswordRequestedMailerSubscriber implements UserEventSubscrib
      * @param UserMailer          $aMailer          The mailer
      * @param UserMailableFactory $aMailableFactory The mailable factory
      * @param UserUrlGenerator    $anUrlGenerator   The url generator
-     * @param string              $aRoute           The route name
      */
     public function __construct(
         UserMailer $aMailer,
         UserMailableFactory $aMailableFactory,
-        UserUrlGenerator $anUrlGenerator,
-        $aRoute
+        UserUrlGenerator $anUrlGenerator
     ) {
         $this->mailer = $aMailer;
         $this->mailableFactory = $aMailableFactory;
         $this->urlGenerator = $anUrlGenerator;
-        $this->route = $aRoute;
     }
 
     /**
@@ -78,12 +68,17 @@ class UserRememberPasswordRequestedMailerSubscriber implements UserEventSubscrib
      */
     public function handle(UserEvent $anEvent)
     {
-        $url = $this->urlGenerator->generate($this->route, [
-            'remember-password-token' => $anEvent->rememberPasswordToken()->token(),
-        ]);
-        $mail = $this->mailableFactory->build($anEvent->email(), [
-            'email' => $anEvent->email(), 'url' => $url,
-        ]);
+        $url = $this->urlGenerator->generate(
+            $anEvent->rememberPasswordToken()->token()
+        );
+
+        $mail = $this->mailableFactory->build(
+            $anEvent->email(),
+            [
+                'email' => $anEvent->email(),
+                'url'   => $url,
+            ]
+        );
 
         $this->mailer->mail($mail);
     }
