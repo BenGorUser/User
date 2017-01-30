@@ -24,6 +24,9 @@ this library offers a well tested and documented codebase with many common use c
  * Role management
     * Grant
     * Revoke
+ * Purge outdated tokens
+    * Invitation token
+    * Remember password token
 
 ##Requirements
 PHP >= 5.5

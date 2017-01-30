@@ -28,4 +28,8 @@
 
 ## Revoke role
 
+## Purge outdated tokens
+#### Invitation token
+#### Remember password token
+
 - Back to the [index](index.md).
