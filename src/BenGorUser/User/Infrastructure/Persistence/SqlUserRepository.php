@@ -71,6 +71,17 @@ final class SqlUserRepository implements UserRepository
     /**
      * {@inheritdoc}
      */
+    public function all()
+    {
+        $statement = $this->execute('SELECT * FROM user', []);
+        if ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
+            return $this->buildUser($row);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function userOfEmail(UserEmail $anEmail)
     {
         $statement = $this->execute('SELECT * FROM user WHERE email = :email', ['email' => $anEmail->email()]);

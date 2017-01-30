@@ -30,6 +30,13 @@ interface UserRepository
     public function userOfId(UserId $anId);
 
     /**
+     * Finds all the users.
+     *
+     * @return User[]
+     */
+    public function all();
+
+    /**
      * Finds the user of given email.
      *
      * @param UserEmail $anEmail The user email
