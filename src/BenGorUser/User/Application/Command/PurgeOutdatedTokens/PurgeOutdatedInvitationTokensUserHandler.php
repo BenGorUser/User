@@ -12,6 +12,7 @@
 
 namespace BenGorUser\User\Application\Command\PurgeOutdatedTokens;
 
+use BenGorUser\User\Domain\Model\Exception\UserTokenNotFoundException;
 use BenGorUser\User\Domain\Model\UserRepository;
 
 /**
@@ -47,7 +48,11 @@ class PurgeOutdatedInvitationTokensUserHandler
     {
         $users = $this->repository->all();
         foreach ($users as $user) {
-            $user->cleanInvitationToken();
+            try {
+                $user->cleanInvitationToken();
+            } catch (UserTokenNotFoundException $exception) {
+                continue;
+            }
             $this->repository->persist($user);
         }
     }
