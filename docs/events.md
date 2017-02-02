@@ -27,8 +27,6 @@ Existing subscribers require de following parameters in their constructors:
 * UserMailer: An implementation of a [mailer adapter](adapters_mailers.md) 
 * UserMailableFactory: An implementation of a [UI adapter](adapters_ui.md),
 * UserUrlGenerator: An implementation of a [routing adapter](adapters_routing.md),
-* A string that will be passed as parameter to the routing adapter's
-`generate()` method as first parameter.
 
 ## Implement your own subscriber
 First of all you need to create a new class that implements

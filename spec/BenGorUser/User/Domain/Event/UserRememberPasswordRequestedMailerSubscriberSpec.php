@@ -35,7 +35,7 @@ class UserRememberPasswordRequestedMailerSubscriberSpec extends ObjectBehavior
 {
     function let(UserMailer $mailer, UserMailableFactory $mailableFactory, UserUrlGenerator $urlGenerator)
     {
-        $this->beConstructedWith($mailer, $mailableFactory, $urlGenerator, 'bengor_user_user_change_password');
+        $this->beConstructedWith($mailer, $mailableFactory, $urlGenerator);
     }
 
     function it_is_initializable()
@@ -53,7 +53,7 @@ class UserRememberPasswordRequestedMailerSubscriberSpec extends ObjectBehavior
         $domainEvent = new UserRememberPasswordRequested(
             new UserId(),
             new UserEmail('bengor@user.com'),
-            new UserToken('remember-token')
+            new UserToken('remember-password-token')
         );
         $mailable = new UserMailable(
             new UserEmail('benatespina@gmail.com'),
@@ -63,11 +63,9 @@ class UserRememberPasswordRequestedMailerSubscriberSpec extends ObjectBehavior
         );
 
         $urlGenerator->generate(
-            'bengor_user_user_change_password', Argument::type('array')
+            'remember-password-token'
         )->shouldBeCalled()->willReturn('bengor.user.com/user/change-password');
-        $mailableFactory->build(
-            'bengor@user.com', Argument::type('array')
-        )->shouldBeCalled()->willReturn($mailable);
+        $mailableFactory->build('bengor@user.com', Argument::type('array'))->shouldBeCalled()->willReturn($mailable);
 
         $this->handle($domainEvent);
     }

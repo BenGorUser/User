@@ -20,23 +20,11 @@ namespace BenGorUser\User\Domain\Model;
 interface UserUrlGenerator
 {
     /**
-     * Generates an absolute URL, e.g. "http://bengor-user.com/bengor/user".
-     */
-    const ABSOLUTE_URL = 0;
-
-    /**
-     * Generates an absolute path, e.g. "/bengor/user".
-     */
-    const ABSOLUTE_PATH = 1;
-
-    /**
-     * Generates a URL or path for a specific route based on the given parameters.
+     * Generates an URL with the given token.
      *
-     * @param string $aName          The name of the route
-     * @param mixed  $parameters     An array of parameters
-     * @param int    $aReferenceType The type of reference to be generated (one of the constants)
+     * @param string $aToken The token
      *
      * @return string
      */
-    public function generate($aName, $parameters = [], $aReferenceType = self::ABSOLUTE_URL);
+    public function generate($aToken);
 }
