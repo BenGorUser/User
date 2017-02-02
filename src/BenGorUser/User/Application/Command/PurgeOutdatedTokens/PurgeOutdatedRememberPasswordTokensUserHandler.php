@@ -47,9 +47,7 @@ class PurgeOutdatedRememberPasswordTokensUserHandler
     {
         $users = $this->repository->all();
         foreach ($users as $user) {
-            if ($user->isRememberPasswordTokenExpired()) {
-                $user->cleanRememberPasswordToken();
-            }
+            $user->cleanRememberPasswordToken();
             $this->repository->persist($user);
         }
     }

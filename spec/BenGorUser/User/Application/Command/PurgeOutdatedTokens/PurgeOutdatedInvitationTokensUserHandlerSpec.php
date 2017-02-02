@@ -42,7 +42,6 @@ class PurgeOutdatedInvitationTokensUserHandlerSpec extends ObjectBehavior
     ) {
         $repository->all()->shouldBeCalled()->willReturn([$user]);
 
-        $user->isInvitationTokenExpired()->shouldBeCalled()->willReturn(true);
         $user->cleanInvitationToken()->shouldBeCalled();
         $repository->persist($user)->shouldBeCalled();
 

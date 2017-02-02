@@ -231,7 +231,9 @@ class User extends UserAggregateRoot
      */
     public function cleanInvitationToken()
     {
-        $this->invitationToken = null;
+        if ($this->isInvitationTokenExpired()) {
+            $this->invitationToken = null;
+        }
     }
 
     /**
@@ -239,7 +241,9 @@ class User extends UserAggregateRoot
      */
     public function cleanRememberPasswordToken()
     {
-        $this->rememberPasswordToken = null;
+        if ($this->isRememberPasswordTokenExpired()) {
+            $this->rememberPasswordToken = null;
+        }
     }
 
     /**

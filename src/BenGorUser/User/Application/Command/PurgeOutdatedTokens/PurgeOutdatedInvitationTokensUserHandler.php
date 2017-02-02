@@ -47,9 +47,7 @@ class PurgeOutdatedInvitationTokensUserHandler
     {
         $users = $this->repository->all();
         foreach ($users as $user) {
-            if ($user->isInvitationTokenExpired()) {
-                $user->cleanInvitationToken();
-            }
+            $user->cleanInvitationToken();
             $this->repository->persist($user);
         }
     }

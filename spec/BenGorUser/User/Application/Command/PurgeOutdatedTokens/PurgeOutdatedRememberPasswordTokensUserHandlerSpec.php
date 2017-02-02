@@ -42,7 +42,6 @@ class PurgeOutdatedRememberPasswordTokensUserHandlerSpec extends ObjectBehavior
     ) {
         $repository->all()->shouldBeCalled()->willReturn([$user]);
 
-        $user->isRememberPasswordTokenExpired()->shouldBeCalled()->willReturn(true);
         $user->cleanRememberPasswordToken()->shouldBeCalled();
         $repository->persist($user)->shouldBeCalled();
 
