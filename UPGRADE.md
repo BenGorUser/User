@@ -1,7 +1,7 @@
 #UPGRADE
 
 ##v0.7.x to v0.8.x
-* The genete method of the UserUrlGenerator is changed so be carefull if you have used to write your custom
+* The generate method of the UserUrlGenerator is changed so be careful if you have used to write your custom
 url generator strategy. 
 
 ##v0.6.x to v0.7.x
