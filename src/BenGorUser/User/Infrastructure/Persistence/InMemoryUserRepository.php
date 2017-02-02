@@ -65,6 +65,14 @@ final class InMemoryUserRepository implements UserRepository
     /**
      * {@inheritdoc}
      */
+    public function all()
+    {
+        return $this->users;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function userOfEmail(UserEmail $anEmail)
     {
         foreach ($this->users as $user) {

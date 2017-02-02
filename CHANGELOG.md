@@ -6,6 +6,8 @@ To get the diff for a specific change, go to https://github.com/BenGorUser/User/
 To get the diff between two versions, go to https://github.com/BenGorUser/User/compare/v0.6.0...v0.7.0
 
 ##v0.8.0
+* Added purge outdated invitation and remember password tokens use cases.
+* Added `all` method inside UserRepository.
 * Upgraded PHP-CS Fixer.
 * [Travis CI] Dropped support for HHVM and added for PHP 7.1.
 * Introduced hacks to prevent Doctrine's bug with nullable embeddables.

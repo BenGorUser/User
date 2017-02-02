@@ -115,6 +115,26 @@ class UserSpec extends ObjectBehavior
         $this->logout();
     }
 
+    function it_cleans_outdated_remember_password_tokens()
+    {
+        $this->rememberPassword();
+
+        $this->isRememberPasswordTokenExpired()->shouldReturn(false);
+        $this->cleanRememberPasswordToken();
+    }
+
+    function it_cleans_outdated_invitation_tokens()
+    {
+        $this->beConstructedInvite(
+            new UserId(),
+            new UserEmail('test@test.com'),
+            [new UserRole('ROLE_USER')]
+        );
+
+        $this->isInvitationTokenExpired()->shouldReturn(false);
+        $this->cleanInvitationToken();
+    }
+
     function it_accepts_invitation_request()
     {
         $this->beConstructedInvite(

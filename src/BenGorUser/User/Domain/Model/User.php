@@ -227,6 +227,26 @@ class User extends UserAggregateRoot
     }
 
     /**
+     * Cleans the invitation token.
+     */
+    public function cleanInvitationToken()
+    {
+        if ($this->isInvitationTokenExpired()) {
+            $this->invitationToken = null;
+        }
+    }
+
+    /**
+     * Cleans the remember password token.
+     */
+    public function cleanRememberPasswordToken()
+    {
+        if ($this->isRememberPasswordTokenExpired()) {
+            $this->rememberPasswordToken = null;
+        }
+    }
+
+    /**
      * Gets the confirmation token.
      *
      * @return UserToken|null
