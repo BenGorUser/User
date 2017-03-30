@@ -569,7 +569,7 @@ class User extends UserAggregateRoot
                 break;
             }
         }
-        if ($index == $numberOfRoles) {
+        if ($index === $numberOfRoles) {
             throw new UserRoleAlreadyRevokedException();
         }
 
