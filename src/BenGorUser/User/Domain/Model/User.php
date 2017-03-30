@@ -558,14 +558,21 @@ class User extends UserAggregateRoot
         if (false === $this->isRoleAllowed($aRole)) {
             throw new UserRoleInvalidException();
         }
-        foreach ($this->roles as $key => $role) {
+
+        $numberOfRoles = count($this->roles);
+        for ($index = 0; $index < $numberOfRoles; $index++) {
+            $role = $this->roles[$index];
+
             if ($role->equals($aRole)) {
-                unset($this->roles[$key]);
+                unset($this->roles[$index]);
                 $this->roles = array_values($this->roles);
                 break;
             }
+        }
+        if ($index === $numberOfRoles) {
             throw new UserRoleAlreadyRevokedException();
         }
+
         $this->updatedOn = new \DateTimeImmutable();
         $this->publish(
             new UserRoleRevoked(
