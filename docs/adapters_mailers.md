@@ -1,4 +1,4 @@
-#Mailers
+# Mailers
 
 The following mailer adapters are available:
 
@@ -23,7 +23,7 @@ TL;DR: The mail sending flow works as follows:
 * Create a `UserMailable` using an instance of `UserMailableFactory`.
 * Use an instance of `UserMailer` to send the `UserMailable` created in the previous step.
 
-##Implement your own mailer
+## Implement your own mailer
 To implement an adapter to use it with your own mailer library just extend the `UserMailer` interface and implement
 `mail(UserMailable $userMailable)` to handle the `UserMailable` instance as required.
 

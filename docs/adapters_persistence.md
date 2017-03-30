@@ -1,4 +1,4 @@
-#Persistence adapters
+# Persistence adapters
 
 The following persistence adapters are available:
 
@@ -9,7 +9,7 @@ The following persistence adapters are available:
 
 > In case you have created a new adapter, please send us a Pull Request with a link to your repository.
 
-##About the repository architecture
+## About the repository architecture
 User is persisted in each service to save changes done in that process. Doctrine, InMemory and Sql
 adapters have been implemented for a plug and play usage.
 

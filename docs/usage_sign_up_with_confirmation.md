@@ -1,4 +1,4 @@
-#Sign up with confirmation
+# Sign up with confirmation
 
 The following code builds all the sign up with confirmation email process.
 You have to use different adapters or even write your custom adapters but this example

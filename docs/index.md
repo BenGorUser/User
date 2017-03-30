@@ -1,4 +1,4 @@
-#BenGorUser documentation
+# BenGorUser documentation
 
 * [Basic usage](basic_usage.md)
 * [Command](command.md)

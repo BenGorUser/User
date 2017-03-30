@@ -1,4 +1,4 @@
-#BenGorUser
+# BenGorUser
 > Lightweight user PHP library developed using Domain-Driven Design
 
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/8e36cc04-117a-4448-9cf7-1bedadfbbc59/mini.png)](https://insight.sensiolabs.com/projects/8e36cc04-117a-4448-9cf7-1bedadfbbc59)
@@ -28,21 +28,21 @@ this library offers a well tested and documented codebase with many common use c
     * Invitation token
     * Remember password token
 
-##Requirements
+## Requirements
 PHP >= 5.5
 
-##Installation
+## Installation
 The easiest way to install this component is using [Composer][6]
 ```bash
 $ composer require bengor-user/user
 ```
 
-##Documentation
+## Documentation
 All the documentation is stored in the `docs` folder.
 
 [Show me the docs!](docs/index.md)
 
-##Tests
+## Tests
 This library is completely tested by **[PHPSpec][1], SpecBDD framework for PHP**.
 
 Run the following command to launch tests:
@@ -50,7 +50,7 @@ Run the following command to launch tests:
 $ vendor/bin/phpspec run -fpretty
 ```
 
-##Contributing
+## Contributing
 If you have any doubt or maybe you want to share some opinion, you can use our **Gitter** chat.
 
 [![Join the chat at https://gitter.im/BenGorUser/User](https://badges.gitter.im/BenGorUser/User.svg)](https://gitter.im/BenGorUser/User?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
@@ -75,13 +75,13 @@ If you would like to contribute it is a good point to follow Symfony contributio
 [Contributing Code][2] in the project documentation. If you are submitting a pull request, please follow the guidelines
 in the [Submitting a Patch][3] section and use the [Pull Request Template][4].
 
-##Credits
+## Credits
 This library is created by:
 >
 **@benatespina** - [benatespina@gmail.com](mailto:benatespina@gmail.com)<br>
 **@gorkalaucirica** - [gorka.lauzirika@gmail.com](mailto:gorka.lauzirika@gmail.com)
 
-##Licensing Options
+## Licensing Options
 [![License](https://poser.pugx.org/bengor-user/user/license.svg)](https://github.com/BenGorUser/User/blob/master/LICENSE)
 
 [1]: http://www.phpspec.net/

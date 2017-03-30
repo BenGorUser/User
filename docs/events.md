@@ -50,4 +50,3 @@ Last but not least, register your subscriber as explained above in the
 adapter's "Listening to the events" section.
 
 - Back to the [index](index.md).
-

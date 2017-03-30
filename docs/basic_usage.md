@@ -1,6 +1,6 @@
-#Basic Usage
+# Basic Usage
 
-##Configuring dependencies
+## Configuring dependencies
 First of all, you need to decide the types of repository, encoder and mailer you will be using to make everything work.
 Services will use the repository and encoder chosen to handle the command, whereas mailer will be used mainly in the 
 event subscribers. These decisions are important because as you will see almost all use cases will require you to pass
@@ -47,7 +47,7 @@ directly:
 ```
 > Plenty of commands are available and more detailed info is available at [command](command.md) documentation file.
 
-##Subscribing to events
+## Subscribing to events
 In order to receive, for example, a registration confirmation mail, you need to subscribe to the
 [domain events](events.md) triggered by the model.
 

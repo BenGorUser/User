@@ -1,4 +1,4 @@
-#UI adapters
+# UI adapters
 
 The following UI adapters are available:
 
